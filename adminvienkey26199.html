@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản lý keys.json - adminvienkey26199</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 720px;
+      margin: 20px auto;
+      padding: 10px;
+      background: url('https://i.imgur.com/your-background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #fff;
+    }
+    .box {
+      background: rgba(0, 0, 0, 0.85);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px #00ff99aa;
+    }
+    input, button, textarea {
+      font-size: 14px;
+      margin: 6px 0;
+    }
+    input[type=text], input[type=password], input[type=date], input[type=time] {
+      width: 80%;
+      padding: 6px;
+      border-radius: 6px;
+      border: none;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-family: monospace;
+      border-radius: 6px;
+      padding: 8px;
+      resize: vertical;
+      border: none;
+    }
+    button {
+      padding: 6px 12px;
+      cursor: pointer;
+      border: none;
+      border-radius: 6px;
+      background: linear-gradient(45deg, #00ff99, #00cc66);
+      color: #000;
+      font-weight: bold;
+      transition: background 0.3s ease;
+      margin-right: 6px;
+    }
+    button:hover {
+      background: linear-gradient(45deg, #00cc66, #009944);
+      color: #fff;
+    }
+    #status {
+      color: #99ff99;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    #error {
+      color: #ff6666;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .logo {
+      width: 100px;
+      margin-bottom: 10px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      color: #eee;
+      text-align: center;
+      font-size: 14px;
+      user-select: none;
+    }
+    th, td {
+      border: 1px solid #00cc66;
+      padding: 6px 8px;
+      border-radius: 6px;
+    }
+    th {
+      background: linear-gradient(45deg, #00cc66, #009944);
+      color: #fff;
+    }
+    tbody tr:hover {
+      background-color: #004422cc;
+    }
+    .btn-icon {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #00ff99;
+      transition: color 0.3s ease;
+    }
+    .btn-icon:hover {
+      color: #00cc66;
+    }
+    .key-text {
+      font-family: monospace;
+      user-select: all;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="box" id="loginBox">
+    <img class="logo" src="https://i.imgur.com/your-logo.png" alt="Logo" /><br />
+    <h2>🔐 Đăng nhập Quản trị</h2>
+    <input type="text" id="username" placeholder="Tài khoản" /><br />
+    <input type="password" id="password" placeholder="Mật khẩu" /><br />
+    <button onclick="login()">🔓 Đăng nhập</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+
+  <div class="box" id="mainBox" style="display:none;">
+    <h2>🛠️ Quản lý keys.json</h2>
+
+    <label>🔑 Nhập GitHub Token của bạn:</label><br />
+    <input type="password" id="token" placeholder="ghp_..." /><br />
+    <button onclick="loadKeys()">📥 Tải keys.json</button>
+
+    <textarea id="keyList" placeholder='{"keys": []}'></textarea><br />
+
+    <input type="text" id="newKey" placeholder="Nhập key mới..." /><br />
+    <label>⏳ Ngày hết hạn:</label><br />
+    <input type="date" id="dateInput" />
+    <input type="time" id="timeInput" value="23:59" /><br />
+
+    <button onclick="generateKey()">🔁 Random 35 ký tự</button>
+    <button onclick="addKey()">➕ Thêm key</button><br />
+
+    <button onclick="saveKeys()">💾 Lưu keys.json</button>
+
+    <p id="status"></p>
+    <p id="error"></p>
+
+    <h3>📋 Danh sách key còn hiệu lực</h3>
+    <table id="keysTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Hết hạn</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const owner = "adminvienkey26109";
+    const repo = "trinhngocvientx";
+    const path = "keys.json";
+    let sha = "";
+
+    const validUsername = "aenhavt";
+    const validPassword = "aenhavienkhanh208209";
+
+    function login() {
+      const user = document.getElementById("username").value.trim();
+      const pass = document.getElementById("password").value.trim();
+      if (user === validUsername && pass === validPassword) {
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("mainBox").style.display = "block";
+      } else {
+        document.getElementById("loginError").textContent = "❌ Sai tài khoản hoặc mật khẩu.";
+      }
+    }
+
+    function base64Encode(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function base64Decode(str) {
+      return decodeURIComponent(escape(atob(str)));
+    }
+
+    function generateKey() {
+      const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      let key = '';
+      for (let i = 0; i < 35; i++) {
+        key += charset.charAt(Math.floor(Math.random() * charset.length));
+      }
+      document.getElementById("newKey").value = key;
+    }
+
+    async function loadKeys() {
+      const token = document.getElementById("token").value.trim();
+      const status = document.getElementById("status");
+      const error = document.getElementById("error");
+      error.textContent = "";
+      if (!token) return alert("Vui lòng nhập GitHub Token!");
+
+      status.textContent = "🔄 Đang tải keys.json...";
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+          headers: { Authorization: `token ${token}` }
+        });
+        if (!res.ok) throw new Error(`Lỗi tải: ${res.status}`);
+        const data = await res.json();
+        sha = data.sha;
+        const content = base64Decode(data.content);
+        const json = JSON.parse(content);
+        filterExpiredKeys(json);
+        document.getElementById("keyList").value = JSON.stringify(json, null, 2);
+        renderKeysTable(json.keys);
+        status.textContent = "✅ Tải keys.json thành công.";
+      } catch (e) {
+        status.textContent = "";
+        error.textContent = "❌ Lỗi: " + e.message;
+      }
+    }
+
+    function filterExpiredKeys(json) {
+      if (!Array.isArray(json.keys)) json.keys = [];
+      const now = new Date();
+      json.keys = json.keys.filter(k => {
+        if (typeof k === 'string') return true; // nếu key không có expiresAt, giữ lại
+        if (!k.expiresAt) return true;
+        const exp = new Date(k.expiresAt);
+        return exp > now;
+      });
+    }
+
+    function renderKeysTable(keys) {
+      const table = document.getElementById("keysTable");
+      const tbody = table.querySelector("tbody");
+      tbody.innerHTML = "";
+      if (!keys || keys.length === 0) {
+        table.style.display = "none";
+        return;
+      }
+      table.style.display = "table";
+
+      keys.forEach((item) => {
+        const key = typeof item === "string" ? item : item.key;
+        const expiresAt = (typeof item === "string" || !item.expiresAt) ? "Không giới hạn" : new Date(item.expiresAt).toLocaleString('vi-VN');
+
+        const tr = document.createElement("tr");
+
+        // Key cell monospace selectable
+        const tdKey = document.createElement("td");
+        tdKey.classList.add("key-text");
+        tdKey.textContent = key;
+        tr.appendChild(tdKey);
+
+        // Expires cell
+        const tdExpires = document.createElement("td");
+        tdExpires.textContent = expiresAt;
+        tr.appendChild(tdExpires);
+
+        // Action cell with copy and delete buttons
+        const tdActions = document.createElement("td");
+
+        // Copy button
+        const btnCopy = document.createElement("button");
+        btnCopy.classList.add("btn-icon");
+        btnCopy.title = "Copy key";
+        btnCopy.innerHTML = "📋";
+        btnCopy.onclick = () => {
+          navigator.clipboard.writeText(key).then(() => {
+            alert(`Đã copy key:\n${key}`);
+          });
+        };
+        tdActions.appendChild(btnCopy);
+
+        // Delete button
+        const btnDelete = document.createElement("button");
+        btnDelete.classList.add("btn-icon");
+        btnDelete.title = "Xóa key";
+        btnDelete.innerHTML = "🗑️";
+        btnDelete.onclick = () => {
+          if (!confirm(`Bạn chắc chắn muốn xóa key:\n${key} ?`)) return;
+          deleteKey(key);
+        };
+        tdActions.appendChild(btnDelete);
+
+        tr.appendChild(tdActions);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function deleteKey(keyToDelete) {
+      try {
+        let json = JSON.parse(document.getElementById("keyList").value);
+        if (!Array.isArray(json.keys)) json.keys = [];
+        json.keys = json.keys.filter(item => {
+          const key = typeof item === 'string' ? item : item.key;
+          return key !== keyToDelete;
+        });
+        document.getElementById("keyList").value = JSON.stringify(json, null, 2);
+        renderKeysTable(json.keys);
+      } catch {
+        alert("Nội dung keys.json không hợp lệ.");
+      }
+    }
+
+    function addKey() {
+      const newKey = document.getElementById("newKey").value.trim();
+      if (!newKey) return alert("Vui lòng nhập key mới!");
+      let date = document.getElementById("dateInput").value;
+      let time = document.getElementById("timeInput").value || "23:59";
+
+      let expiresAt = null;
+      if (date) {
+        // Tạo chuỗi datetime chuẩn ISO 8601
+        expiresAt = new Date(date + "T" + time + ":00").toISOString();
+      }
+
+      try {
+        let json = JSON.parse(document.getElementById("keyList").value);
+        if (!Array.isArray(json.keys)) json.keys = [];
+
+        // Kiểm tra key trùng
+        if (json.keys.some(item => (typeof item === 'string' ? item : item.key) === newKey)) {
+          return alert("Key này đã tồn tại!");
+        }
+
+        const newEntry = expiresAt ? { key: newKey, expiresAt } : newKey;
+        json.keys.push(newEntry);
+
+        filterExpiredKeys(json);
+        document.getElementById("keyList").value = JSON.stringify(json, null, 2);
+        renderKeysTable(json.keys);
+
+        // Xóa input key mới, reset ngày giờ
+        document.getElementById("newKey").value = "";
+        document.getElementById("dateInput").value = "";
+        document.getElementById("timeInput").value = "23:59";
+      } catch {
+        alert("Nội dung keys.json không hợp lệ.");
+      }
+    }
+
+    async function saveKeys() {
+      const token = document.getElementById("token").value.trim();
+      const status = document.getElementById("status");
+      const error = document.getElementById("error");
+      error.textContent = "";
+      if (!token) return alert("Vui lòng nhập GitHub Token!");
+
+      let jsonStr = document.getElementById("keyList").value.trim();
+      if (!jsonStr) return alert("Nội dung keys.json trống!");
+      try {
+        JSON.parse(jsonStr);
+      } catch {
+        return alert("Nội dung keys.json không hợp lệ!");
+      }
+
+      status.textContent = "⏳ Đang lưu keys.json...";
+
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `token ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: `Cập nhật keys.json tại ${new Date().toLocaleString()}`,
+            content: base64Encode(jsonStr),
+            sha
+          })
+        });
+        if (!res.ok) throw new Error(`Lỗi lưu: ${res.status}`);
+        const data = await res.json();
+        sha = data.content.sha;
+        status.textContent = "✅ Lưu keys.json thành công.";
+      } catch (e) {
+        status.textContent = "";
+        error.textContent = "❌ Lỗi: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
