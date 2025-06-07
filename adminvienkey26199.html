@@ -121,16 +121,6 @@
 
   <div class="box" id="mainBox" style="display:none;">
     <h2>🛠️ Quản lý keys.json</h2>
-
-    <!-- 👇 Thêm 5 ô mới tại đây -->
-    <h3>🔧 Thông tin bổ sung</h3>
-    <input type="text" placeholder="Ô 1 - Ví dụ dữ liệu..." /><br />
-    <input type="text" placeholder="Ô 2 - Ví dụ dữ liệu..." /><br />
-    <input type="text" placeholder="Ô 3 - Ví dụ dữ liệu..." /><br />
-    <input type="text" placeholder="Ô 4 - Ví dụ dữ liệu..." /><br />
-    <input type="text" placeholder="Ô 5 - Ví dụ dữ liệu..." /><br />
-    <!-- 👆 Kết thúc phần thêm -->
-
     <label>🔑 Nhập GitHub Token của bạn:</label><br />
     <input type="password" id="token" placeholder="ghp_..." /><br />
     <button onclick="loadKeys()">📥 Tải keys.json</button>
@@ -311,7 +301,7 @@
       const newKey = document.getElementById("newKey").value.trim();
       if (!newKey) return alert("Vui lòng nhập key mới!");
       let date = document.getElementById("dateInput").value;
-      let time = document.getElementById("timeInput").value || "23:59";
+      let time = document.getElementById("timeInput").value || "00:00";
 
       let expiresAt = null;
       if (date) {
@@ -335,7 +325,7 @@
 
         document.getElementById("newKey").value = "";
         document.getElementById("dateInput").value = "";
-        document.getElementById("timeInput").value = "23:59";
+        document.getElementById("timeInput").value = "00:00";
       } catch {
         alert("Nội dung keys.json không hợp lệ.");
       }
