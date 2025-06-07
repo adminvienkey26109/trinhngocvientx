@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Quản lý keys.json - adminvienkey26199</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 20px auto; padding: 10px; }
+    input, button, textarea { font-size: 14px; margin: 6px 0; }
+    input[type=text], input[type=password] { width: 80%; padding: 6px; }
+    textarea { width: 100%; height: 250px; font-family: monospace; }
+    button { padding: 6px 12px; cursor: pointer; }
+    #status { color: green; margin-top: 10px; }
+    #error { color: red; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <h2>🛠️ Quản lý keys.json</h2>
+  
+  <label>🔑 Nhập GitHub Token của bạn:</label><br>
+  <input type="password" id="token" placeholder="ghp_..."><br>
+
+  <button onclick="loadKeys()">📥 Tải keys.json</button>
+  
+  <textarea id="keyList" placeholder='{"keys": ["abc123", "xyz789"]}'></textarea><br>
+
+  <input type="text" id="newKey" placeholder="Nhập key mới...">
+  <button onclick="addKey()">➕ Thêm key</button>
+  <button onclick="saveKeys()">💾 Lưu keys.json</button>
+
+  <p id="status"></p>
+  <p id="error"></p>
+
+  <script>
+    const owner = "adminvienkey26109";
+    const repo = "trinhngocvientx";
+    const path = "keys.json";
+    let sha = "";
+
+    function base64Encode(str) {
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+    function base64Decode(str) {
+      return decodeURIComponent(escape(atob(str)));
+    }
+
+    async function loadKeys() {
+      const token = document.getElementById("token").value.trim();
+      const status = document.getElementById("status");
+      const error = document.getElementById("error");
+      error.textContent = "";
+      if (!token) return alert("Vui lòng nhập GitHub Token!");
+
+      status.textContent = "🔄 Đang tải keys.json...";
+      try {
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+          headers: { Authorization: `token ${token}` }
+        });
+        if (!res.ok) throw new Error(`Lỗi tải: ${res.status}`);
+        const data = await res.json();
+        sha = data.sha;
+        const content = base64Decode(data.content);
+        document.getElementById("keyList").value = content;
+        status.textContent = "✅ Tải keys.json thành công.";
+      } catch (e) {
+        status.textContent = "";
+        error.textContent = "❌ Lỗi: " + e.message;
+      }
+    }
+
+    function addKey() {
+      const newKey = document.getElementById("newKey").value.trim();
+      const textarea = document.getElementById("keyList");
+      if (!newKey) return alert("Vui lòng nhập key mới.");
+      try {
+        let json = JSON.parse(textarea.value);
+        if (!Array.isArray(json.keys)) json.keys = [];
+        if (json.keys.includes(newKey)) return alert("Key đã tồn tại.");
+        json.keys.push(newKey);
+        textarea.value = JSON.stringify(json, null, 2);
+        document.getElementById("newKey").value = "";
+      } catch {
+        alert("Nội dung keys.json không hợp lệ.");
+      }
+    }
+
+    async function saveKeys() {
+      const token = document.getElementById("token").value.trim();
+      const status = document.getElementById("status");
+      const error = document.getElementById("error");
+      error.textContent = "";
+      if (!token) return alert("Vui lòng nhập GitHub Token!");
+
+      const content = document.getElementById("keyList").value;
+      try {
+        JSON.parse(content);
+      } catch {
+        return alert("keys.json không hợp lệ.");
+      }
+
+      status.textContent = "💾 Đang lưu keys.json...";
+      try {
+        const body = {
+          message: "Update keys.json via admin tool",
+          content: base64Encode(content),
+          sha: sha
+        };
+        const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+          method: "PUT",
+          headers: {
+            "Authorization": `token ${token}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(body)
+        });
+        if (!res.ok) throw new Error(`Lỗi lưu file: ${res.status}`);
+        const data = await res.json();
+        sha = data.content.sha;
+        status.textContent = "✅ Lưu thành công!";
+      } catch (e) {
+        status.textContent = "";
+        error.textContent = "❌ Lỗi: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
