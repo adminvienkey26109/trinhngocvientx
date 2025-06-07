@@ -154,6 +154,7 @@
 
   <script>
     let keyExpiresAt;
+    let countdownInterval;
 
     window.onload = () => {
       const savedKey = localStorage.getItem("userKey");
@@ -162,6 +163,8 @@
         keyExpiresAt = parseInt(expires);
         showGameMenu();
         startCountdown();
+      } else {
+        logout();
       }
     }
 
@@ -196,8 +199,7 @@
               status.style.color = "red";
               status.textContent = "⛔ Key đã hết hạn.";
               countdown.textContent = "";
-              localStorage.removeItem("userKey");
-              localStorage.removeItem("keyExpiresAt");
+              logout();
             }
           } else {
             status.style.color = "red";
@@ -223,7 +225,8 @@
         const now = new Date().getTime();
         const distance = keyExpiresAt - now;
         if (distance <= 0) {
-          countdown.textContent = "⛔ Key đã hết hạn.";
+          countdown.textContent = "";
+          clearInterval(countdownInterval);
           logout();
           return;
         }
@@ -233,13 +236,15 @@
         countdown.textContent = `⏳ Key hết hạn sau: ${hours} giờ ${minutes} phút ${seconds} giây`;
       }
       updateCountdown();
-      setInterval(updateCountdown, 1000);
+      countdownInterval = setInterval(updateCountdown, 1000);
     }
 
     function logout() {
+      clearInterval(countdownInterval);
       localStorage.removeItem("userKey");
       localStorage.removeItem("keyExpiresAt");
-      location.reload();
+      document.getElementById("gameMenu").style.display = "none";
+      document.getElementById("countdown").textContent = "";
     }
   </script>
 </body>
