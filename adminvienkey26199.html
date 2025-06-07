@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -9,7 +10,7 @@
       max-width: 720px;
       margin: 20px auto;
       padding: 10px;
-      background: url('https://i.imgur.com/hhAdYYM.png') no-repeat center center fixed;
+      background: url('https://i.imgur.com/your-background.jpg') no-repeat center center fixed;
       background-size: cover;
       color: #fff;
     }
@@ -27,7 +28,9 @@
       width: 80%;
       padding: 6px;
       border-radius: 6px;
-      border: none;
+      border: 2px solid #00cc66;
+      background-color: #000;
+      color: #fff;
     }
     textarea {
       width: 100%;
@@ -108,7 +111,7 @@
 </head>
 <body>
   <div class="box" id="loginBox">
-    <img class="logo" src="https://i.imgur.com/aKXg9HN.png" alt="Logo" /><br />
+    <img class="logo" src="https://i.imgur.com/your-logo.png" alt="Logo" /><br />
     <h2>🔐 Đăng nhập Quản trị</h2>
     <input type="text" id="username" placeholder="Tài khoản" /><br />
     <input type="password" id="password" placeholder="Mật khẩu" /><br />
@@ -119,6 +122,15 @@
   <div class="box" id="mainBox" style="display:none;">
     <h2>🛠️ Quản lý keys.json</h2>
 
+    <!-- 👇 Thêm 5 ô mới tại đây -->
+    <h3>🔧 Thông tin bổ sung</h3>
+    <input type="text" placeholder="Ô 1 - Ví dụ dữ liệu..." /><br />
+    <input type="text" placeholder="Ô 2 - Ví dụ dữ liệu..." /><br />
+    <input type="text" placeholder="Ô 3 - Ví dụ dữ liệu..." /><br />
+    <input type="text" placeholder="Ô 4 - Ví dụ dữ liệu..." /><br />
+    <input type="text" placeholder="Ô 5 - Ví dụ dữ liệu..." /><br />
+    <!-- 👆 Kết thúc phần thêm -->
+
     <label>🔑 Nhập GitHub Token của bạn:</label><br />
     <input type="password" id="token" placeholder="ghp_..." /><br />
     <button onclick="loadKeys()">📥 Tải keys.json</button>
@@ -128,7 +140,7 @@
     <input type="text" id="newKey" placeholder="Nhập key mới..." /><br />
     <label>⏳ Ngày hết hạn:</label><br />
     <input type="date" id="dateInput" />
-    <input type="time" id="timeInput" value="23:59" /><br />
+    <input type="time" id="timeInput" value="00:00" /><br />
 
     <button onclick="generateKey()">🔁 Random 35 ký tự</button>
     <button onclick="addKey()">➕ Thêm key</button><br />
@@ -151,14 +163,15 @@
     </table>
   </div>
 
+  <!-- Giữ nguyên phần JavaScript -->
   <script>
     const owner = "adminvienkey26109";
     const repo = "trinhngocvientx";
     const path = "keys.json";
     let sha = "";
 
-    const validUsername = "aenhavt";
-    const validPassword = "aenhavienkhanh208209";
+    const validUsername = "v";
+    const validPassword = "v";
 
     function login() {
       const user = document.getElementById("username").value.trim();
@@ -219,7 +232,7 @@
       if (!Array.isArray(json.keys)) json.keys = [];
       const now = new Date();
       json.keys = json.keys.filter(k => {
-        if (typeof k === 'string') return true; // nếu key không có expiresAt, giữ lại
+        if (typeof k === 'string') return true;
         if (!k.expiresAt) return true;
         const exp = new Date(k.expiresAt);
         return exp > now;
@@ -242,21 +255,17 @@
 
         const tr = document.createElement("tr");
 
-        // Key cell monospace selectable
         const tdKey = document.createElement("td");
         tdKey.classList.add("key-text");
         tdKey.textContent = key;
         tr.appendChild(tdKey);
 
-        // Expires cell
         const tdExpires = document.createElement("td");
         tdExpires.textContent = expiresAt;
         tr.appendChild(tdExpires);
 
-        // Action cell with copy and delete buttons
         const tdActions = document.createElement("td");
 
-        // Copy button
         const btnCopy = document.createElement("button");
         btnCopy.classList.add("btn-icon");
         btnCopy.title = "Copy key";
@@ -268,7 +277,6 @@
         };
         tdActions.appendChild(btnCopy);
 
-        // Delete button
         const btnDelete = document.createElement("button");
         btnDelete.classList.add("btn-icon");
         btnDelete.title = "Xóa key";
@@ -280,7 +288,6 @@
         tdActions.appendChild(btnDelete);
 
         tr.appendChild(tdActions);
-
         tbody.appendChild(tr);
       });
     }
@@ -308,7 +315,6 @@
 
       let expiresAt = null;
       if (date) {
-        // Tạo chuỗi datetime chuẩn ISO 8601
         expiresAt = new Date(date + "T" + time + ":00").toISOString();
       }
 
@@ -316,7 +322,6 @@
         let json = JSON.parse(document.getElementById("keyList").value);
         if (!Array.isArray(json.keys)) json.keys = [];
 
-        // Kiểm tra key trùng
         if (json.keys.some(item => (typeof item === 'string' ? item : item.key) === newKey)) {
           return alert("Key này đã tồn tại!");
         }
@@ -328,7 +333,6 @@
         document.getElementById("keyList").value = JSON.stringify(json, null, 2);
         renderKeysTable(json.keys);
 
-        // Xóa input key mới, reset ngày giờ
         document.getElementById("newKey").value = "";
         document.getElementById("dateInput").value = "";
         document.getElementById("timeInput").value = "23:59";
