@@ -1,79 +1,63 @@
-<!DOCTYPE html><html lang="vi">
+<!DOCTYPE html>
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
   <title>Đăng nhập & Chọn Game</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: url('https://i.imgur.com/aKXg9HN.png') no-repeat center center fixed;
+      background: url('https://i.imgur.com/Veo6n1B.jpg') no-repeat center center fixed;
       background-size: cover;
       color: white;
       text-align: center;
       padding: 20px;
     }
+
     input, button {
       padding: 10px;
       font-size: 16px;
       margin: 5px;
     }
+
     input {
       width: 80%;
     }
+
     #status {
       font-weight: bold;
       margin-top: 10px;
     }
+
     .game-menu {
       display: none;
       margin-top: 20px;
     }
-    .rainbow-border {
-      border: 3px solid;
-      border-image: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) 1;
-      animation: rainbow 4s linear infinite;
-    }
-    @keyframes rainbow {
-      0% { border-image-slice: 1; }
-      100% { border-image-slice: 1; }
-    }
+
     .game-button {
       display: inline-block;
-      background: green;
+      background: #4CAF50;
       color: white;
       margin: 10px;
       padding: 15px 25px;
       border-radius: 10px;
       font-size: 16px;
       text-decoration: none;
-      animation: blink 1s infinite;
+      border: 2px solid black;
     }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.6; }
-    }
+
     .note {
       background: rgba(0,0,0,0.6);
       margin-top: 20px;
       padding: 10px;
       border-radius: 8px;
     }
+
     #countdown {
       font-size: 18px;
       color: yellow;
       margin-top: 10px;
     }
-    #admin-links {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      text-align: left;
-    }
-    #admin-links a {
-      display: block;
-      color: cyan;
-      text-decoration: none;
-      margin-bottom: 4px;
-    }
+
     #logoutBtn {
       background-color: red;
       color: white;
@@ -83,43 +67,92 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
     img.logo {
       width: 100px;
       margin-bottom: 20px;
     }
+
+    .admin-contact {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px;
+      border-radius: 10px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      text-align: left;
+      max-width: 200px;
+      box-shadow: 0 0 10px rgba(0,255,255,0.5);
+    }
+
+    .admin-contact h3 {
+      color: cyan;
+      margin-bottom: 10px;
+    }
+
+    .admin-contact ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .admin-contact li {
+      margin-bottom: 8px;
+    }
+
+    .admin-contact a {
+      color: #00ffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .admin-contact a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <div id="admin-links">
-    <strong>Liên hệ Admin:</strong>
-    <a href="https://facebook.com/admin1" target="_blank">Admin 1</a>
-    <a href="https://facebook.com/admin2" target="_blank">Admin 2</a>
-    <a href="https://facebook.com/admin3" target="_blank">Admin 3</a>
-    <a href="https://facebook.com/admin4" target="_blank">Admin 4</a>
-    <a href="https://facebook.com/admin5" target="_blank">Admin 5</a>
-  </div>  <img src="https://i.imgur.com/hhAdYYM.png" class="logo" alt="Logo">
+
+  <div class="admin-contact">
+    <h3>📞 Liên hệ Admin</h3>
+    <ul>
+      <li><a href="https://facebook.com/admin1" target="_blank">📱 Admin 1</a></li>
+      <li><a href="https://facebook.com/admin2" target="_blank">📱 Admin 2</a></li>
+      <li><a href="https://facebook.com/admin3" target="_blank">📱 Admin 3</a></li>
+      <li><a href="https://facebook.com/admin4" target="_blank">📱 Admin 4</a></li>
+      <li><a href="https://facebook.com/admin5" target="_blank">📱 Admin 5</a></li>
+    </ul>
+  </div>
+
+  <img src="https://i.imgur.com/AzZ1xL7.png" class="logo" alt="Logo">
   <h2>🎮 Nhập key để vào game</h2>
   <input type="text" id="userKey" placeholder="Nhập key bạn có..."><br>
-  <button onclick="checkKey()">✅ Kiểm tra key</button>
+  <button id="checkBtn" onclick="checkKey()">✅ Kiểm tra key</button>
   <p id="status"></p>
-  <div id="countdown"></div>  <div class="game-menu" id="gameMenu">
+  <div id="countdown"></div>
+
+  <div class="game-menu" id="gameMenu">
     <h3>🎯 Chọn game</h3>
     <div>
-      <a href="game1.html" class="game-button rainbow-border">Game 1 - Tài Xỉu</a>
-      <a href="game2.html" class="game-button rainbow-border">Game 2 - Bầu Cua</a>
-      <a href="game3.html" class="game-button rainbow-border">Game 3 - Lô Đề</a>
-      <a href="game4.html" class="game-button rainbow-border">Game 4 - Xổ Số</a>
-      <a href="game5.html" class="game-button rainbow-border">Game 5 - Tài Xỉu VIP</a>
-      <a href="game6.html" class="game-button rainbow-border">Game 6 - Mini Game</a>
-      <a href="game7.html" class="game-button rainbow-border">Game 7 - Lô Siêu Tốc</a>
-      <a href="game8.html" class="game-button rainbow-border">Game 8 - 3 Càng</a>
-      <a href="game9.html" class="game-button rainbow-border">Game 9 - Keno</a>
-      <a href="game10.html" class="game-button rainbow-border">Game 10 - Random</a>
+      <a href="game1.html" class="game-button">Game 1 - Tài Xỉu</a>
+      <a href="game2.html" class="game-button">Game 2 - Bầu Cua</a>
+      <a href="game3.html" class="game-button">Game 3 - Lô Đề</a>
+      <a href="game4.html" class="game-button">Game 4 - Xổ Số</a>
+      <a href="game5.html" class="game-button">Game 5 - Tài Xỉu VIP</a>
+      <a href="game6.html" class="game-button">Game 6 - Mini Game</a>
+      <a href="game7.html" class="game-button">Game 7 - Lô Siêu Tốc</a>
+      <a href="game8.html" class="game-button">Game 8 - 3 Càng</a>
+      <a href="game9.html" class="game-button">Game 9 - Keno</a>
+      <a href="game10.html" class="game-button">Game 10 - Random</a>
     </div>
     <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
-  </div>  <div class="note">
+  </div>
+
+  <div class="note">
     <p>📢 Ghi chú: "ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!"</p>
-  </div>  <script>
+  </div>
+
+  <script>
     let keyExpiresAt;
 
     window.onload = () => {
@@ -136,6 +169,8 @@
       const inputKey = document.getElementById("userKey").value.trim();
       const status = document.getElementById("status");
       const countdown = document.getElementById("countdown");
+      const checkBtn = document.getElementById("checkBtn");
+
       status.textContent = "🔄 Đang kiểm tra key...";
       status.style.color = "white";
 
@@ -152,10 +187,11 @@
               localStorage.setItem("userKey", inputKey);
               localStorage.setItem("keyExpiresAt", expiresAt);
               keyExpiresAt = expiresAt;
-              status.style.color = "lime";
-              status.textContent = "✅ Key hợp lệ!";
               showGameMenu();
               startCountdown();
+              checkBtn.style.display = "none";
+              status.style.display = "none";
+              document.getElementById("userKey").style.display = "none";
             } else {
               status.style.color = "red";
               status.textContent = "⛔ Key đã hết hạn.";
@@ -179,7 +215,6 @@
 
     function showGameMenu() {
       document.getElementById("gameMenu").style.display = "block";
-      document.getElementById("userKey").style.display = "none";
     }
 
     function startCountdown() {
@@ -206,5 +241,6 @@
       localStorage.removeItem("keyExpiresAt");
       location.reload();
     }
-  </script></body>
+  </script>
+</body>
 </html>
