@@ -20,11 +20,11 @@
     input {
       width: 80%;
       background-color: black;
-      border: 2px solid #4CAF50; /* viền xanh lá */
+      border: 2px solid #4CAF50;
       color: white;
     }
     #checkBtn {
-      background-color: #4CAF50; /* xanh lá */
+      background-color: #4CAF50;
       color: white;
       border: 2px solid black;
       cursor: pointer;
@@ -43,7 +43,7 @@
     }
     .game-button {
       display: inline-block;
-      background: #4CAF50; /* xanh lá */
+      background: #4CAF50;
       color: white;
       margin: 10px;
       padding: 15px 25px;
@@ -55,7 +55,7 @@
       cursor: pointer;
     }
     .game-button:hover {
-      background: #45a049; /* xanh lá đậm khi hover */
+      background: #45a049;
       color: #e0e0e0;
       transform: scale(1.05);
     }
@@ -141,10 +141,13 @@
     window.onload = () => {
       const savedKey = localStorage.getItem("userKey");
       const expires = localStorage.getItem("keyExpiresAt");
-      if (savedKey && expires && new Date().getTime() < parseInt(expires)) {
+      if (savedKey && expires && Date.now() < parseInt(expires)) {
         keyExpiresAt = parseInt(expires);
         showGameMenu();
         startCountdown();
+      } else {
+        localStorage.removeItem("userKey");
+        localStorage.removeItem("keyExpiresAt");
       }
     }
 
@@ -154,6 +157,12 @@
       const countdown = document.getElementById("countdown");
       const checkBtn = document.getElementById("checkBtn");
 
+      if (!inputKey) {
+        status.style.color = "orange";
+        status.textContent = "⚠️ Vui lòng nhập key!";
+        return;
+      }
+
       status.textContent = "🔄 Đang kiểm tra key...";
       status.style.color = "white";
 
@@ -161,11 +170,17 @@
         const res = await fetch("https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json");
         const data = await res.json();
 
-        if (data.keys && Array.isArray(data.keys)) {
-          const keyObj = data.keys.find(k => typeof k === 'object' && k.key === inputKey);
+        if (Array.isArray(data.keys)) {
+          const keyObj = data.keys.find(k => k && typeof k === 'object' && k.key === inputKey);
           if (keyObj) {
-            const expiresAt = new Date(keyObj.expiresAt).getTime();
-            const now = new Date().getTime();
+            const expiresAt = Date.parse(keyObj.expiresAt);
+            if (isNaN(expiresAt)) {
+              status.style.color = "red";
+              status.textContent = "❌ Định dạng ngày hết hạn không hợp lệ.";
+              return;
+            }
+
+            const now = Date.now();
             if (now < expiresAt) {
               localStorage.setItem("userKey", inputKey);
               localStorage.setItem("keyExpiresAt", expiresAt);
@@ -173,9 +188,9 @@
               showGameMenu();
               startCountdown();
 
-              // Ẩn nút và dòng status
               checkBtn.style.display = "none";
               status.style.display = "none";
+              document.getElementById("userKey").style.display = "none";
             } else {
               status.style.color = "red";
               status.textContent = "⛔ Key đã hết hạn.";
@@ -192,30 +207,30 @@
           status.textContent = "❌ Dữ liệu key không đúng định dạng.";
         }
       } catch (e) {
+        console.error(e);
         status.style.color = "red";
-        status.textContent = "❌ Lỗi kiểm tra key.";
+        status.textContent = "❌ Không thể tải file key.";
       }
     }
 
     function showGameMenu() {
       document.getElementById("gameMenu").style.display = "block";
-      document.getElementById("userKey").style.display = "none";
       document.getElementById("countdown").style.display = "block";
     }
 
     function startCountdown() {
       const countdown = document.getElementById("countdown");
       function updateCountdown() {
-        const now = new Date().getTime();
+        const now = Date.now();
         const distance = keyExpiresAt - now;
         if (distance <= 0) {
           countdown.textContent = "⛔ Key đã hết hạn.";
           logout();
           return;
         }
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        const hours = Math.floor((distance / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((distance / (1000 * 60)) % 60);
+        const seconds = Math.floor((distance / 1000) % 60);
         countdown.textContent = `⏳ Key hết hạn sau: ${hours} giờ ${minutes} phút ${seconds} giây`;
       }
       updateCountdown();
