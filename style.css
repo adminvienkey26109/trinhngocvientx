@@ -1,6 +1,7 @@
 body {
   font-family: Arial, sans-serif;
-  background: linear-gradient(to right, #1d4350, #a43931);
+  background: url('https://images.unsplash.com/photo-1607083209942-a98a73f01a5d?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+  background-size: cover;
   color: #fff;
   text-align: center;
   padding: 20px;
@@ -54,21 +55,32 @@ button:hover {
   margin-top: 10px;
 }
 
+/* 🔥 TOOL VIP BUTTON STYLE */
 .game-btn {
-  background-color: #4CAF50;
+  background-color: #50C878; /* Emerald green */
   color: white;
-  border: 3px solid;
-  border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1;
+  border: 3px solid black;
   padding: 10px 20px;
   font-size: 16px;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  animation: led-glow 1.5s infinite alternate;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
 }
 
 .game-btn:hover {
-  background-color: #45a049;
   transform: scale(1.1);
+  box-shadow: 0 0 15px #50C878, 0 0 25px #50C878;
+}
+
+/* ✨ LED Border Glow Animation */
+@keyframes led-glow {
+  0% {
+    box-shadow: 0 0 5px #000;
+  }
+  100% {
+    box-shadow: 0 0 15px #50C878, 0 0 25px #50C878;
+  }
 }
 
 #logoutBtn {
@@ -123,4 +135,4 @@ button:hover {
   0% { transform: scale(1); }
   50% { transform: scale(1.05); color: #ff4081; }
   100% { transform: scale(1); }
-}
+  }}
