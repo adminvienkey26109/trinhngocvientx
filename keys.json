@@ -1,0 +1,9 @@
+{
+  "keys": [
+    "ABCD1234EFGH5678IJKL9012MNOP3456QRS", 
+    {
+      "key": "ZXCVAABB1122CCDD3344EEFF5566GGHH",
+      "expiresAt": "2025-06-30T23:59:00.000Z"
+    }
+  ]
+}
