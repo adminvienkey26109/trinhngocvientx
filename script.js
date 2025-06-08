@@ -20,6 +20,15 @@ const logoutBtn = document.getElementById("logoutBtn");
 const countdownElem = document.getElementById("countdown");
 const userKeyInput = document.getElementById("userKey");
 
+const thongBaoText = `
+1. ADMIN TELE: @BiMax209, Có Não Thì Dùng !!
+2. TOOL FREE THẰNG NÀO BÁN LÀM CHÓ🐕!!!!!!!!
+3. ĐÂY LÀ TOOL DỰ ĐOÁN KHÔNG PHẢI HACK .
+4. TOOL DỰ ĐOÁN KHÔNG ĐƯỢC CHUẨN NÊN AE THÔNG CẢM
+5. TOOL ĐƯỢC TẠO BỞI ADMIN TRING NGOC VIEN
+Có Khắc Mắc Liên Hệ CTV
+`;
+
 function toggleAdminContacts() {
   const cont = document.getElementById("adminContacts");
   cont.style.display = cont.style.display === "block" ? "none" : "block";
@@ -132,4 +141,18 @@ window.onload = () => {
       showGameMenu(null);
     }
   }
-};
+
+  // Thêm nút thông báo
+  const btnThongBao = document.getElementById("btnThongBao");
+  if (btnThongBao) {
+    btnThongBao.onclick = () => alert(thongBaoText);
+  }
+
+  // Thêm nút liên hệ admin
+  const btnLienHe = document.getElementById("btnLienHe");
+  if (btnLienHe) {
+    btnLienHe.onclick = () => {
+      window.open("https://t.me/BiMax209", "_blank");
+    };
+  }
+};};
