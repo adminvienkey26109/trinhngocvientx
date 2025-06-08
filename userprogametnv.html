@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Nhập key để vào game</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -36,7 +36,11 @@
       color: white;
       box-shadow: 0 0 8px #16a085;
     }
-    #status { margin-top: 20px; font-weight: bold; font-size: 18px; }
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+    }
     #gameMenu {
       margin-top: 30px;
       display: none;
@@ -69,8 +73,12 @@
       border-radius: 10px;
     }
     @keyframes ledEffect {
-      0% { transform: rotate(0deg) translateX(-100%); }
-      100% { transform: rotate(360deg) translateX(100%); }
+      0% {
+        transform: rotate(0deg) translateX(-100%);
+      }
+      100% {
+        transform: rotate(360deg) translateX(100%);
+      }
     }
     #logoutBtn {
       margin-top: 15px;
@@ -130,39 +138,39 @@
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
-      0%, 100% { text-shadow: 0 0 10px #16a085; }
-      50% { text-shadow: 0 0 20px #1abc9c; }
+      0%, 100% {
+        text-shadow: 0 0 10px #16a085;
+      }
+      50% {
+        text-shadow: 0 0 20px #1abc9c;
+      }
     }
   </style>
 </head>
 <body>
+  <h2>🎮 Vào game bằng key</h2>
+  <p>Nhập key để kích hoạt, hoặc bạn đã đăng nhập rồi.</p>
+  <input type="text" id="userKey" placeholder="Nhập key bạn có..." />
+  <br />
+  <button onclick="checkKey()">✅ Kiểm tra key</button>
+  <p id="status"></p>
 
-<button id="adminMenuBtn" onclick="toggleAdminContacts()">Menu Admin</button>
-<div id="adminContacts">
-  <a href="https://facebook.com/admin1" target="_blank">Admin 1</a>
-  <a href="https://facebook.com/admin2" target="_blank">Admin 2</a>
-  <a href="https://facebook.com/admin3" target="_blank">Admin 3</a>
-</div>
+  <!-- Game Menu -->
+  <div id="gameMenu">
+    <h3>Chọn game bạn muốn chơi:</h3>
+    <div id="gamesButtons" style="display:flex; flex-wrap:wrap; justify-content:center;"></div>
+    <p id="countdown" class="countdown"></p>
+    <button id="btnLienHe">Liên Hệ Admin 📞</button>
+    <button id="btnThongBao">Thông Báo 📢</button>
+    <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
+  </div>
 
-<h2>🎮 Vào game bằng key</h2>
-<p>Nhập key để kích hoạt, hoặc bạn đã đăng nhập rồi.</p>
-<input type="text" id="userKey" placeholder="Nhập key bạn có..."><br>
-<button onclick="checkKey()">✅ Kiểm tra key</button>
-<p id="status"></p>
+  <!-- Note -->
+  <div id="note">
+    ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
+  </div>
 
-<!-- Game Menu -->
-<div id="gameMenu">
-  <h3>Chọn game bạn muốn chơi:</h3>
-  <div id="gamesButtons" style="display:flex; flex-wrap:wrap; justify-content:center;"></div>
-  <p id="countdown" class="countdown"></p>
-  <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
-</div>
-
-<!-- Note -->
-<div id="note">
-  ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
-</div>
-
-<script src="script.js"></script>
+  <!-- Gọi file script.js bên ngoài -->
+  <script src="script.js"></script>
 </body>
-</html>
+</html></html>
