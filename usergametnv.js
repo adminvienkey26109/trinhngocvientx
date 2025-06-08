@@ -35,7 +35,7 @@ function showGameMenu(expireDate) {
   for (let i = 0; i < 10; i++) {
     const btn = document.createElement("button");
     btn.className = "game-btn";
-    btn.innerHTML = `<span>Game ${i+1}</span>`;
+    btn.innerHTML = `<span>TOOL VIP ${i + 1}</span>`;
     btn.onclick = () => {
       window.location.href = gameLinks[i];
     };
@@ -157,4 +157,4 @@ window.onload = () => {
       showGameMenu(null);
     }
   }
-};
+};};
