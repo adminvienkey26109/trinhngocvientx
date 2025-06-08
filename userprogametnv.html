@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -163,25 +162,40 @@
         const data = await res.json();
 
         if (data.keys && Array.isArray(data.keys)) {
-          const keyObj = data.keys.find(k => typeof k === 'object' && k.key === inputKey);
+          const keyObj = data.keys.find(k => {
+            if (typeof k === 'string') return k === inputKey;
+            if (typeof k === 'object') return k.key === inputKey;
+            return false;
+          });
+
           if (keyObj) {
-            const expiresAt = new Date(keyObj.expiresAt).getTime();
-            const now = new Date().getTime();
-            if (now < expiresAt) {
+            if (typeof keyObj === 'string') {
+              const fakeExpire = Date.now() + 24 * 60 * 60 * 1000; // 24h
               localStorage.setItem("userKey", inputKey);
-              localStorage.setItem("keyExpiresAt", expiresAt);
-              keyExpiresAt = expiresAt;
+              localStorage.setItem("keyExpiresAt", fakeExpire);
+              keyExpiresAt = fakeExpire;
               showGameMenu();
               startCountdown();
-
               checkBtn.style.display = "none";
               status.style.display = "none";
             } else {
-              status.style.color = "red";
-              status.textContent = "⛔ Key đã hết hạn.";
-              countdown.style.display = "none";
-              localStorage.removeItem("userKey");
-              localStorage.removeItem("keyExpiresAt");
+              const expiresAt = new Date(keyObj.expiresAt).getTime();
+              const now = new Date().getTime();
+              if (now < expiresAt) {
+                localStorage.setItem("userKey", inputKey);
+                localStorage.setItem("keyExpiresAt", expiresAt);
+                keyExpiresAt = expiresAt;
+                showGameMenu();
+                startCountdown();
+                checkBtn.style.display = "none";
+                status.style.display = "none";
+              } else {
+                status.style.color = "red";
+                status.textContent = "⛔ Key đã hết hạn.";
+                countdown.style.display = "none";
+                localStorage.removeItem("userKey");
+                localStorage.removeItem("keyExpiresAt");
+              }
             }
           } else {
             status.style.color = "red";
@@ -229,4 +243,4 @@
     }
   </script>
 </body>
-</html>
+</html></html>
