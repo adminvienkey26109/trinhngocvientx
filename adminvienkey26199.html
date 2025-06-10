@@ -174,10 +174,11 @@
     if (time) {
       const now = new Date();
       const [h, m] = time.split(":");
-      now.setHours(h, m, 0, 0);
-      expires = now.toISOString();
+      now.setHours(parseInt(h), parseInt(m), 0, 0);
+      expires = now.toISOString(); // Hết hạn hôm nay tại giờ đã chọn
     } else if (date) {
       const d = new Date(date);
+      d.setHours(23, 59, 59, 999); // Hết hạn cuối ngày được chọn
       expires = d.toISOString();
     }
 
@@ -298,19 +299,6 @@
       container.appendChild(keyDiv);
     });
   }
-
-  // ✅ Lưu GitHub token vào localStorage khi người dùng nhập
-  document.getElementById("token").addEventListener("input", function() {
-    localStorage.setItem("githubToken", this.value);
-  });
-
-  // ✅ Tự động điền token khi mở lại trang
-  window.addEventListener("load", function() {
-    const savedToken = localStorage.getItem("githubToken");
-    if (savedToken) {
-      document.getElementById("token").value = savedToken;
-    }
-  });
 </script>
 </body>
 </html>
