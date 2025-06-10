@@ -52,6 +52,8 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
+      flex-direction: column;
+      align-items: center;
     }
     .game-btn {
       border: 2px solid #1abc9c;
@@ -66,6 +68,7 @@
       user-select: none;
       position: relative;
       overflow: hidden;
+      margin: 5px;
     }
     .game-btn::before {
       content: '';
@@ -102,6 +105,7 @@
       color: white;
       box-shadow: none;
       text-shadow: none;
+      padding: 10px 25px;
     }
     #logoutBtn:hover {
       background-color: #c0392b;
@@ -165,6 +169,22 @@
       0%, 100% { text-shadow: 0 0 10px #16a085; }
       50% { text-shadow: 0 0 20px #1abc9c; }
     }
+    #gameContent {
+      margin-top: 25px;
+      padding: 15px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      text-align: left;
+      font-family: monospace;
+      white-space: pre-wrap;
+      color: #0f0;
+      box-shadow: 0 0 10px #16a085;
+      user-select: text;
+      width: 100%;
+      max-width: 600px;
+    }
   </style>
 </head>
 <body>
@@ -183,11 +203,14 @@
 <p id="status"></p>
 
 <!-- Game Menu -->
-<div id="gameMenu" style="display:none;">
+<div id="gameMenu" style="display:none; flex-direction: column; align-items:center;">
   <h3>Chọn game bạn muốn chơi:</h3>
-  <div id="gamesButtons" style="display:flex; flex-wrap: wrap; justify-content:center;"></div>
+  <div id="gamesButtons" style="display:flex; flex-wrap: wrap; justify-content:center; max-width:600px;"></div>
   <p id="countdown" class="countdown"></p>
   <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
+
+  <!-- Div hiển thị code HTML + script game -->
+  <div id="gameContent" style="display:none;"></div>
 </div>
 
 <!-- Note -->
@@ -198,185 +221,165 @@
 <script>
   const keysURL = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json";
 
+  // Nội dung HTML + Script ví dụ cho game 1-10
+  const htmlSources = {
+    1: `<div><h4>Game 1</h4><p>Đây là nội dung demo game 1.</p><script>console.log("Script Game 1 chạy!");<\/script></div>`,
+    2: `<div><h4>Game 2</h4><p>Game 2 vui vẻ nhé!</p><script>console.log("Script Game 2 chạy!");<\/script></div>`,
+    3: `<div><h4>Game 3</h4><p>Nội dung game 3 đơn giản.</p><script>console.log("Script Game 3 chạy!");<\/script></div>`,
+    4: `<div><h4>Game 4</h4><p>Nội dung game 4.</p></div>`,
+    5: `<div><h4>Game 5</h4><p>Nội dung game 5.</p></div>`,
+    6: `<div><h4>Game 6</h4><p>Nội dung game 6.</p></div>`,
+    7: `<div><h4>Game 7</h4><p>Nội dung game 7.</p></div>`,
+    8: `<div><h4>Game 8</h4><p>Nội dung game 8.</p></div>`,
+    9: `<div><h4>Game 9</h4><p>Nội dung game 9.</p></div>`,
+    10:`<div><h4>Game 10</h4><p>Nội dung game 10.</p></div>`
+  };
 
-  const gameLinks = [
-    "https://adminvienkey26109.github.io/adminvienkey26109/tooltxthuong3.html",
-    "https://game2.example.com",
-    "https://game3.example.com",
-    "https://game4.example.com",
-    "https://game5.example.com",
-    "https://game6.example.com",
-    "https://game7.example.com",
-    "https://game8.example.com",
-    "https://game9.example.com",
-    "https://game10.example.com"
-  ];
-
-  // Lấy các phần tử cần dùng
   const status = document.getElementById("status");
   const gameMenu = document.getElementById("gameMenu");
   const gamesButtons = document.getElementById("gamesButtons");
   const logoutBtn = document.getElementById("logoutBtn");
   const countdownElem = document.getElementById("countdown");
   const userKeyInput = document.getElementById("userKey");
+  const gameContent = document.getElementById("gameContent");
+  let countdownInterval = null;
+  let currentKeyExpire = null;
 
-  // Admin contacts toggle
-  function toggleAdminContacts() {
-    const cont = document.getElementById("adminContacts");
-    if (cont.style.display === "block") {
-      cont.style.display = "none";
-    } else {
-      cont.style.display = "block";
-    }
-  }
-
-  // Hiển thị menu game với nút chuyển hướng
-  function showGameMenu(expireDate) {
-    gameMenu.style.display = "flex";
-    userKeyInput.style.display = "none";
-    document.querySelector("button[onclick='checkKey()']").style.display = "none";
-    logoutBtn.style.display = "inline-block";
-
-    // Tạo nút game 1-10
+  // Tạo nút game 1-10
+  function createGameButtons() {
     gamesButtons.innerHTML = "";
-    for (let i = 0; i < 10; i++) {
+    for(let i=1; i<=10; i++) {
       const btn = document.createElement("button");
       btn.className = "game-btn";
-      btn.innerHTML = `<span>Game ${i+1}</span>`;
-      btn.onclick = () => {
-        window.location.href = gameLinks[i];
-      };
+      btn.innerHTML = `<span>Game ${i}</span>`;
+      btn.onclick = () => loadGameContent(i);
       gamesButtons.appendChild(btn);
-    }
-
-    // Hiển thị đếm ngược hết hạn key
-    if (expireDate) {
-      startCountdown(new Date(expireDate));
     }
   }
 
-  // Đếm ngược thời gian hết hạn key
-  let countdownInterval;
-  function startCountdown(expireDate) {
-    clearInterval(countdownInterval);
+  function loadGameContent(gameNum) {
+    // Hiển thị nội dung game, cần chạy script đúng cách
+    const html = htmlSources[gameNum] || "<p>Chưa có nội dung game này.</p>";
+    // Để script chạy, ta tạo temp div rồi clone vào gameContent
+    gameContent.style.display = "block";
+    gameContent.innerHTML = ""; // Xóa cũ
+    const temp = document.createElement("div");
+    temp.innerHTML = html;
+    gameContent.appendChild(temp);
 
+    // Thực thi các thẻ <script> bên trong nội dung game
+    const scripts = temp.querySelectorAll("script");
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement("script");
+      if(oldScript.src){
+        newScript.src = oldScript.src;
+      } else {
+        newScript.textContent = oldScript.textContent;
+      }
+      document.body.appendChild(newScript);
+      document.body.removeChild(newScript);
+    });
+  }
+
+  // Hiển thị hoặc ẩn admin contact
+  function toggleAdminContacts() {
+    const cont = document.getElementById("adminContacts");
+    cont.style.display = (cont.style.display === "block") ? "none" : "block";
+  }
+
+  // Kiểm tra key hợp lệ và thời hạn key
+  async function checkKey() {
+    const key = userKeyInput.value.trim();
+    if(!key) {
+      status.style.color = "red";
+      status.textContent = "Vui lòng nhập key!";
+      return;
+    }
+    status.style.color = "#1abc9c";
+    status.textContent = "Đang kiểm tra key...";
+    try {
+      const res = await fetch(keysURL + "?t=" + Date.now());
+      if(!res.ok) throw new Error("Không tải được file keys.json");
+      const keysData = await res.json();
+
+      // Tìm key trong keysData, giả sử keysData là mảng hoặc object
+      // Ví dụ keysData: [{key:"xxx", expiresAt: "2025-06-12T15:30:00Z"}, ...]
+      const foundKeyObj = (Array.isArray(keysData) ? keysData : Object.values(keysData))
+        .find(k => k.key === key);
+
+      if(!foundKeyObj) {
+        status.style.color = "red";
+        status.textContent = "Key không hợp lệ!";
+        return;
+      }
+      if(foundKeyObj.expiresAt) {
+        const expireDate = new Date(foundKeyObj.expiresAt);
+        if(expireDate < new Date()) {
+          status.style.color = "red";
+          status.textContent = "Key đã hết hạn!";
+          return;
+        }
+        currentKeyExpire = expireDate;
+        startCountdown();
+      } else {
+        currentKeyExpire = null;
+        countdownElem.textContent = "";
+      }
+
+      status.style.color = "#1abc9c";
+      status.textContent = "Key hợp lệ! Bạn đã đăng nhập thành công.";
+      userKeyInput.disabled = true;
+      gameMenu.style.display = "flex";
+      logoutBtn.style.display = "inline-block";
+      createGameButtons();
+
+    } catch(e) {
+      status.style.color = "red";
+      status.textContent = "Lỗi kiểm tra key: " + e.message;
+    }
+  }
+
+  function logout() {
+    userKeyInput.value = "";
+    userKeyInput.disabled = false;
+    status.textContent = "";
+    gameMenu.style.display = "none";
+    logoutBtn.style.display = "none";
+    countdownElem.textContent = "";
+    currentKeyExpire = null;
+    clearInterval(countdownInterval);
+    gameContent.style.display = "none";
+    gameContent.innerHTML = "";
+  }
+
+  // Hàm đếm ngược thời gian hết hạn key
+  function startCountdown() {
+    if(!currentKeyExpire) {
+      countdownElem.textContent = "";
+      return;
+    }
+    clearInterval(countdownInterval);
     function updateCountdown() {
       const now = new Date();
-      const diff = expireDate - now;
-
-      if (diff <= 0) {
-        clearInterval(countdownInterval);
-        alert("⏰ Key của bạn đã hết hạn và bị ban!");
+      let diff = currentKeyExpire - now;
+      if(diff <= 0) {
+        countdownElem.textContent = "Key đã hết hạn!";
         logout();
         return;
       }
-
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-
-      countdownElem.textContent = `Key hết hạn sau: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+      const hours = Math.floor(diff / (1000*60*60));
+      diff -= hours * 1000*60*60;
+      const minutes = Math.floor(diff / (1000*60));
+      diff -= minutes * 1000*60;
+      const seconds = Math.floor(diff / 1000);
+      countdownElem.textContent = `Thời gian còn lại: ${hours}h ${minutes}p ${seconds}s`;
     }
-
     updateCountdown();
     countdownInterval = setInterval(updateCountdown, 1000);
   }
 
-  // Kiểm tra key hợp lệ & hết hạn
-  async function checkKey() {
-    const inputKey = userKeyInput.value.trim();
-    if (!inputKey) {
-      status.style.color = "red";
-      status.textContent = "❌ Vui lòng nhập key!";
-      return;
-    }
-
-    status.textContent = "🔄 Đang kiểm tra key...";
-    status.style.color = "white";
-
-    try {
-      const res = await fetch(keysURL);
-      const data = await res.json();
-
-      if (!data.keys) throw new Error("Dữ liệu keys không hợp lệ");
-
-      // Tìm key
-      const keyObj = data.keys.find(k => k.key === inputKey);
-
-      if (!keyObj) {
-        status.style.color = "red";
-        status.textContent = "❌ Key không hợp lệ.";
-        return;
-      }
-
-      // Kiểm tra hết hạn
-      if (keyObj.expiresAt) {
-        const expireDate = new Date(keyObj.expiresAt);
-        const now = new Date();
-        if (expireDate < now) {
-          status.style.color = "red";
-          status.textContent = "❌ Key của bạn đã hết hạn và bị ban!";
-          return;
-        }
-
-        // Lưu key + ngày hết hạn vào localStorage
-        localStorage.setItem("userKey", inputKey);
-        localStorage.setItem("keyExpire", keyObj.expiresAt);
-        status.style.color = "green";
-        status.textContent = "✅ Key hợp lệ! Đang chuyển hướng...";
-
-        setTimeout(() => {
-          showGameMenu(keyObj.expiresAt);
-        }, 1000);
-
-      } else {
-        // Key không có ngày hết hạn
-        localStorage.setItem("userKey", inputKey);
-        localStorage.removeItem("keyExpire");
-        status.style.color = "green";
-        status.textContent = "✅ Key hợp lệ! Đang chuyển hướng...";
-        setTimeout(() => {
-          showGameMenu(null);
-        }, 1000);
-      }
-
-    } catch (e) {
-      status.style.color = "red";
-      status.textContent = "❌ Lỗi khi kiểm tra key.";
-      console.error(e);
-    }
-  }
-
-  // Logout: xóa key và reload trang
-  function logout() {
-    localStorage.removeItem("userKey");
-    localStorage.removeItem("keyExpire");
-    location.reload();
-  }
-
-  // Kiểm tra nếu đã đăng nhập rồi
-  window.onload = () => {
-    const savedKey = localStorage.getItem("userKey");
-    const savedExpire = localStorage.getItem("keyExpire");
-
-    if (savedKey) {
-      // Kiểm tra lại xem key có hết hạn không
-      if (savedExpire) {
-        const expireDate = new Date(savedExpire);
-        const now = new Date();
-        if (expireDate < now) {
-          alert("⏰ Key của bạn đã hết hạn và bị ban!");
-          logout();
-          return;
-        }
-        // Hiển thị menu game với countdown
-        showGameMenu(savedExpire);
-      } else {
-        showGameMenu(null);
-      }
-    }
-  };
+  
 </script>
+
 </body>
 </html>
