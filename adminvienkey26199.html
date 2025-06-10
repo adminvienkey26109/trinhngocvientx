@@ -147,7 +147,7 @@
     error.textContent = "";
     status.textContent = "🔄 Đang tải keys.json...";
     try {
-      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
+      const res = await fetch(`https://api.github.com/repos/adminvienkey26109/trinhngocvientx/contents/keys.json?ref=main}`, {
         headers: { Authorization: `token ${token}` }
       });
       if (!res.ok) throw new Error(`Lỗi tải: ${res.status}`);
