@@ -1,5 +1,4 @@
-<!DOCTYPE html><html lang="vi">
-<head>
+<!DOCTYPE html><html lang="vi"><head>
   <meta charset="UTF-8">
   <title>Quản lý keys.json - adminvienkey26199</title>
   <style>
@@ -56,45 +55,36 @@
 </head>
 <body>
   <div class="note">⚠️ VÔ ĐÂY LÀM MẸ GÌ, ĐÉO CHO TK MK ĐÂU MÀ VÔ THÁCH BỌN NGUU CRACK TOOL TAO AHAHAHA</div>
-  <img id="logo" src="https://i.imgur.com/UYiroysl.png" alt="Logo">
-  
-  <div id="loginBox">
+  <img id="logo" src="https://i.imgur.com/UYiroysl.png" alt="Logo">  <div id="loginBox">
     <h3>🔐 Đăng nhập</h3>
     <input type="text" id="username" placeholder="Tài khoản"><br>
     <input type="password" id="password" placeholder="Mật khẩu"><br>
     <button onclick="checkLogin()">➡️ Tiếp tục</button>
-  </div>
-
-  <div id="pinBox" class="hidden">
+  </div>  <div id="pinBox" class="hidden">
     <input type="password" id="pin2" placeholder="Nhập mã PIN 2..."><br>
     <button onclick="checkPin()">✅ Vào quản lý</button>
-  </div>
-
-  <div id="mainBox" class="hidden">
+  </div>  <div id="mainBox" class="hidden">
     <h2>🛠️ Quản lý keys.json</h2>
     <label>🔑 Nhập GitHub Token:</label><br>
     <input type="password" id="token" placeholder="ghp_..."><br>
-    <button onclick="loadKeys()">📥 Tải keys.json</button>
+    <button onclick="loadKeys()">📥 Tải keys.json</button><textarea id="keyList" placeholder='{"keys": []}'></textarea><br>
 
-    <textarea id="keyList" placeholder='{"keys": []}'></textarea><br>
+<input type="text" id="newKey" placeholder="Key mới sẽ tự tạo..." readonly>
+<button onclick="generateKey()">🔁 Tạo Key 35 ký tự</button><br>
 
-    <input type="text" id="newKey" placeholder="Key mới sẽ tự tạo..." readonly>
-    <button onclick="generateKey()">🔁 Tạo Key 35 ký tự</button><br>
+<label>⏳ Hạn sử dụng:</label><br>
+<input type="time" id="timeInput"> hoặc 
+<input type="date" id="dateInput"><br>
 
-    <label>⏳ Hạn sử dụng:</label><br>
-    <input type="time" id="timeInput"> hoặc 
-    <input type="date" id="dateInput"><br>
+<button onclick="addKey()">➕ Thêm key</button>
+<button onclick="saveKeys()">💾 Lưu keys.json</button>
 
-    <button onclick="addKey()">➕ Thêm key</button>
-    <button onclick="saveKeys()">💾 Lưu keys.json</button>
+<p id="status"></p>
+<p id="error"></p>
 
-    <p id="status"></p>
-    <p id="error"></p>
+<div id="keyDisplay" style="margin-top: 20px;"></div>
 
-    <div id="keyDisplay" style="margin-top: 20px;"></div>
-  </div>
-
-<script>
+  </div><script>
   const owner = "adminvienkey26109";
   const repo = "trinhngocvientx";
   const path = "keys.json";
@@ -174,11 +164,11 @@
     if (time) {
       const now = new Date();
       const [h, m] = time.split(":");
-      now.setHours(parseInt(h), parseInt(m), 0, 0);
-      expires = now.toISOString(); // Hết hạn hôm nay tại giờ đã chọn
+      now.setHours(h, m, 0, 0);
+      expires = now.toISOString();
     } else if (date) {
       const d = new Date(date);
-      d.setHours(23, 59, 59, 999); // Hết hạn cuối ngày được chọn
+      d.setHours(23, 59, 59, 999);
       expires = d.toISOString();
     }
 
@@ -299,6 +289,5 @@
       container.appendChild(keyDiv);
     });
   }
-</script>
-</body>
+</script></body>
 </html>
