@@ -1,425 +1,201 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <title>🎮 Vào game bằng key</title>
+  <meta charset="UTF-8">
+  <title>Nhập key để vào game</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
-
-    /* Reset & chung */
     body {
-      font-family: 'Arial', sans-serif;
-      max-width: 700px;
-      margin: 30px auto;
+      font-family: Arial;
+      background: url('https://i.imgur.com/YOUR_BACKGROUND.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
       text-align: center;
-      background: url('https://i.imgur.com/NQ5PcTl.png') no-repeat center/cover; /* Logo nền ví dụ */
-      color: #0f0;
-      text-shadow:
-        0 0 5px #0f0,
-        0 0 10px #0f0,
-        0 0 20px #0f0,
-        0 0 40px #0f0;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
     }
-
-    /* Hiệu ứng chữ led ngọc lục bảo */
-    .led-text {
-      font-family: 'Orbitron', monospace;
-      font-weight: 700;
-      font-size: 1.2rem;
-      color: #0f0;
-      text-shadow:
-        0 0 5px #0f0,
-        0 0 10px #0f0,
-        0 0 20px #0f0,
-        0 0 40px #0f0;
-      animation: ledGlow 2s infinite alternate;
-    }
-    @keyframes ledGlow {
-      from {
-        text-shadow:
-          0 0 5px #0f0,
-          0 0 10px #0f0,
-          0 0 20px #0f0,
-          0 0 40px #0f0;
-      }
-      to {
-        text-shadow:
-          0 0 10px #5aff9a,
-          0 0 20px #5aff9a,
-          0 0 30px #5aff9a,
-          0 0 50px #5aff9a;
-      }
-    }
-
-    input[type=text] {
+    input, button {
       padding: 10px;
-      width: 80%;
       font-size: 16px;
-      border: 2px solid #0f0;
-      border-radius: 6px;
-      background: #000;
-      color: #0f0;
-      box-shadow:
-        0 0 5px #0f0,
-        inset 0 0 8px #0f0;
+      border-radius: 12px;
+      border: 2px solid #00ffae;
+      background: black;
+      color: #00ffae;
+      margin-top: 10px;
     }
-
     button {
-      padding: 10px 25px;
-      font-size: 16px;
-      margin-top: 10px;
       cursor: pointer;
-      background: #000;
-      color: #0f0;
-      border: 2px solid #0f0;
-      border-radius: 8px;
-      box-shadow:
-        0 0 10px #0f0,
-        inset 0 0 8px #0f0;
-      transition: 0.3s;
-      text-transform: uppercase;
+    }
+    .led-button {
+      border: 2px solid #00ffae;
+      background-color: black;
+      color: #00ffae;
+      box-shadow: 0 0 10px #00ffae;
+      margin: 10px;
+      width: 120px;
       font-weight: bold;
-      letter-spacing: 1.5px;
     }
-    button:hover {
-      box-shadow:
-        0 0 20px #5aff9a,
-        inset 0 0 12px #5aff9a;
-      color: #5aff9a;
-      border-color: #5aff9a;
-    }
-
-    #status {
-      margin-top: 20px;
-      font-weight: bold;
-      min-height: 30px;
-    }
-
-    #gameMenu {
-      margin-top: 30px;
+    #gameMenu, #adminLinks, #logoutBtn, #countdown, #note, #gameContent {
       display: none;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-    }
-
-    .game-btn {
-      background: #000;
-      border: 2px solid #0f0;
-      border-radius: 8px;
-      color: #0f0;
-      padding: 15px 25px;
-      cursor: pointer;
-      min-width: 80px;
-      font-weight: bold;
-      font-size: 18px;
-      box-shadow:
-        0 0 10px #0f0,
-        inset 0 0 8px #0f0;
-      transition: 0.3s;
-      user-select: none;
-      position: relative;
-      text-shadow:
-        0 0 5px #0f0,
-        0 0 10px #0f0;
-    }
-    .game-btn:hover {
-      color: #5aff9a;
-      border-color: #5aff9a;
-      box-shadow:
-        0 0 20px #5aff9a,
-        inset 0 0 12px #5aff9a;
-      text-shadow:
-        0 0 10px #5aff9a,
-        0 0 20px #5aff9a;
-    }
-
-    #logoutBtn {
-      margin-top: 30px;
-      background: #000;
-      border: 2px solid #0f0;
-      border-radius: 8px;
-      color: #0f0;
-      padding: 12px 30px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow:
-        0 0 10px #0f0,
-        inset 0 0 8px #0f0;
-      transition: 0.3s;
-      user-select: none;
-    }
-    #logoutBtn:hover {
-      color: #5aff9a;
-      border-color: #5aff9a;
-      box-shadow:
-        0 0 20px #5aff9a,
-        inset 0 0 12px #5aff9a;
-    }
-
-    #noteOutside, #noteInside {
       margin-top: 20px;
-      color: #0f0;
-      font-weight: bold;
-      background: rgba(0,0,0,0.7);
-      padding: 10px;
-      border: 2px solid #0f0;
-      border-radius: 8px;
-      text-shadow:
-        0 0 5px #0f0;
-      user-select: none;
     }
-
-    /* Góc trên trái nút menu */
-    #menuToggleBtn {
-      position: fixed;
-      top: 15px;
-      left: 15px;
-      z-index: 9999;
-      background: #000;
-      border: 2px solid #0f0;
-      border-radius: 8px;
-      padding: 10px 15px;
-      cursor: pointer;
-      color: #0f0;
-      font-weight: bold;
-      box-shadow:
-        0 0 10px #0f0,
-        inset 0 0 8px #0f0;
-      transition: 0.3s;
-      user-select: none;
+    .rainbow-text {
+      animation: rainbow 4s linear infinite;
     }
-    #menuToggleBtn:hover {
-      color: #5aff9a;
-      border-color: #5aff9a;
-      box-shadow:
-        0 0 20px #5aff9a,
-        inset 0 0 12px #5aff9a;
+    @keyframes rainbow {
+      0%{color:red;} 14%{color:orange;} 28%{color:yellow;}
+      42%{color:green;} 57%{color:blue;} 71%{color:indigo;} 85%{color:violet;} 100%{color:red;}
     }
-
-    #adminLinks {
-      position: fixed;
-      top: 60px;
-      left: 15px;
-      background: rgba(0,0,0,0.8);
-      border: 2px solid #0f0;
-      border-radius: 8px;
-      padding: 10px;
-      display: none;
-      z-index: 9998;
-      text-align: left;
-      min-width: 180px;
+    #adminToggle {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 8px 16px;
+      border-radius: 10px;
     }
-    #adminLinks a {
-      display: block;
-      color: #0f0;
-      text-decoration: none;
-      font-weight: bold;
-      margin-bottom: 8px;
-      text-shadow:
-        0 0 5px #0f0;
-      transition: 0.3s;
-    }
-    #adminLinks a:hover {
-      color: #5aff9a;
-      text-shadow:
-        0 0 10px #5aff9a;
-    }
-
-    /* Hiệu ứng viền LED chữ đếm ngược */
-    #countdown {
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-top: 10px;
-      color: #0f0;
-      text-shadow:
-        0 0 7px #0f0,
-        0 0 14px #0f0,
-        0 0 21px #0f0,
-        0 0 28px #5aff9a,
-        0 0 35px #5aff9a,
-        0 0 42px #5aff9a;
-      animation: ledGlow 2s infinite alternate;
-      user-select: none;
+    a { color: #00ffae; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    #gameInnerContent {
+      margin-top: 20px;
+      padding: 20px;
+      border: 2px solid #00ffae;
+      border-radius: 12px;
+      background: rgba(0,0,0,0.6);
+      box-shadow: 0 0 10px #00ffae;
     }
   </style>
 </head>
 <body>
-
-  <button id="menuToggleBtn" title="Liên hệ Admin">☰ Menu</button>
+  <button id="adminToggle" onclick="toggleAdminLinks()">📩 Liên hệ admin</button>
   <div id="adminLinks">
-    <a href="https://facebook.com/admin1" target="_blank" rel="noopener noreferrer">Facebook Admin 1</a>
-    <a href="https://facebook.com/admin2" target="_blank" rel="noopener noreferrer">Facebook Admin 2</a>
-    <a href="https://facebook.com/admin3" target="_blank" rel="noopener noreferrer">Facebook Admin 3</a>
+    <p><a href="https://facebook.com/admin1" target="_blank">Admin 1</a></p>
+    <p><a href="https://facebook.com/admin2" target="_blank">Admin 2</a></p>
+    <p><a href="https://facebook.com/admin3" target="_blank">Admin 3</a></p>
   </div>
 
-  <h2 class="led-text">🎮 Vào game bằng key</h2>
-
-  <div id="loginArea">
-    <input type="text" id="userKey" placeholder="Nhập key bạn có..." autocomplete="off" /><br />
-    <button onclick="checkKey()">✅ Kiểm tra key</button>
-    <p id="status"></p>
-    <div id="noteOutside" class="led-text">
-      ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
-    </div>
-  </div>
+  <h2 class="rainbow-text">🎮 Nhập Key Để Vào Game</h2>
+  <p id="note">* Vui lòng nhập key hợp lệ. Nếu chưa có, <a href="https://facebook.com/admin1" target="_blank">liên hệ admin</a></p>
+  <input type="text" id="userKey" placeholder="Nhập key bạn có...">
+  <br><button onclick="checkKey()">✅ Kiểm tra key</button>
+  <p id="status"></p>
 
   <div id="gameMenu">
-    <div class="led-text" id="welcomeMsg"></div>
-    <div id="countdown"></div>
-    <p id="noteInside" class="led-text">
-      Lựa chọn game bạn muốn chơi (1-10)
-    </p>
-    <div id="buttonsContainer"></div>
+    <h3>Chọn Game:</h3>
+    <div>
+      <button class="led-button" onclick="selectGame(1)">Game 1</button>
+      <button class="led-button" onclick="selectGame(2)">Game 2</button>
+      <button class="led-button" onclick="selectGame(3)">Game 3</button>
+      <button class="led-button" onclick="selectGame(4)">Game 4</button>
+      <button class="led-button" onclick="selectGame(5)">Game 5</button>
+      <button class="led-button" onclick="selectGame(6)">Game 6</button>
+      <button class="led-button" onclick="selectGame(7)">Game 7</button>
+      <button class="led-button" onclick="selectGame(8)">Game 8</button>
+      <button class="led-button" onclick="selectGame(9)">Game 9</button>
+      <button class="led-button" onclick="selectGame(10)">Game 10</button>
+    </div>
+    <p id="countdown"></p>
     <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
+    <p id="note">ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!</p>
+  </div>
+
+  <div id="gameContent">
+    <p class="rainbow-text">🔥 Bạn đang chơi <span id="currentGame"></span></p>
+    <div id="gameInnerContent"></div>
+    <button onclick="backToMenu()">⬅ Quay lại menu</button>
   </div>
 
   <script>
-    const repoKeysUrl = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json";
-
-    const adminLinksBtn = document.getElementById("menuToggleBtn");
-    const adminLinksDiv = document.getElementById("adminLinks");
-
-    // Toggle hiển thị liên hệ admin
-    adminLinksBtn.addEventListener("click", () => {
-      adminLinksDiv.style.display = adminLinksDiv.style.display === "block" ? "none" : "block";
-    });
-
-    // Hiển thị nút game 1-10
-    function createGameButtons() {
-      const container = document.getElementById("buttonsContainer");
-      container.innerHTML = "";
-      for(let i=1; i<=10; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = `Game ${i}`;
-        btn.className = "game-btn led-text";
-        btn.onclick = () => alert(`Bạn chọn Game ${i} (chưa có chức năng thực tế)`); // Thay bằng chuyển trang hoặc code game thật
-        container.appendChild(btn);
-      }
+    function toggleAdminLinks() {
+      const panel = document.getElementById("adminLinks");
+      panel.style.display = panel.style.display === "block" ? "none" : "block";
     }
 
-    // Hiển thị đếm ngược thời gian hết hạn
-    function startCountdown(expiryISO) {
-      const countdownElem = document.getElementById("countdown");
-      function update() {
-        const now = new Date();
-        const expiry = new Date(expiryISO);
-        const diff = expiry - now;
-        if(diff <= 0) {
-          countdownElem.textContent = "Key đã hết hạn! Bạn sẽ bị đăng xuất.";
-          countdownElem.style.color = "#f00";
+    function logout() {
+      localStorage.removeItem("key");
+      localStorage.removeItem("expiresAt");
+      location.reload();
+    }
+
+    function selectGame(num) {
+      document.getElementById("gameMenu").style.display = "none";
+      document.getElementById("gameContent").style.display = "block";
+      document.getElementById("currentGame").textContent = `Game ${num}`;
+      document.getElementById("gameInnerContent").innerHTML = `<p>Nội dung Game ${num} đang tải... (Bạn có thể thêm gì tùy bạn muốn ở đây)</p>`;
+      // Thêm nội dung đặc trưng cho từng game ở đây, ví dụ:
+      // if (num === 1) {
+      //   document.getElementById("gameInnerContent").innerHTML = `<p>Game 1 - Nội dung đặc biệt ở đây</p>`;
+      // }
+    }
+
+    function backToMenu() {
+      document.getElementById("gameContent").style.display = "none";
+      document.getElementById("gameMenu").style.display = "block";
+    }
+
+    function startCountdown(expireAt) {
+      const countdown = document.getElementById("countdown");
+      const interval = setInterval(() => {
+        const diff = expireAt - Date.now();
+        if (diff <= 0) {
+          clearInterval(interval);
+          alert("🔴 Key đã hết hạn!");
           logout();
-          return;
+        } else {
+          const minutes = Math.floor(diff / 60000);
+          const seconds = Math.floor((diff % 60000) / 1000);
+          countdown.innerHTML = `⏳ Hết hạn sau: <span style="color:#00ffae; text-shadow: 0 0 10px #00ffae">${minutes} phút ${seconds} giây</span>`;
         }
-        const days = Math.floor(diff / (1000*60*60*24));
-        const hours = Math.floor((diff / (1000*60*60)) % 24);
-        const minutes = Math.floor((diff / (1000*60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-
-        countdownElem.textContent = `⏳ Key còn hạn: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
-      }
-      update();
-      return setInterval(update, 1000);
+      }, 1000);
     }
 
-    // Kiểm tra key hợp lệ & chưa hết hạn
     async function checkKey() {
       const inputKey = document.getElementById("userKey").value.trim();
       const status = document.getElementById("status");
-      if(!inputKey) {
-        status.style.color = "#f00";
-        status.textContent = "❌ Vui lòng nhập key.";
-        return;
-      }
-      status.style.color = "#0f0";
       status.textContent = "🔄 Đang kiểm tra key...";
 
       try {
-        const res = await fetch(repoKeysUrl + `?t=${Date.now()}`); // cache buster
-        if(!res.ok) throw new Error("Lỗi fetch keys");
+        const res = await fetch("https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json");
         const data = await res.json();
-
-        // Dữ liệu keys dạng: { keys: [ {key: "...", expiresAt:"2025-06-10T23:59:59Z"}, ... ] }
-        // hoặc bạn có thể điều chỉnh lại dữ liệu trong keys.json theo cấu trúc này
-
-        const found = data.keys.find(k => k.key === inputKey);
-
-        if(found) {
-          const now = new Date();
-          const expiry = new Date(found.expiresAt);
-          if(expiry <= now) {
-            status.style.color = "#f00";
-            status.textContent = "❌ Key đã hết hạn và bị ban!";
-            localStorage.removeItem("savedKey");
-            return;
-          }
-          status.style.color = "green";
-          status.textContent = "✅ Key hợp lệ! Đang chuyển hướng...";
-
-          // Lưu key localStorage để lần sau không cần nhập
-          localStorage.setItem("savedKey", inputKey);
-
-          // Hiển thị menu game
-          enterGame(found);
-
-        } else {
-          status.style.color = "#f00";
-          status.textContent = "❌ Key không hợp lệ.";
-          localStorage.removeItem("savedKey");
-        }
-
-      } catch (e) {
-        status.style.color = "#f00";
-        status.textContent = "❌ Lỗi khi kiểm tra key.";
-        console.error(e);
-      }
-    }
-
-    // Hiển thị menu game, ẩn login area
-    let countdownInterval = null;
-    function enterGame(keyObj) {
-      document.getElementById("loginArea").style.display = "none";
-      document.getElementById("gameMenu").style.display = "flex";
-      createGameButtons();
-      document.getElementById("welcomeMsg").textContent = `🎉 Chào mừng bạn! Key: ${keyObj.key}`;
-      if(countdownInterval) clearInterval(countdownInterval);
-      countdownInterval = startCountdown(keyObj.expiresAt);
-    }
-
-    // Đăng xuất
-    function logout() {
-      localStorage.removeItem("savedKey");
-      if(countdownInterval) clearInterval(countdownInterval);
-      document.getElementById("gameMenu").style.display = "none";
-      document.getElementById("loginArea").style.display = "block";
-      document.getElementById("status").textContent = "";
-      document.getElementById("userKey").value = "";
-    }
-
-    // Tự động đăng nhập nếu có key trong localStorage
-    async function tryAutoLogin() {
-      const savedKey = localStorage.getItem("savedKey");
-      if(savedKey) {
-        document.getElementById("userKey").value = savedKey;
-        // Lặp lại logic checkKey nhưng không đổi status text, chỉ hiện menu hoặc logout
-        try {
-          const res = await fetch(repoKeysUrl + `?t=${Date.now()}`);
-          if(!res.ok) throw new Error("Lỗi fetch keys");
-          const data = await res.json();
-          const found = data.keys.find(k => k.key === savedKey);
-          if(found && new Date(found.expiresAt) > new Date()) {
-            enterGame(found);
+        const keyObj = data.keys.find(k => k.key === inputKey);
+        if (keyObj) {
+          const expiresAt = new Date(keyObj.expiresAt).getTime();
+          if (expiresAt > Date.now()) {
+            localStorage.setItem("key", inputKey);
+            localStorage.setItem("expiresAt", expiresAt);
+            status.textContent = "✅ Key hợp lệ! Đang chuyển hướng...";
+            status.style.color = "green";
+            showMenu(expiresAt);
           } else {
-            logout();
+            status.textContent = "❌ Key đã hết hạn.";
+            status.style.color = "red";
           }
-        } catch {
-          logout();
+        } else {
+          status.textContent = "❌ Key không hợp lệ.";
+          status.style.color = "red";
         }
+      } catch (e) {
+        status.textContent = "❌ Lỗi khi kiểm tra key.";
+        status.style.color = "red";
       }
     }
 
-    tryAutoLogin();
+    function showMenu(expireAt) {
+      document.getElementById("status").style.display = "none";
+      document.getElementById("gameMenu").style.display = "block";
+      document.getElementById("countdown").style.display = "block";
+      startCountdown(expireAt);
+    }
 
+    window.onload = () => {
+      const savedKey = localStorage.getItem("key");
+      const expiresAt = parseInt(localStorage.getItem("expiresAt"));
+      if (savedKey && expiresAt > Date.now()) {
+        showMenu(expiresAt);
+      } else {
+        localStorage.removeItem("key");
+        localStorage.removeItem("expiresAt");
+      }
+    }
   </script>
 </body>
-  </html>
+        </html>
