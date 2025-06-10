@@ -1,11 +1,3 @@
 {
-  "keys": [
-    "abc123",
-    "testvip",
-    "vienvip",
-    {
-      "key": "0tZk3nQUgD87z24izzjJiO9LYeHpbHIvM30",
-      "expiresAt": ""
-    }
-  ]
+  "keys": []
 }
