@@ -196,7 +196,7 @@
   }
 
   async function saveKeys() {
-    const token = document.getElementById("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").value.trim();
+    const token = document.getElementById("token").value.trim();
     if (!token) return alert("Vui lòng nhập GitHub Token!");
     localStorage.setItem("github_token", token); // Lưu lại token
 
@@ -221,7 +221,7 @@
       const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         method: "PUT",
         headers: {
-          "Authorization": `token ${token}`,
+          "Authorization": `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 ${token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(body)
