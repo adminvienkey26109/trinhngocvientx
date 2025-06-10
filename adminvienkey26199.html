@@ -139,15 +139,14 @@
 
   async function loadKeys() {
     const token = document.getElementById("token").value.trim();
-    if (!token) return alert("Vui lòng nhập GitHub Token!");
-    localStorage.setItem("github_token", token); // Lưu token
-
     const status = document.getElementById("status");
     const error = document.getElementById("error");
     error.textContent = "";
+    if (!token) return alert("Vui lòng nhập GitHub Token!");
+
     status.textContent = "🔄 Đang tải keys.json...";
     try {
-      const res = await fetch(`https://api.github.com/repos/adminvienkey26109/trinhngocvientx/contents/keys.json?ref=main}`, {
+      const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         headers: { Authorization: `token ${token}` }
       });
       if (!res.ok) throw new Error(`Lỗi tải: ${res.status}`);
@@ -197,12 +196,10 @@
 
   async function saveKeys() {
     const token = document.getElementById("token").value.trim();
-    if (!token) return alert("Vui lòng nhập GitHub Token!");
-    localStorage.setItem("github_token", token); // Lưu lại token
-
     const status = document.getElementById("status");
     const error = document.getElementById("error");
     error.textContent = "";
+    if (!token) return alert("Vui lòng nhập GitHub Token!");
 
     const content = document.getElementById("keyList").value;
     try {
@@ -221,7 +218,7 @@
       const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
         method: "PUT",
         headers: {
-          "Authorization": `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 ${token}`,
+          "Authorization": `token ${token}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(body)
@@ -302,13 +299,18 @@
     });
   }
 
-  // 🔁 Tự động điền lại token đã lưu nếu có
-  window.onload = () => {
-    const savedToken = localStorage.getItem("github_token");
+  // ✅ Lưu GitHub token vào localStorage khi người dùng nhập
+  document.getElementById("token").addEventListener("input", function() {
+    localStorage.setItem("githubToken", this.value);
+  });
+
+  // ✅ Tự động điền token khi mở lại trang
+  window.addEventListener("load", function() {
+    const savedToken = localStorage.getItem("githubToken");
     if (savedToken) {
       document.getElementById("token").value = savedToken;
     }
-  };
+  });
 </script>
 </body>
 </html>
