@@ -1,4 +1,4 @@
-const keysURL = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json";
+const keysURL = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json";
 
 const gameLinks = [
   "https://adminvienkey26109.github.io/adminvienkey26109/tooltxthuong3.html",
