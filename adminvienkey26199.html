@@ -139,11 +139,12 @@
 
   async function loadKeys() {
     const token = document.getElementById("token").value.trim();
+    if (!token) return alert("Vui lòng nhập GitHub Token!");
+    localStorage.setItem("github_token", token); // Lưu token
+
     const status = document.getElementById("status");
     const error = document.getElementById("error");
     error.textContent = "";
-    if (!token) return alert("Vui lòng nhập GitHub Token!");
-
     status.textContent = "🔄 Đang tải keys.json...";
     try {
       const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`, {
@@ -195,11 +196,13 @@
   }
 
   async function saveKeys() {
-    const token = document.getElementById("token").value.trim();
+    const token = document.getElementById("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").value.trim();
+    if (!token) return alert("Vui lòng nhập GitHub Token!");
+    localStorage.setItem("github_token", token); // Lưu lại token
+
     const status = document.getElementById("status");
     const error = document.getElementById("error");
     error.textContent = "";
-    if (!token) return alert("Vui lòng nhập GitHub Token!");
 
     const content = document.getElementById("keyList").value;
     try {
@@ -298,6 +301,14 @@
       container.appendChild(keyDiv);
     });
   }
+
+  // 🔁 Tự động điền lại token đã lưu nếu có
+  window.onload = () => {
+    const savedToken = localStorage.getItem("github_token");
+    if (savedToken) {
+      document.getElementById("token").value = savedToken;
+    }
+  };
 </script>
 </body>
 </html>
