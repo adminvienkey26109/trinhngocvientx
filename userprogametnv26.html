@@ -5,48 +5,177 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Vào game bằng key</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: #010;
+    color: #afa;
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
+  }
+  #bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    background: #010;
+  }
+  #mainContainer {
+    position: relative;
+    z-index: 10;
     max-width: 600px;
     margin: 30px auto;
-    text-align: center;
-    background: #010;
-    color: #cfc;
-    position: relative;
+    padding: 20px;
+    background: #001100cc;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #0f0;
   }
-  input {
-    padding: 10px;
-    width: 80%;
-    font-size: 16px;
-    border: 2px solid #0c0;
-    border-radius: 6px;
+  h2.animated-text, h3.animated-text {
+    animation: glow 2s ease-in-out infinite alternate;
+    text-align: center;
+    user-select: none;
+  }
+  @keyframes glow {
+    from {
+      text-shadow:
+        0 0 5px #0f0,
+        0 0 10px #0f0,
+        0 0 20px #0f0,
+        0 0 30px #0f0;
+    }
+    to {
+      text-shadow:
+        0 0 10px #0f0,
+        0 0 20px #0f0,
+        0 0 40px #0f0,
+        0 0 60px #0f0;
+    }
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    border: 2px solid #0f0;
+    border-radius: 8px;
     background: #002200;
     color: #afa;
+    box-sizing: border-box;
   }
   button {
-    padding: 10px 20px;
-    font-size: 16px;
-    margin-top: 10px;
-    cursor: pointer;
-    background: #000;
-    color: #0f0;
+    margin-top: 15px;
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 10px;
     border: 2px solid #0f0;
-    border-radius: 6px;
+    background: linear-gradient(45deg, #004400, #008800);
+    color: #afa;
+    cursor: pointer;
     box-shadow:
-      0 0 6px #0f0,
-      inset 0 0 6px #0f0;
-    transition: 0.3s;
+      0 0 8px #0f0,
+      inset 0 0 8px #0f0;
+    transition: all 0.3s ease;
   }
   button:hover {
-    background: #0f0;
+    background: linear-gradient(45deg, #00aa00, #00ff00);
     color: #000;
     box-shadow:
-      0 0 12px #0f0,
-      inset 0 0 12px #0f0;
+      0 0 15px #0f0,
+      inset 0 0 15px #0f0;
   }
   #status {
     margin-top: 20px;
+    font-size: 18px;
     font-weight: bold;
+    user-select: none;
+  }
+  #expirationTimer {
+    margin-top: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #0f0;
+    text-shadow: 0 0 8px #0f0;
+    user-select: none;
+  }
+  #gameMenu {
+    margin-top: 25px;
+    display: none;
+    text-align: center;
+  }
+  #gameMenu button {
+    width: 45px;
+    height: 45px;
+    margin: 5px;
+    border-radius: 8px;
+    border: 2px solid #0f0;
+    background: linear-gradient(45deg, #004400, #008800);
+    color: #afa;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow:
+      0 0 8px #0f0,
+      inset 0 0 8px #0f0;
+    transition: all 0.3s ease;
+  }
+  #gameMenu button:hover {
+    background: linear-gradient(45deg, #00aa00, #00ff00);
+    color: #000;
+    box-shadow:
+      0 0 15px #0f0,
+      inset 0 0 15px #0f0;
+  }
+  #gameContent {
+    margin-top: 20px;
+    display: none;
+    background: #002200cc;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px #0f0;
+  }
+  .game-div {
+    display: none;
+    font-size: 16px;
+  }
+  #backToMenuBtn {
+    margin-top: 15px;
+    width: auto;
+    padding: 10px 20px;
+  }
+  #note {
+    margin-top: 25px;
+    background: #003300cc;
+    border: 2px solid #0f0;
+    padding: 10px;
+    border-radius: 10px;
+    font-weight: bold;
+    user-select: none;
+  }
+  #topLeftMenu {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 20;
+  }
+  #adminContact {
+    display: none;
+    margin-top: 8px;
+    background: #003300cc;
+    border: 2px solid #0f0;
+    border-radius: 8px;
+    padding: 10px;
+    max-width: 200px;
+    user-select: none;
+  }
+  #adminContact a {
+    display: block;
+    color: #0f0;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+  #adminContact a:hover {
+    text-decoration: underline;
   }
   .led-button {
     background: #000;
@@ -57,8 +186,8 @@
       0 0 8px #0f0,
       inset 0 0 8px #0f0;
     cursor: pointer;
-    margin: 5px;
-    padding: 10px 15px;
+    margin: 5px 0;
+    padding: 8px 12px;
     font-weight: bold;
   }
   .led-button:hover {
@@ -68,384 +197,228 @@
       0 0 15px #0f0,
       inset 0 0 15px #0f0;
   }
-  #gameMenu button {
-    width: 45px;
-    height: 45px;
-    margin: 5px;
-    font-weight: bold;
-    font-size: 16px;
-  }
-  #gameContent {
-    margin-top: 20px;
-  }
-  .game-div {
-    display: none;
-    margin-top: 10px;
-    border: 2px solid #0f0;
-    padding: 10px;
-    border-radius: 8px;
-    background: #002200cc;
-  }
-  .animated-text {
-    animation: glow 2s infinite alternate;
-  }
-  @keyframes glow {
-    from {
-      text-shadow:
-        0 0 5px #0f0,
-        0 0 10px #0f0,
-        0 0 20px #0f0,
-        0 0 40px #0f0;
-    }
-    to {
-      text-shadow:
-        0 0 10px #0f0,
-        0 0 20px #0f0,
-        0 0 30px #0f0,
-        0 0 50px #0f0;
-    }
-  }
-  #note {
-    margin-top: 15px;
-    font-size: 14px;
-    color: #afa;
-    font-weight: bold;
-    border: 2px solid #0f0;
-    padding: 10px;
-    border-radius: 8px;
-    background: #002200cc;
-  }
-  #topLeftMenu {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-  }
-  #adminContact {
-    display: none;
-    margin-top: 10px;
-    background: #003300cc;
-    border: 2px solid #0f0;
-    border-radius: 6px;
-    padding: 10px;
-  }
-  #adminContact a {
-    display: block;
-    color: #0f0;
-    text-decoration: none;
-    margin: 5px 0;
-  }
-  #expirationTimer {
-    font-weight: bold;
-    margin-top: 10px;
-    color: #0f0;
-    text-shadow: 0 0 8px #0f0;
-  }
 </style>
 </head>
 <body>
 
-<!-- Menu liên hệ admin góc trên trái -->
+<canvas id="bgCanvas"></canvas>
+
 <div id="topLeftMenu">
   <button class="led-button" id="toggleAdminBtn">☰ Menu Admin</button>
   <div id="adminContact">
-    <a href="https://facebook.com/admin1" target="_blank">Admin 1 (Facebook)</a>
-    <a href="https://facebook.com/admin2" target="_blank">Admin 2 (Facebook)</a>
-    <a href="https://facebook.com/admin3" target="_blank">Admin 3 (Facebook)</a>
+    <a href="https://facebook.com/admin1" target="_blank" rel="noopener">Admin 1 (Facebook)</a>
+    <a href="https://facebook.com/admin2" target="_blank" rel="noopener">Admin 2 (Facebook)</a>
+    <a href="https://facebook.com/admin3" target="_blank" rel="noopener">Admin 3 (Facebook)</a>
   </div>
 </div>
 
-<h2 class="animated-text">🎮 Vào game bằng key</h2>
+<div id="mainContainer">
+  <h2 class="animated-text">🎮 Vào game bằng key</h2>
 
-<!-- Phần nhập key -->
-<div id="keyInputSection">
   <input type="text" id="userKey" placeholder="Nhập key bạn có..." autocomplete="off" />
-  <br />
-  <button onclick="checkKey()">✅ Kiểm tra key</button>
+  <button id="checkKeyBtn">✅ Kiểm tra key</button>
   <p id="status"></p>
   <p id="expirationTimer"></p>
-</div>
 
-<!-- Phần game menu -->
-<div id="gameMenu" style="display:none;">
-  <h3 class="animated-text">Chọn game bạn muốn chơi</h3>
-  <div>
-    <!-- Nút game 1-10 -->
-    <button class="led-button" onclick="openGame(1)">1</button>
-    <button class="led-button" onclick="openGame(2)">2</button>
-    <button class="led-button" onclick="openGame(3)">3</button>
-    <button class="led-button" onclick="openGame(4)">4</button>
-    <button class="led-button" onclick="openGame(5)">5</button>
-    <button class="led-button" onclick="openGame(6)">6</button>
-    <button class="led-button" onclick="openGame(7)">7</button>
-    <button class="led-button" onclick="openGame(8)">8</button>
-    <button class="led-button" onclick="openGame(9)">9</button>
-    <button class="led-button" onclick="openGame(10)">10</button>
-  </div>
-  <button class="led-button" onclick="logout()">🚪 Đăng xuất</button>
-</div>
-
-<!-- Nội dung game (ẩn mặc định) -->
-<div id="gameContent" style="display:none;">
-  <h3 class="animated-text" id="gameTitle"></h3>
-
-  <div id="game1" class="game-div">
-    <p>Nội dung Game 1 ở đây</p>
-  </div>
-  <div id="game2" class="game-div">
-    <p>Nội dung Game 2 ở đây</p>
-  </div>
-  <div id="game3" class="game-div">
-    <p>Nội dung Game 3 ở đây</p>
-  </div>
-  <div id="game4" class="game-div">
-    <p>Nội dung Game 4 ở đây</p>
-  </div>
-  <div id="game5" class="game-div">
-    <p>Nội dung Game 5 ở đây</p>
-  </div>
-  <div id="game6" class="game-div">
-    <p>Nội dung Game 6 ở đây</p>
-  </div>
-  <div id="game7" class="game-div">
-    <p>Nội dung Game 7 ở đây</p>
-  </div>
-  <div id="game8" class="game-div">
-    <p>Nội dung Game 8 ở đây</p>
-  </div>
-  <div id="game9" class="game-div">
-    <p>Nội dung Game 9 ở đây</p>
-  </div>
-  <div id="game10" class="game-div">
-    <p>Nội dung Game 10 ở đây</p>
+  <div id="gameMenu">
+    <h3 class="animated-text">Chọn game bạn muốn chơi</h3>
+    <div>
+      <button onclick="openGame(1)">1</button>
+      <button onclick="openGame(2)">2</button>
+      <button onclick="openGame(3)">3</button>
+      <button onclick="openGame(4)">4</button>
+      <button onclick="openGame(5)">5</button>
+      <button onclick="openGame(6)">6</button>
+      <button onclick="openGame(7)">7</button>
+      <button onclick="openGame(8)">8</button>
+      <button onclick="openGame(9)">9</button>
+      <button onclick="openGame(10)">10</button>
+    </div>
+    <button id="logoutBtn">🚪 Đăng xuất</button>
   </div>
 
-  <button class="led-button" id="backToMenuBtn">⬅️ Quay lại menu</button>
-</div>
+  <div id="gameContent">
+    <h3 class="animated-text" id="gameTitle"></h3>
+    <div id="game1" class="game-div"><p>Nội dung Game 1 ở đây</p></div>
+    <div id="game2" class="game-div"><p>Nội dung Game 2 ở đây</p></div>
+    <div id="game3" class="game-div"><p>Nội dung Game 3 ở đây</p></div>
+    <div id="game4" class="game-div"><p>Nội dung Game 4 ở đây</p></div>
+    <div id="game5" class="game-div"><p>Nội dung Game 5 ở đây</p></div>
+    <div id="game6" class="game-div"><p>Nội dung Game 6 ở đây</p></div>
+    <div id="game7" class="game-div"><p>Nội dung Game 7 ở đây</p></div>
+    <div id="game8" class="game-div"><p>Nội dung Game 8 ở đây</p></div>
+    <div id="game9" class="game-div"><p>Nội dung Game 9 ở đây</p></div>
+    <div id="game10" class="game-div"><p>Nội dung Game 10 ở đây</p></div>
+    <button id="backToMenuBtn">⬅️ Quay lại menu</button>
+  </div>
 
-<!-- Ghi chú -->
-<div id="note">
-  ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
+  <div id="note">
+    ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
+  </div>
 </div>
 
 <script>
-  const githubKeysUrl = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json";
+  // URL keys.json của bạn trên Github
+  const githubKeysUrl = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json";
 
-  const keyInputSection = document.getElementById("keyInputSection");
   const userKeyInput = document.getElementById("userKey");
   const status = document.getElementById("status");
   const expirationTimer = document.getElementById("expirationTimer");
-
+  const checkKeyBtn = document.getElementById("checkKeyBtn");
   const gameMenu = document.getElementById("gameMenu");
+  const logoutBtn = document.getElementById("logoutBtn");
   const gameContent = document.getElementById("gameContent");
   const gameTitle = document.getElementById("gameTitle");
-
   const backToMenuBtn = document.getElementById("backToMenuBtn");
-
   const adminContact = document.getElementById("adminContact");
   const toggleAdminBtn = document.getElementById("toggleAdminBtn");
 
-  // Biến lưu trạng thái key hợp lệ + ngày hết hạn
-  let validKey = null;
-  let keyExpiresAt = null;
-  let countdownInterval = null;
+  let keysData = null;
+  let currentKeyData = null;
+  let expirationInterval = null;
 
-  // Hiện/ẩn menu admin liên hệ
-  toggleAdminBtn.addEventListener("click", () => {
-    if (adminContact.style.display === "none" || adminContact.style.display === "") {
-      adminContact.style.display = "block";
-    } else {
-      adminContact.style.display = "none";
-    }
-  });
-
-  // Kiểm tra key lấy từ GitHub và lưu localStorage
-  async function checkKey() {
-    const inputKey = userKeyInput.value.trim();
-    if (!inputKey) {
-      status.style.color = "red";
-      status.textContent = "❌ Vui lòng nhập key.";
-      return;
-    }
-    status.style.color = "#0f0";
-    status.textContent = "🔄 Đang kiểm tra key...";
-
-    try {
-      const res = await fetch(githubKeysUrl + "?t=" + Date.now()); // tránh cache
-      const data = await res.json();
-
-      // Tìm key hợp lệ trong data.keys, kiểm tra ngày hết hạn
-      if (data.keys && Array.isArray(data.keys)) {
-        const found = data.keys.find(k => k.key === inputKey);
-        if (found) {
-          // Kiểm tra hết hạn
-          if (found.expiresAt) {
-            const expires = new Date(found.expiresAt).getTime();
-            const now = Date.now();
-            if (now > expires) {
-              status.style.color = "red";
-              status.textContent = "❌ Key đã hết hạn và bị ban.";
-              localStorage.removeItem("savedKey");
-              return;
-            } else {
-              keyExpiresAt = expires;
-              startCountdown();
-            }
-          } else {
-            // Nếu không có expiresAt thì mặc định vô hạn
-            keyExpiresAt = null;
-            expirationTimer.textContent = "";
-            clearInterval(countdownInterval);
-          }
-
-          // Key hợp lệ
-          validKey = inputKey;
-          localStorage.setItem("savedKey", inputKey);
-          status.style.color = "green";
-          status.textContent = "✅ Key hợp lệ! Đang vào menu...";
-          setTimeout(() => {
-            showGameMenu();
-          }, 1000);
-          return;
-        }
-      }
-
-      status.style.color = "red";
-      status.textContent = "❌ Key không hợp lệ.";
-      localStorage.removeItem("savedKey");
-    } catch (e) {
-      status.style.color = "red";
-      status.textContent = "❌ Lỗi khi kiểm tra key.";
-      console.error(e);
-    }
+  // Hiệu ứng canvas nền
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   }
+  window.addEventListener('resize', resize);
+  resize();
 
-  // Hiện menu game
-  function showGameMenu() {
-    keyInputSection.style.display = "none";
-    status.textContent = "";
-    expirationTimer.textContent = "";
-    gameMenu.style.display = "block";
-    gameContent.style.display = "none";
-  }
-
-  // Mở game theo số và hiện div tương ứng
-  function openGame(num) {
-    // Ẩn tất cả div game trước
-    document.querySelectorAll(".game-div").forEach(div => {
-      div.style.display = "none";
+  // Hiệu ứng điểm sáng random
+  const points = [];
+  for(let i=0; i<50; i++){
+    points.push({
+      x: Math.random()*width,
+      y: Math.random()*height,
+      vx: (Math.random()-0.5)*0.5,
+      vy: (Math.random()-0.5)*0.5,
+      radius: Math.random()*2 + 1
     });
-
-    const currentDiv = document.getElementById("game" + num);
-    if (currentDiv) currentDiv.style.display = "block";
-
-    gameTitle.textContent = `Game số ${num}`;
-    gameContent.style.display = "block";
-    gameMenu.style.display = "none";
   }
-
-  // Nút quay lại menu
-  backToMenuBtn.addEventListener("click", () => {
-    gameContent.style.display = "none";
-    gameMenu.style.display = "block";
-    gameTitle.textContent = "";
-    document.querySelectorAll(".game-div").forEach(div => {
-      div.style.display = "none";
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    points.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.x < 0 || p.x > width) p.vx = -p.vx;
+      if(p.y < 0 || p.y > height) p.vy = -p.vy;
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(0,255,0,0.6)';
+      ctx.shadowColor = '#0f0';
+      ctx.shadowBlur = 10;
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
+      ctx.fill();
     });
-  });
-
-  // Logout (xóa key lưu, quay lại nhập key)
-  function logout() {
-    localStorage.removeItem("savedKey");
-    validKey = null;
-    keyExpiresAt = null;
-    clearInterval(countdownInterval);
-    expirationTimer.textContent = "";
-    gameMenu.style.display = "none";
-    gameContent.style.display = "none";
-    keyInputSection.style.display = "block";
-    status.textContent = "";
-    userKeyInput.value = "";
+    requestAnimationFrame(animate);
   }
+  animate();
 
-  // Kiểm tra nếu có key đã lưu
-  window.onload = () => {
-    const savedKey = localStorage.getItem("savedKey");
-    if (savedKey) {
-      userKeyInput.value = savedKey;
-      // Tự động check key khi load trang (bỏ qua thông báo check key)
-      checkSavedKey(savedKey);
-    }
+  toggleAdminBtn.onclick = () => {
+    adminContact.style.display = adminContact.style.display === 'block' ? 'none' : 'block';
   };
 
-  // Kiểm tra key đã lưu khi load trang
-  async function checkSavedKey(key) {
-    try {
-      const res = await fetch(githubKeysUrl + "?t=" + Date.now());
-      const data = await res.json();
-
-      if (data.keys && Array.isArray(data.keys)) {
-        const found = data.keys.find(k => k.key === key);
-        if (found) {
-          // Kiểm tra hết hạn
-          if (found.expiresAt) {
-            const expires = new Date(found.expiresAt).getTime();
-            const now = Date.now();
-            if (now > expires) {
-              // Hết hạn
-              logout();
-              alert("Key bạn đã hết hạn và bị ban.");
-              return;
-            } else {
-              keyExpiresAt = expires;
-              startCountdown();
-            }
-          } else {
-            keyExpiresAt = null;
-            expirationTimer.textContent = "";
-            clearInterval(countdownInterval);
-          }
-
-          validKey = key;
-          showGameMenu();
-          return;
-        }
-      }
-      logout();
-    } catch (e) {
-      console.error(e);
-      logout();
-    }
+  function showStatus(msg, isError = false) {
+    status.textContent = msg;
+    status.style.color = isError ? '#f00' : '#0f0';
   }
 
-  // Đếm ngược thời gian hết hạn key
-  function startCountdown() {
-    if (!keyExpiresAt) {
-      expirationTimer.textContent = "";
-      clearInterval(countdownInterval);
-      return;
-    }
-    clearInterval(countdownInterval);
+  function startExpirationCountdown(expirationISO) {
+    if (expirationInterval) clearInterval(expirationInterval);
     function updateTimer() {
-      const now = Date.now();
-      const diff = keyExpiresAt - now;
-      if (diff <= 0) {
-        expirationTimer.textContent = "⏰ Key đã hết hạn!";
-        expirationTimer.style.color = "red";
+      const now = new Date();
+      const expireTime = new Date(expirationISO);
+      const diff = expireTime - now;
+      if(diff <= 0){
+        expirationTimer.textContent = "Key đã hết hạn!";
+        showStatus("Key đã hết hạn!", true);
         logout();
-      } else {
-        // Đếm ngược thời gian theo ngày, giờ, phút, giây
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-        expirationTimer.textContent = `🕒 Thời gian hết hạn key còn: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-        expirationTimer.style.color = "#0f0";
-        expirationTimer.style.textShadow = "0 0 6px #0f0, 0 0 10px #0f0";
+        clearInterval(expirationInterval);
+        return;
       }
+      const hrs = Math.floor(diff / 3600000);
+      const mins = Math.floor((diff % 3600000) / 60000);
+      const secs = Math.floor((diff % 60000) / 1000);
+      expirationTimer.textContent = `Thời gian còn lại: ${hrs} giờ ${mins} phút ${secs} giây`;
     }
     updateTimer();
-    countdownInterval = setInterval(updateTimer, 1000);
+    expirationInterval = setInterval(updateTimer, 1000);
   }
+
+  function logout() {
+    currentKeyData = null;
+    userKeyInput.value = '';
+    gameMenu.style.display = 'none';
+    gameContent.style.display = 'none';
+    expirationTimer.textContent = '';
+    showStatus("Bạn đã đăng xuất!");
+  }
+
+  logoutBtn.onclick = logout;
+
+  backToMenuBtn.onclick = () => {
+    gameContent.style.display = 'none';
+    gameMenu.style.display = 'block';
+  };
+
+  function openGame(num) {
+    gameTitle.textContent = `Game số ${num}`;
+    document.querySelectorAll('.game-div').forEach(div => div.style.display = 'none');
+    const gameDiv = document.getElementById('game'+num);
+    if(gameDiv) gameDiv.style.display = 'block';
+    gameMenu.style.display = 'none';
+    gameContent.style.display = 'block';
+  }
+
+  checkKeyBtn.onclick = () => {
+    const inputKey = userKeyInput.value.trim();
+    if (!inputKey) {
+      showStatus("Vui lòng nhập key!");
+      return;
+    }
+    if (!keysData) {
+      showStatus("Đang tải dữ liệu key, vui lòng thử lại sau...", true);
+      return;
+    }
+    // Tìm key
+    const found = keysData.find(k => k.key === inputKey);
+    if (!found) {
+      showStatus("Key không hợp lệ!", true);
+      return;
+    }
+    // Kiểm tra hết hạn
+    if (found.expiresAt) {
+      const expireDate = new Date(found.expiresAt);
+      if (expireDate < new Date()) {
+        showStatus("Key đã hết hạn!", true);
+        return;
+      }
+      startExpirationCountdown(found.expiresAt);
+    } else {
+      expirationTimer.textContent = "";
+    }
+    currentKeyData = found;
+    showStatus("Key hợp lệ! Bạn có thể vào game.");
+    gameMenu.style.display = 'block';
+  };
+
+  // Tải keys.json từ github
+  fetch(githubKeysUrl)
+    .then(res => {
+      if(!res.ok) throw new Error("Không thể tải keys.json");
+      return res.json();
+    })
+    .then(data => {
+      keysData = data;
+      showStatus("Đã tải danh sách key. Vui lòng nhập key để kiểm tra.");
+    })
+    .catch(e => {
+      showStatus("Lỗi tải key: " + e.message, true);
+    });
+
 </script>
 
 </body>
