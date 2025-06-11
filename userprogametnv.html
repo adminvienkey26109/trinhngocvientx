@@ -1,197 +1,178 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Giao Diện Game</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trang Game Bảo Mật</title>
   <style>
-    body {
+    html, body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      height: 100%;
       background: black;
       color: white;
-      overflow: hidden;
     }
-    #canvas-bg {
+
+    canvas {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
       z-index: -1;
     }
-    .rainbow-border {
-      display: inline-block;
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 24px;
-      font-weight: bold;
-      border-radius: 20px;
-      cursor: pointer;
-      border: 4px solid transparent;
-      background: linear-gradient(black, black) padding-box,
-                  linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet) border-box;
-      animation: rainbow 3s linear infinite;
-    }
-    @keyframes rainbow {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
-    }
-    .container {
-      text-align: center;
+
+    #authSection, #gameMenu, .gameContent {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
       padding: 20px;
+      box-sizing: border-box;
+      text-align: center;
     }
-    .hidden { display: none; }
+
+    #authSection {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #authSection input {
+      padding: 10px;
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    #authSection button {
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    #gameMenu {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .rainbow {
+      border: 4px solid;
+      border-image: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet) 1;
+      animation: rainbowBorder 5s linear infinite;
+    }
+
+    @keyframes rainbowBorder {
+      0% { border-image-slice: 1; }
+      100% { border-image-slice: 1; transform: rotate(360deg); }
+    }
+
+    .game-button {
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 20px;
+      background: #00ff99;
+      color: black;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .game-button:hover {
+      transform: scale(1.05);
+    }
+
+    .gameContent {
+      display: none;
+    }
+
+    #countdown {
+      font-size: 16px;
+      margin-top: 10px;
+      color: #ccc;
+    }
+
+    .admin-link {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 16px;
+    }
+
+    .admin-link a {
+      color: #00ffff;
+      text-decoration: none;
+    }
+
     .logout {
       position: fixed;
-      top: 10px; right: 10px;
+      top: 10px;
+      right: 10px;
       background: red;
-      color: white;
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .contact {
-      position: fixed;
-      bottom: 10px; left: 10px;
-      background: blue;
-      color: white;
-      padding: 10px;
-      border-radius: 10px;
-    }
-    iframe {
-      width: 95%;
-      height: 500px;
-      margin-top: 20px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 20px;
-    }
-    #expirationTimer {
-      font-weight: bold;
-      margin-top: 10px;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-<canvas id="canvas-bg"></canvas>
+<canvas id="bgCanvas"></canvas>
 
-<div class="container" id="keyInputArea">
-  <h2>🔑 Nhập Key để truy cập</h2>
-  <input type="text" id="keyInput" placeholder="Nhập key..." />
-  <button onclick="checkKey()">Xác nhận</button>
-  <div id="expirationTimer"></div>
+<div id="authSection">
+  <h2>🔐 Nhập Key Để Truy Cập</h2>
+  <input type="text" id="keyInput" placeholder="Nhập key...">
+  <button onclick="verifyKey()">Xác Nhận</button>
 </div>
 
-<div id="gameContainer" class="hidden">
-  <div class="container" id="gameMenu"></div>
-  <div id="gameContent"></div>
-  <div class="logout" onclick="logout()">Đăng xuất</div>
-  <div class="contact"><a href="https://facebook.com/adminvienkey26109" style="color:white;">💬 Liên hệ Admin</a></div>
+<div id="gameMenu" class="rainbow">
+  <h2>🎮 Chọn Game</h2>
+  <div id="countdown"></div>
+  <button class="logout" onclick="logout()">Đăng Xuất</button>
+  <div id="gameButtons"></div>
 </div>
+
+<div class="admin-link">
+  📩 <a href="https://www.facebook.com/trinhngocvien.tx" target="_blank">Liên hệ Admin</a>
+</div>
+
+<!-- Nội dung các game -->
+<div id="game1" class="gameContent"><h2>🎲 Game 1 - Tài/Xỉu</h2><p>Chọn tài/xỉu, máy dự đoán kết quả.</p></div>
+<div id="game2" class="gameContent"><h2>🔢 Game 2 - Quay Số</h2><p>Bấm để quay số từ 1–100.</p></div>
+<div id="game3" class="gameContent"><h2>🧠 Game 3 - Đoán Số</h2><p>Hệ thống chọn số, bạn đoán trong 5 lượt.</p></div>
+<div id="game4" class="gameContent"><h2>🎯 Game 4 - Chọn Nhanh</h2><p>Bấm nút đúng trong thời gian ngắn nhất.</p></div>
+<div id="game5" class="gameContent"><h2>💡 Game 5 - Câu Hỏi Nhanh</h2><p>Trả lời 5 câu hỏi đúng liên tiếp.</p></div>
+<div id="game6" class="gameContent"><h2>⚖️ Game 6 - So Sánh</h2><p>Chọn số lớn hơn trong 2 số hiện ra.</p></div>
+<div id="game7" class="gameContent"><h2>🧮 Game 7 - Tính Nhanh</h2><p>Tính toán nhanh trong thời gian giới hạn.</p></div>
+<div id="game8" class="gameContent"><h2>🪙 Game 8 - Tung Đồng Xu</h2><p>Tung xu ra mặt ngẫu nhiên: ngửa hoặc sấp.</p></div>
+<div id="game9" class="gameContent"><h2>🧩 Game 9 - Trò Chơi Đoán Màu</h2><p>Chọn đúng màu trùng với tên.</p></div>
+<div id="game10" class="gameContent"><h2>📉 Game 10 - Dự Đoán Số Ngẫu Nhiên</h2><p>Nhập số, hệ thống chọn và chấm điểm.</p></div>
 
 <script>
-  const keyInputArea = document.getElementById("keyInputArea");
-  const gameContainer = document.getElementById("gameContainer");
-  const gameMenu = document.getElementById("gameMenu");
-  const gameContent = document.getElementById("gameContent");
-  const expirationTimer = document.getElementById("expirationTimer");
-
-  let countdownInterval;
-
-  async function checkKey() {
-    const inputKey = document.getElementById("keyInput").value.trim();
-    if (!inputKey) return alert("Vui lòng nhập key.");
-
-    try {
-      const res = await fetch("https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json");
-      const keys = await res.json();
-      const matched = keys.find(k => k.key === inputKey);
-
-      if (!matched) return alert("❌ Key không hợp lệ.");
-
-      const expiresAt = new Date(matched.expiresAt);
-      const now = new Date();
-
-      if (expiresAt < now) return alert("⚠️ Key đã hết hạn.");
-
-      // Hiển thị giao diện game
-      keyInputArea.classList.add("hidden");
-      gameContainer.classList.remove("hidden");
-      createGameMenu();
-      startCountdown(expiresAt);
-    } catch (err) {
-      alert("Lỗi kết nối đến máy chủ key.");
-      console.error(err);
-    }
-  }
-
-  function createGameMenu() {
-    gameMenu.innerHTML = "";
-    for (let i = 1; i <= 10; i++) {
-      const btn = document.createElement("div");
-      btn.className = "rainbow-border";
-      btn.textContent = `Game ${i}`;
-      btn.onclick = () => loadGame(i);
-      gameMenu.appendChild(btn);
-    }
-  }
-
-  function loadGame(num) {
-    gameContent.innerHTML = `<iframe src="games/game${num}.html"></iframe>`;
-  }
-
-  function logout() {
-    clearInterval(countdownInterval);
-    keyInputArea.classList.remove("hidden");
-    gameContainer.classList.add("hidden");
-    document.getElementById("keyInput").value = "";
-    expirationTimer.textContent = "";
-    gameContent.innerHTML = "";
-    gameMenu.innerHTML = "";
-  }
-
-  function startCountdown(expiry) {
-    function updateTimer() {
-      const now = new Date();
-      const diff = expiry - now;
-
-      if (diff <= 0) {
-        logout();
-        alert("⏰ Key đã hết hạn.");
-        return;
-      }
-
-      const mins = Math.floor(diff / 60000);
-      const secs = Math.floor((diff % 60000) / 1000);
-      expirationTimer.textContent = `🕒 Còn lại: ${mins} phút ${secs} giây`;
-    }
-
-    updateTimer();
-    countdownInterval = setInterval(updateTimer, 1000);
-  }
-
-  // Nền động bằng canvas
-  const canvas = document.getElementById("canvas-bg");
-  const ctx = canvas.getContext("2d");
+  // Canvas nền động
+  const canvas = document.getElementById('bgCanvas');
+  const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
 
-  let particles = [];
-  for (let i = 0; i < 80; i++) {
-    particles.push({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      r: Math.random() * 2 + 1,
-      dx: Math.random() * 2 - 1,
-      dy: Math.random() * 2 - 1
-    });
-  }
+  let particles = Array.from({ length: 100 }, () => ({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    r: Math.random() * 2 + 1,
+    dx: (Math.random() - 0.5) * 1,
+    dy: (Math.random() - 0.5) * 1
+  }));
 
   function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "white";
     for (let p of particles) {
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "#0ff";
       ctx.fill();
       p.x += p.dx;
       p.y += p.dy;
@@ -201,6 +182,71 @@
     requestAnimationFrame(animate);
   }
   animate();
+
+  // Xác thực key
+  async function verifyKey() {
+    const key = document.getElementById('keyInput').value.trim();
+    if (!key) return alert("Vui lòng nhập key!");
+
+    try {
+      const res = await fetch('https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json');
+      const keys = await res.json();
+      const match = keys.find(k => k.key === key);
+
+      if (!match) return alert("❌ Key không hợp lệ!");
+
+      if (match.expiresAt && Date.now() > new Date(match.expiresAt).getTime()) {
+        return alert("⚠️ Key đã hết hạn!");
+      }
+
+      showMenu(match.expiresAt);
+    } catch (e) {
+      alert("Lỗi kết nối đến server!");
+    }
+  }
+
+  function showMenu(expiresAt) {
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('gameMenu').style.display = 'flex';
+    const buttons = document.getElementById('gameButtons');
+    buttons.innerHTML = '';
+
+    for (let i = 1; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'game-button';
+      btn.textContent = `Game ${i}`;
+      btn.onclick = () => showGame(i);
+      buttons.appendChild(btn);
+    }
+
+    // Countdown
+    if (expiresAt) {
+      const end = new Date(expiresAt).getTime();
+      const cd = document.getElementById("countdown");
+      const interval = setInterval(() => {
+        const now = Date.now();
+        const diff = end - now;
+        if (diff <= 0) {
+          cd.textContent = "⏰ Key đã hết hạn!";
+          clearInterval(interval);
+          logout();
+        } else {
+          const mins = Math.floor(diff / 60000);
+          const secs = Math.floor((diff % 60000) / 1000);
+          cd.textContent = `⏳ Key còn hiệu lực: ${mins} phút ${secs} giây`;
+        }
+      }, 1000);
+    }
+  }
+
+  function showGame(index) {
+    document.querySelectorAll(".gameContent").forEach(el => el.style.display = "none");
+    document.getElementById("game" + index).style.display = "block";
+  }
+
+  function logout() {
+    location.reload();
+  }
 </script>
 
 </body>
