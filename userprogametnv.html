@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Nhập key để vào game</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Arial">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,49 +24,35 @@
       margin-bottom: 10px;
     }
 
-    /* Nút viền cầu vồng, nền đen, chữ trắng */
     .led-button {
       position: relative;
-      padding: 10px 20px;
-      font-weight: bold;
-      color: white;
-      background-color: black;
-      border-radius: 12px;
-      cursor: pointer;
-      user-select: none;
-      border: 4px solid transparent;
-      z-index: 1;
-      overflow: hidden;
-      transition: color 0.3s ease, background-color 0.3s ease;
       display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+      border: 3px solid transparent;
+      border-radius: 10px;
+      background-color: black;
+      color: white;
+      z-index: 0;
+      transition: 0.3s ease;
     }
 
-    /* Viền cầu vồng động */
     .led-button::before {
       content: "";
       position: absolute;
-      top: -4px;
-      left: -4px;
-      right: -4px;
-      bottom: -4px;
-      background: linear-gradient(
-        45deg,
-        red,
-        orange,
-        yellow,
-        green,
-        cyan,
-        blue,
-        magenta,
-        red
-      );
-      background-size: 400% 400%;
-      border-radius: 16px;
-      z-index: -1;
-      animation: rainbowBorder 4s linear infinite;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet, red);
+      background-size: 300% 300%;
+      border-radius: 12px;
+      z-index: -2;
+      animation: rainbow 3s linear infinite;
     }
 
-    /* Lớp nền đen trên viền để tạo hiệu ứng viền */
     .led-button::after {
       content: "";
       position: absolute;
@@ -77,15 +63,18 @@
       background-color: black;
       border-radius: 8px;
       z-index: -1;
+      pointer-events: none; /* Fix không bấm được */
     }
 
-    @keyframes rainbowBorder {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 100% 50%;
-      }
+    .led-button:hover {
+      box-shadow: 0 0 10px white;
+      transform: scale(1.05);
+    }
+
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     #status {
@@ -103,14 +92,70 @@
       gap: 10px;
     }
 
+    .game-btn {
+      padding: 10px 15px;
+      font-weight: bold;
+      width: 100px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      user-select: none;
+      color: white;
+      background-color: black;
+      border: 3px solid transparent;
+      position: relative;
+      z-index: 0;
+    }
+
+    .game-btn::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      border-radius: 12px;
+      background: linear-gradient(45deg, red, orange, yellow, green, cyan, blue, violet, red);
+      background-size: 300% 300%;
+      z-index: -2;
+      animation: rainbow 3s linear infinite;
+    }
+
+    .game-btn::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 4px;
+      background-color: black;
+      border-radius: 8px;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .game-btn:hover {
+      box-shadow: 0 0 10px white;
+      transform: scale(1.05);
+    }
+
     #logoutBtn {
       margin-top: 15px;
+      display: none;
     }
 
     #adminMenuBtn {
       position: fixed;
       top: 15px;
       left: 15px;
+      background: #1abc9c;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 0 10px #16a085;
       z-index: 1000;
     }
 
@@ -140,7 +185,7 @@
     #note {
       margin-top: 40px;
       font-size: 14px;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0,0,0,0.5);
       padding: 15px;
       border-radius: 10px;
       line-height: 1.4;
@@ -160,57 +205,40 @@
     }
 
     @keyframes pulse {
-      0%,
-      100% {
-        text-shadow: 0 0 10px #16a085;
-      }
-      50% {
-        text-shadow: 0 0 20px #1abc9c;
-      }
+      0%, 100% { text-shadow: 0 0 10px #16a085; }
+      50% { text-shadow: 0 0 20px #1abc9c; }
     }
   </style>
 </head>
 <body>
-  <!-- Admin Menu -->
-  <button id="adminMenuBtn" class="led-button" onclick="toggleAdminContacts()">
-    Menu Admin
-  </button>
-  <div id="adminContacts">
-    <a href="https://facebook.com/admin1" target="_blank">Admin 1</a>
-    <a href="https://facebook.com/admin2" target="_blank">Admin 2</a>
-    <a href="https://facebook.com/admin3" target="_blank">Admin 3</a>
-  </div>
 
-  <h2>🎮 Vào game bằng key</h2>
-  <p>Nhập key để kích hoạt, hoặc bạn đã đăng nhập rồi.</p>
-  <input type="text" id="userKey" placeholder="Nhập key bạn có..." /><br />
-  <button class="led-button" onclick="checkKey()">✅ Kiểm tra key</button>
-  <p id="status"></p>
+<button id="adminMenuBtn" onclick="toggleAdminContacts()">Menu Admin</button>
+<div id="adminContacts">
+  <a href="https://facebook.com/admin1" target="_blank">Admin 1</a>
+  <a href="https://facebook.com/admin2" target="_blank">Admin 2</a>
+  <a href="https://facebook.com/admin3" target="_blank">Admin 3</a>
+</div>
 
-  <!-- Game Menu -->
-  <div id="gameMenu" style="display: none;">
-    <h3>Chọn game bạn muốn chơi:</h3>
-    <div
-      id="gamesButtons"
-      style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;"
-    >
-      <button class="led-button">Game 1</button>
-      <button class="led-button">Game 2</button>
-      <button class="led-button">Game 3</button>
-      <button class="led-button">Game 4</button>
-      <button class="led-button">Game 5</button>
-    </div>
-    <p id="countdown" class="countdown"></p>
-    <button id="logoutBtn" class="led-button" onclick="logout()">🚪 Đăng xuất</button>
-  </div>
+<h2>🎮 Vào game bằng key</h2>
+<p>Nhập key để kích hoạt, hoặc bạn đã đăng nhập rồi.</p>
+<input type="text" id="userKey" placeholder="Nhập key bạn có..."><br>
+<button class="led-button" onclick="checkKey()">✅ Kiểm tra key</button>
+<p id="status"></p>
 
-  <!-- Note -->
-  <div id="note">
-    ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ
-    LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
-  </div>
+<!-- Game Menu -->
+<div id="gameMenu">
+  <h3>Chọn game bạn muốn chơi:</h3>
+  <div id="gamesButtons" style="display:flex; flex-wrap: wrap; justify-content:center;"></div>
+  <p id="countdown" class="countdown"></p>
+  <button id="logoutBtn" class="led-button" onclick="logout()">🚪 Đăng xuất</button>
+</div>
 
-  <!-- External JavaScript -->
-  <script src="script.js"></script>
+<!-- Note -->
+<div id="note">
+  ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
+</div>
+
+<!-- Gọi script -->
+<script src="script.js"></script>
 </body>
 </html>
