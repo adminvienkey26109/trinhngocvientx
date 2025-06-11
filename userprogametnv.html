@@ -49,8 +49,7 @@
       border-radius: 10px;
       font-size: 16px;
       text-decoration: none;
-      border: 4px solid;
-      border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1;
+      border: 2px solid black;
       cursor: pointer;
     }
     .game-button:hover {
@@ -97,15 +96,20 @@
     .game-content {
       display: none;
       margin-top: 20px;
-      background-color: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       padding: 20px;
-      border-radius: 10px;
+      border-radius: 12px;
+    }
+    .game-box {
+      display: none;
+      padding: 10px;
+      font-size: 18px;
     }
     #backBtn {
-      background-color: orange;
-      color: black;
-      margin-top: 10px;
-      padding: 8px 16px;
+      margin-top: 15px;
+      background: orange;
+      padding: 10px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
@@ -121,6 +125,7 @@
     <a href="https://facebook.com/admin4" target="_blank">Admin 4</a>
     <a href="https://facebook.com/admin5" target="_blank">Admin 5</a>
   </div>
+
   <img src="https://i.imgur.com/AzZ1xL7.png" class="logo" alt="Logo">
   <h2>🎮 Nhập key để vào game</h2>
   <input type="text" id="userKey" placeholder="Nhập key bạn có..."><br>
@@ -131,7 +136,7 @@
   <div class="game-menu" id="gameMenu">
     <h3>🎯 Chọn game</h3>
     <div>
-      <button class="game-button" onclick="game1.html">Game 1 - Tài Xỉu</button>
+      <button class="game-button" onclick="showGame(1)">Game 1 - Tài Xỉu</button>
       <button class="game-button" onclick="showGame(2)">Game 2 - Bầu Cua</button>
       <button class="game-button" onclick="showGame(3)">Game 3 - Lô Đề</button>
       <button class="game-button" onclick="showGame(4)">Game 4 - Xổ Số</button>
@@ -145,7 +150,19 @@
     <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
   </div>
 
-  <div id="gameContent" class="game-content"></div>
+  <div class="game-content" id="gameContent">
+    <div id="game1" class="game-box">🎲 Đây là Game 1: Tài Xỉu</div>
+    <div id="game2" class="game-box">🐯 Đây là Game 2: Bầu Cua</div>
+    <div id="game3" class="game-box">🎯 Đây là Game 3: Lô Đề</div>
+    <div id="game4" class="game-box">📈 Đây là Game 4: Xổ Số</div>
+    <div id="game5" class="game-box">🔥 Đây là Game 5: Tài Xỉu VIP</div>
+    <div id="game6" class="game-box">✨ Đây là Game 6: Mini Game</div>
+    <div id="game7" class="game-box">⚡ Đây là Game 7: Lô Siêu Tốc</div>
+    <div id="game8" class="game-box">🔢 Đây là Game 8: 3 Càng</div>
+    <div id="game9" class="game-box">🎱 Đây là Game 9: Keno</div>
+    <div id="game10" class="game-box">🎰 Đây là Game 10: Random</div>
+    <button id="backBtn" onclick="backToMenu()">🔙 Quay lại</button>
+  </div>
 
   <div class="note">
     <p>📢 Ghi chú: "ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!"</p>
@@ -245,20 +262,16 @@
     function showGame(gameNumber) {
       const content = document.getElementById("gameContent");
       const menu = document.getElementById("gameMenu");
-      const gameName = `Game ${gameNumber}`;
-      const gameDescriptions = {
-        1: "🎲 Đây là game Tài Xỉu dự đoán kết quả xúc xắc.",
-        2: "🐯 Game Bầu Cua dân gian siêu vui.",
-        3: "🎯 Lô đề truyền thống, thử vận may.",
-        4: "📈 Xổ số kiểu mới - quay là trúng.",
-        5: "🔥 Tài Xỉu phiên bản nâng cao - VIP.",
-        6: "✨ Mini game giải trí nhanh.",
-        7: "⚡ Lô siêu tốc với tốc độ ánh sáng.",
-        8: "🔢 3 càng - chốt số cực mạnh.",
-        9: "🎱 Keno - chọn số đổi đời.",
-        10: "🎰 Random game bất ngờ mỗi lần."
-      };
-      content.innerHTML = `<h3>${gameName}</h3><p>${gameDescriptions[gameNumber]}</p><button id="backBtn" onclick="backToMenu()">🔙 Quay lại</button>`;
+
+      for (let i = 1; i <= 10; i++) {
+        document.getElementById(`game${i}`).style.display = "none";
+      }
+
+      const gameDiv = document.getElementById(`game${gameNumber}`);
+      if (gameDiv) {
+        gameDiv.style.display = "block";
+      }
+
       content.style.display = "block";
       menu.style.display = "none";
     }
