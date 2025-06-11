@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tool Dự Đoán Game</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+    }
+    .key-input {
+      margin-bottom: 20px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      width: 250px;
+      border-radius: 10px;
+      border: none;
+      outline: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #00ff00;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .menu {
+      display: none;
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 20px;
+      justify-items: center;
+    }
+    .game-button {
+      padding: 15px;
+      border: 4px solid;
+      border-image: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet) 1;
+      border-radius: 15px;
+      background-color: #111;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+    }
+    .game-button:hover {
+      transform: scale(1.1);
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 14px;
+      color: #ccc;
+    }
+    .countdown {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      color: yellow;
+    }
+    .game-box {
+      display: none;
+      margin-top: 20px;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 20px;
+    }
+    .admin-contact {
+      margin-top: 20px;
+    }
+    .admin-contact a {
+      color: cyan;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      margin: 5px;
+    }
+    .notify-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: orange;
+      color: black;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas"></canvas>
+
+<div class="notify-button" onclick="showNotification()">🔔 Thông báo</div>
+
+<div class="container">
+  <h1>🔐 Nhập Key Truy Cập Tool</h1>
+  <div class="key-input">
+    <input type="text" id="keyInput" placeholder="Nhập key tại đây..." />
+    <button onclick="checkKey()">🔓 MỞ TOOL</button>
+  </div>
+  <div class="countdown" id="countdown"></div>
+
+  <div class="menu" id="menu">
+    <button class="game-button" onclick="showGame(1)">🎲 Game 1</button>
+    <button class="game-button" onclick="showGame(2)">🎮 Game 2</button>
+    <button class="game-button" onclick="showGame(3)">🃏 Game 3</button>
+    <button class="game-button" onclick="showGame(4)">🧠 Game 4</button>
+    <button class="game-button" onclick="showGame(5)">🎰 Game 5</button>
+    <button class="game-button" onclick="showGame(6)">🕹️ Game 6</button>
+    <button class="game-button" onclick="showGame(7)">📊 Game 7</button>
+    <button class="game-button" onclick="showGame(8)">🎯 Game 8</button>
+    <button class="game-button" onclick="showGame(9)">🔮 Game 9</button>
+    <button class="game-button" onclick="showGame(10)">🧩 Game 10</button>
+    <button class="game-button" onclick="logout()">🚪 Đăng Xuất</button>
+  </div>
+
+  <!-- Iframes -->
+  <div class="game-box" id="iframe1"><iframe src="games/game1.html"></iframe></div>
+  <div class="game-box" id="iframe2"><iframe src="games/game2.html"></iframe></div>
+  <div class="game-box" id="iframe3"><iframe src="games/game3.html"></iframe></div>
+  <div class="game-box" id="iframe4"><iframe src="games/game4.html"></iframe></div>
+  <div class="game-box" id="iframe5"><iframe src="games/game5.html"></iframe></div>
+  <div class="game-box" id="iframe6"><iframe src="games/game6.html"></iframe></div>
+  <div class="game-box" id="iframe7"><iframe src="games/game7.html"></iframe></div>
+  <div class="game-box" id="iframe8"><iframe src="games/game8.html"></iframe></div>
+  <div class="game-box" id="iframe9"><iframe src="games/game9.html"></iframe></div>
+  <div class="game-box" id="iframe10"><iframe src="games/game10.html"></iframe></div>
+
+  <div class="admin-contact">
+    Liên hệ Admin: 
+    <a href="https://www.facebook.com/trinhngocvientx" target="_blank">Facebook Chính</a> | 
+    <a href="https://www.facebook.com/messages/t/100064013207448" target="_blank">Nhắn Tin</a>
+  </div>
+
+  <div class="footer">
+    © 2025 Tool Dự Đoán Game - Bản Quyền Admin Trịnh Ngọc Viễn
+  </div>
+</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const particles = [];
+
+  for (let i = 0; i < 100; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 1,
+      dy: (Math.random() - 0.5) * 1,
+      color: `hsl(${Math.random() * 360}, 100%, 50%)`
+    });
+  }
+
+  function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let p of particles) {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+      if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+    }
+    requestAnimationFrame(animateParticles);
+  }
+
+  animateParticles();
+
+  async function checkKey() {
+    const key = document.getElementById("keyInput").value.trim();
+    if (!key) return alert("Vui lòng nhập key!");
+
+    try {
+      const res = await fetch("https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json");
+      const keys = await res.json();
+      const matched = keys.find(k => k.key === key);
+
+      if (!matched) return alert("❌ Key không hợp lệ!");
+      if (matched.expiresAt && new Date(matched.expiresAt) < new Date()) return alert("⏰ Key đã hết hạn!");
+
+      document.getElementById("menu").style.display = "grid";
+      const countdown = document.getElementById("countdown");
+
+      if (matched.expiresAt) {
+        const expiry = new Date(matched.expiresAt).getTime();
+        setInterval(() => {
+          const now = new Date().getTime();
+          const distance = expiry - now;
+          if (distance <= 0) {
+            countdown.innerText = "Key đã hết hạn.";
+            logout();
+          } else {
+            const h = Math.floor(distance / (1000 * 60 * 60));
+            const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((distance % (1000 * 60)) / 1000);
+            countdown.innerText = `Thời gian còn lại: ${h}h ${m}m ${s}s`;
+          }
+        }, 1000);
+      }
+    } catch (e) {
+      alert("Lỗi khi kiểm tra key!");
+    }
+  }
+
+  function showGame(num) {
+    for (let i = 1; i <= 10; i++) {
+      document.getElementById(`iframe${i}`).style.display = i === num ? "block" : "none";
+    }
+  }
+
+  function logout() {
+    location.reload();
+  }
+
+  function showNotification() {
+    alert("🛠️ Hệ thống đang bảo trì lúc 23h hàng ngày. Vui lòng quay lại sau!");
+  }
+</script>
+</body>
+</html>
