@@ -155,7 +155,7 @@
       status.style.color = "white";
 
       try {
-        const res = await fetch("https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json");
+        const res = await fetch("https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json");
         const data = await res.json();
 
         if (data.keys && Array.isArray(data.keys)) {
