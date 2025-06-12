@@ -184,7 +184,471 @@
 <div id="toolContainer" style="margin-top: 30px;">
   <div id="tool1Div" class="tool-content" style="display:none;">
     <h3>🔧 Tool 1</h3><p>Đây là nội dung tool 1.</p>
-    <script>console.log("Tool 1 đang hoạt động...");</script>
+    <script><!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dự đoán Tài Xỉu By Ngoc Vien</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .buttons {
+            margin-bottom: 20px;
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .buttons .btn-tai {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .buttons .btn-tai:hover {
+            background-color: #45a049;
+        }
+        .buttons .btn-xiu {
+            background-color: #f44336;
+            color: white;
+        }
+        .buttons .btn-xiu:hover {
+            background-color: #da190b;
+        }
+        .buttons .btn-clear {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .buttons .btn-clear:hover {
+            background-color: #e0a800;
+        }
+        .buttons .btn-predict {
+            background-color: #007bff;
+            color: white;
+        }
+        .buttons .btn-predict:hover {
+            background-color: #0056b3;
+        }
+
+        #result-display {
+            font-size: 24px;
+            margin-bottom: 20px;
+            min-height: 30px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #e9e9e9;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+        #prediction-display {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #007bff;
+            min-height: 35px;
+        }
+        #pattern-analysis {
+            text-align: left;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        #pattern-analysis h2 {
+            color: #555;
+            margin-bottom: 15px;
+        }
+        #pattern-analysis ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        #pattern-analysis ul li {
+            background-color: #e0f7fa;
+            border-left: 5px solid #00bcd4;
+            margin-bottom: 8px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #pattern-analysis ul li.no-pattern {
+            background-color: #ffebee;
+            border-left: 5px solid #f44336;
+            color: #d32f2f;
+        }
+        .pattern-percentage {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        /* Error message styling */
+        .error-message {
+            background-color: #ffdddd;
+            color: #d8000c;
+            padding: 10px;
+            border: 1px solid #d8000c;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            display: none; /* Hidden by default */
+            animation: fadeOut 5s forwards; /* Animation to fade out */
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; display: block; }
+            80% { opacity: 1; display: block; }
+            100% { opacity: 0; display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Dự đoán Tài Xỉu</h1>
+        <div class="buttons">
+            <button class="btn-tai" onclick="addResult('t')">Tài</button>
+            <button class="btn-xiu" onclick="addResult('x')">Xỉu</button>
+            <button class="btn-clear" onclick="clearResults()">Xóa</button>
+            <button class="btn-predict" onclick="predictNext()">Dự đoán</button>
+        </div>
+        <div id="error-message" class="error-message"></div>
+        <div id="result-display"></div>
+        <div id="prediction-display"></div>
+        <div id="pattern-analysis">
+            <h2>Các loại cầu có thể xảy ra:</h2>
+            <ul id="patterns-list">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        let results = "";
+        let errorTimeout; // To store the timeout ID for error messages
+        const patternsList = document.getElementById('patterns-list');
+        const predictionDisplay = document.getElementById('prediction-display');
+        const errorMessageDiv = document.getElementById('error-message');
+
+        function showErrorMessage(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.style.display = 'block';
+
+            // Clear any existing timeout to restart the fadeOut animation
+            clearTimeout(errorTimeout);
+
+            // Set a new timeout to hide and fade out the message after 5 seconds
+            errorTimeout = setTimeout(() => {
+                errorMessageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function addResult(type) {
+            results += type;
+            document.getElementById('result-display').innerText = results.toUpperCase().split('').join('-');
+            analyzePatterns();
+            predictionDisplay.innerText = ""; // Clear previous prediction
+            errorMessageDiv.style.display = 'none'; // Hide error message if adding results
+        }
+
+        function clearResults() {
+            results = "";
+            document.getElementById('result-display').innerText = "";
+            patternsList.innerHTML = "";
+            predictionDisplay.innerText = "";
+            errorMessageDiv.style.display = 'none'; // Hide error message on clear
+            clearTimeout(errorTimeout); // Clear any pending error message timeout
+        }
+
+        function predictNext() {
+            if (results.length === 0) {
+                showErrorMessage("Vui lòng nhập ít nhất một kết quả Tài hoặc Xỉu để dự đoán.");
+                predictionDisplay.innerText = ""; // Clear any old prediction
+                return;
+            }
+            if (results.length < 2) { // Minimum length for some meaningful pattern analysis
+                showErrorMessage("Chuỗi kết quả quá ngắn để đưa ra dự đoán có ý nghĩa. Vui lòng nhập thêm.");
+                predictionDisplay.innerText = "";
+                return;
+            }
+
+            // Clear any error message before starting prediction
+            errorMessageDiv.style.display = 'none';
+
+            const potentialPredictions = []; // Stores [{ name: "Cầu X", percentage: 90, prediction: 't', priority: 5 }]
+
+            // Helper functions
+            function checkConsecutive(char, count, str = results) {
+                const regex = new RegExp(`${char}{${count}}$`);
+                return regex.test(str);
+            }
+
+            function checkAlternating(subStr) {
+                if (!subStr || subStr.length < 2) return 0;
+                let matches = 0;
+                for (let i = 0; i < subStr.length - 1; i++) {
+                    if (subStr[i] !== subStr[i+1]) {
+                        matches++;
+                    }
+                }
+                return (matches / (subStr.length - 1)) * 100;
+            }
+
+            function getSequenceMatchPercentage(sequence, str = results) {
+                if (str.length < sequence.length) return 0;
+                const sub = str.slice(-sequence.length);
+                let matches = 0;
+                for (let i = 0; i < sequence.length; i++) {
+                    if (sub[i] === sequence[i]) {
+                        matches++;
+                    }
+                }
+                return (matches / sequence.length) * 100;
+            }
+
+            function countTrailing(char, str = results) {
+                let count = 0;
+                for (let i = str.length - 1; i >= 0; i--) {
+                    if (str[i] === char) {
+                        count++;
+                    } else {
+                        break;
+                    }
+                }
+                return count;
+            }
+
+            // Function to add a prediction with its priority
+            function addPrediction(name, percentage, prediction, priority = 1) {
+                potentialPredictions.push({ name, percentage, prediction, priority });
+            }
+
+            // --- Logic for predicting based on common patterns ---
+            const lastChar = results.slice(-1);
+            const secondLastChar = results.slice(-2, -1);
+            const thirdLastChar = results.slice(-3, -2);
+            const fourthLastChar = results.slice(-4, -3); // Useful for some patterns
+
+            // 1. Long Streaks (Cầu Bệt) - Highest Priority
+            const trailingT = countTrailing('t');
+            const trailingX = countTrailing('x');
+
+            if (trailingT >= 5) {
+                addPrediction(`Cầu bệt Tài (Bệt ${trailingT} lần)`, 100, 't', 12); // Very high priority
+            } else if (trailingX >= 5) {
+                addPrediction(`Cầu bệt Xỉu (Bệt ${trailingX} lần)`, 100, 'x', 12);
+            } else if (trailingT === 4) {
+                addPrediction(`Cầu bệt Tài (Bệt ${trailingT} lần)`, 100, 't', 10);
+            } else if (trailingX === 4) {
+                addPrediction(`Cầu bệt Xỉu (Bệt ${trailingX} lần)`, 100, 'x', 10);
+            } else if (trailingT === 3) {
+                addPrediction(`Cầu bệt Tài (Bệt ${trailingT} lần)`, 100, 't', 8);
+            } else if (trailingX === 3) {
+                addPrediction(`Cầu bệt Xỉu (Bệt ${trailingX} lần)`, 100, 'x', 8);
+            }
+
+            // 2. Alternating Pattern (Cầu Đảo 1-1)
+            const alternatingPercentage = checkAlternating(results);
+            if (alternatingPercentage > 90 && results.length >= 4) { // Very strong alternating
+                addPrediction("Cầu Đảo 1-1 (Rất rõ ràng)", alternatingPercentage, lastChar === 't' ? 'x' : 't', 11);
+            } else if (alternatingPercentage > 75 && results.length >= 3) { // Strong alternating
+                addPrediction("Cầu Đảo 1-1 (Xu hướng mạnh)", alternatingPercentage, lastChar === 't' ? 'x' : 't', 9);
+            }
+
+            // 3. Double Alternating (Cầu Kép 2-2)
+            if (results.length >= 4) {
+                if (getSequenceMatchPercentage('ttxx', results.slice(-4)) === 100) addPrediction("Cầu Kép 2-2 (TTXX)", 100, 't', 8);
+                if (getSequenceMatchPercentage('xxtt', results.slice(-4)) === 100) addPrediction("Cầu Kép 2-2 (XXTT)", 100, 'x', 8);
+            }
+            if (results.length >= 6) {
+                if (getSequenceMatchPercentage('ttxxtt', results.slice(-6)) === 100) addPrediction("Cầu Kép 2-2 (TTXXTT)", 100, 'x', 8);
+                if (getSequenceMatchPercentage('xxttxx', results.slice(-6)) === 100) addPrediction("Cầu Kép 2-2 (XXTTXX)", 100, 't', 8);
+            }
+
+            // 4. Cầu 3-1-1 (3 bệt, sau đó 1 đảo) or 1-3-1
+            if (results.length >= 5) {
+                if (getSequenceMatchPercentage('tttxt', results.slice(-5)) === 100) addPrediction("Cầu 3-1-1 (TTTXT)", 100, 'x', 7);
+                if (getSequenceMatchPercentage('xxxtx', results.slice(-5)) === 100) addPrediction("Cầu 3-1-1 (XXXTAI)", 100, 't', 7);
+                if (getSequenceMatchPercentage('txttt', results.slice(-5)) === 100) addPrediction("Cầu 1-3-1 (TXTTAI)", 100, 'x', 7);
+                if (getSequenceMatchPercentage('xtxxx', results.slice(-5)) === 100) addPrediction("Cầu 1-3-1 (XTXXX)", 100, 't', 7);
+            }
+
+            // 5. Cầu 1-2-3 and 3-2-1 (Ladder patterns)
+            if (results.length >= 6) { 
+                if (getSequenceMatchPercentage('txtttx', results.slice(-6)) === 100) addPrediction("Cầu 1-2-3 (TXTTTX)", 100, 't', 6);
+                if (getSequenceMatchPercentage('xtxxx', results.slice(-5)) === 100) addPrediction("Cầu 1-2-3 (XTXXX)", 100, 't', 6); 
+                if (getSequenceMatchPercentage('xxtttx', results.slice(-6)) === 100) addPrediction("Cầu 2-3-1 (XXTTTX)", 100, 't', 6);
+                if (getSequenceMatchPercentage('tttxxt', results.slice(-6)) === 100) addPrediction("Cầu 3-2-1 (TTTXXT)", 100, 'x', 6);
+            }
+
+            // 6. Cầu Bệt Ngắt Quãng (Interrupted Streaks) - e.g., TTTXTTT
+            if (results.length >= 7) {
+                if (results.slice(-7).match(/t{3}xt{3}/)) addPrediction("Cầu bệt ngắt quãng (Tài)", 95, 't', 7);
+                if (results.slice(-7).match(/x{3}tx{3}/)) addPrediction("Cầu bệt ngắt quãng (Xỉu)", 95, 'x', 7);
+            }
+
+            // 7. Cầu 3-2-1 (3 bệt, 2 bệt, 1 bệt)
+            if (results.length >= 6) {
+                if (getSequenceMatchPercentage('tttxxt', results.slice(-6)) === 100) addPrediction("Cầu 3-2-1 (TTTXXT)", 100, 'x', 7);
+                if (getSequenceMatchPercentage('xxxttx', results.slice(-6)) === 100) addPrediction("Cầu 3-2-1 (XXXTTX)", 100, 't', 7);
+            }
+
+            // 8. Cầu 1-2-1-2 (Dây chuyền)
+            if (results.length >= 6) {
+                if (getSequenceMatchPercentage('txxtxx', results.slice(-6)) === 100) addPrediction("Cầu 1-2-1-2 (TXXTXX)", 100, 't', 7);
+                if (getSequenceMatchPercentage('xttxtt', results.slice(-6)) === 100) addPrediction("Cầu 1-2-1-2 (XTTXTT)", 100, 'x', 7);
+            }
+
+            // 9. Cầu 2-1-2-1 (Dây chuyền ngược)
+            if (results.length >= 6) {
+                if (getSequenceMatchPercentage('ttxttx', results.slice(-6)) === 100) addPrediction("Cầu 2-1-2-1 (TTXTTX)", 100, 'x', 7);
+                if (getSequenceMatchPercentage('xxtxxt', results.slice(-6)) === 100) addPrediction("Cầu 2-1-2-1 (XXTXXT)", 100, 't', 7);
+            }
+
+            // 10. Cầu Bệt Lật (Reverse Streak)
+            if (results.length >= 7) {
+                if (results.slice(-7).match(/t{4}x{3}/)) addPrediction("Cầu bệt lật (Tài sang Xỉu)", 90, 'x', 8);
+                if (results.slice(-7).match(/x{4}t{3}/)) addPrediction("Cầu bệt lật (Xỉu sang Tài)", 90, 't', 8);
+            }
+
+            // 11. Cầu Xen Kẽ Dài (Extended Alternating)
+            if (results.length >= 6) {
+                const longerAlternating = checkAlternating(results.slice(-6));
+                if (longerAlternating > 80 && alternatingPercentage <= 90) { 
+                    addPrediction("Cầu xen kẽ dài (Luân phiên trên 6 lượt)", longerAlternating, lastChar === 't' ? 'x' : 't', 6);
+                }
+            }
+            
+            // --- CẦU BẺ (BREAK PATTERNS) ---
+            // Cầu Bẻ Nhẹ (Light Break) - Short streak followed by an immediate reversal
+            // e.g., TTX, XXT (2 consecutive, then breaks)
+            if (results.length >= 3) {
+                if (lastChar === 't' && secondLastChar === 't' && thirdLastChar === 'x') { // ...XTT
+                    addPrediction("Cầu bẻ nhẹ (2 Tài sau Xỉu)", 70, 'x', 6); // Predict X to continue break
+                } else if (lastChar === 'x' && secondLastChar === 'x' && thirdLastChar === 't') { // ...TXX
+                    addPrediction("Cầu bẻ nhẹ (2 Xỉu sau Tài)", 70, 't', 6); // Predict T to continue break
+                }
+            }
+
+            // Cầu Bẻ Mạnh (Strong Break) - Longer streak followed by an immediate reversal
+            // e.g., TTTX, XXXT (3 consecutive, then breaks)
+            if (results.length >= 4) {
+                if (lastChar === 't' && secondLastChar === 't' && thirdLastChar === 't' && fourthLastChar === 'x') { // ...XTTT
+                    addPrediction("Cầu bẻ mạnh (3 Tài sau Xỉu)", 90, 'x', 9); // Higher priority break
+                } else if (lastChar === 'x' && secondLastChar === 'x' && thirdLastChar === 'x' && fourthLastChar === 't') { // ...TXXX
+                    addPrediction("Cầu bẻ mạnh (3 Xỉu sau Tài)", 90, 't', 9); // Higher priority break
+                }
+            }
+
+
+            // --- Aggregate and Final Prediction ---
+            let finalTaiScore = 0;
+            let finalXiuScore = 0;
+
+            // Sort by priority (descending) and then percentage (descending)
+            potentialPredictions.sort((a, b) => {
+                if (b.priority !== a.priority) {
+                    return b.priority - a.priority;
+                }
+                return b.percentage - a.percentage;
+            });
+
+            // Consider only the top N predictions or those above a certain threshold
+            const strongPredictions = potentialPredictions.filter(p => p.priority >= 5 && p.percentage >= 70);
+
+            if (strongPredictions.length > 0) {
+                strongPredictions.forEach(p => {
+                    // Weighted score: percentage * priority
+                    if (p.prediction === 't') {
+                        finalTaiScore += (p.percentage / 100) * p.priority;
+                    } else if (p.prediction === 'x') {
+                        finalXiuScore += (p.percentage / 100) * p.priority;
+                    }
+                });
+            } else {
+                // Fallback: If no strong patterns, predict inverse of last result
+                if (results.length > 0) {
+                    addPrediction("Dự đoán ngược lại (Không có cầu rõ ràng)", 50, lastChar === 't' ? 'x' : 't', 1); // Low priority fallback
+                    if (lastChar === 't') finalXiuScore += 0.5; // Small boost for X
+                    else finalTaiScore += 0.5; // Small boost for T
+                }
+            }
+
+            let finalPredictionText = "Không chắc chắn";
+            let predictionColor = "#555";
+
+            const scoreDifference = Math.abs(finalTaiScore - finalXiuScore);
+            const totalScore = finalTaiScore + finalXiuScore;
+
+            if (totalScore === 0) { 
+                finalPredictionText = "Chưa có đủ dữ liệu hoặc cầu ngẫu nhiên.";
+                predictionColor = "#555";
+            } else if (scoreDifference / totalScore > 0.4) { 
+                if (finalTaiScore > finalXiuScore) {
+                    finalPredictionText = "Dự đoán: Tài";
+                    predictionColor = "#4CAF50";
+                } else {
+                    finalPredictionText = "Dự đoán: Xỉu";
+                    predictionColor = "#f44336";
+                }
+            } else {
+                if (results.length > 0) {
+                     if (lastChar === 't') {
+                        finalPredictionText = "Có thể là Xỉu"; 
+                        predictionColor = "#f44336";
+                    } else {
+                        finalPredictionText = "Có thể là Tài"; 
+                        predictionColor = "#4CAF50";
+                    }
+                } else {
+                     finalPredictionText = "Chưa có đủ dữ liệu để dự đoán."; 
+                     predictionColor = "#555";
+                }
+            }
+
+            predictionDisplay.innerText = finalPredictionText;
+            predictionDisplay.style.color = predictionColor;
+        }
+
+        // --- Hàm analyzePatterns() (chỉ để hiển thị các cầu đã nhận diện) ---
+        function analyzePatterns() {
+            patternsList.innerHTML = "";
+            const currentPatterns = [];
+
+            function checkConsecutive(char, count) {
+                const regex = new RegExp(`${char}{${count}}$`);
+                return regex.test(results);
+            }
+
+            function checkAlternating(subStr) {
+                if (!subStr || subStr.length < 2) return 0;
+                let matches = 0;
+                for (let i = 0; i < subStr.length - 1; i++) {
+                    if (subStr[i] !== subStr[i+1]) {
+                        matches++;
+                    }
+                }
+        </script>
   </div>
   <div id="tool2Div" class="tool-content" style="display:none;">
     <h3>🔧 Tool 2</h3><p>Đây là nội dung tool 2.</p>
