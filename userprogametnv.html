@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Nhập key để vào game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: center;
+      background: url('https://i.imgur.com/1JdFvXb.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 80%;
+    }
+    button {
+      margin: 5px;
+      cursor: pointer;
+      border: 2px solid #1abc9c;
+      background: transparent;
+      color: #1abc9c;
+      font-weight: bold;
+      transition: 0.3s;
+      text-shadow: 0 0 5px #1abc9c;
+    }
+    button:hover {
+      background-color: #1abc9c;
+      color: #fff;
+      text-shadow: none;
+      box-shadow: 0 0 8px #16a085;
+    }
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+      font-size: 18px;
+      text-shadow: 0 0 5px #000;
+    }
+    #gameMenu {
+      margin-top: 30px;
+      display: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .game-btn {
+      border: 2px solid #1abc9c;
+      color: #1abc9c;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      width: 100px;
+      box-shadow: 0 0 8px #16a085;
+      cursor: pointer;
+      transition: 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .game-btn::before {
+      content: '';
+      position: absolute;
+      width: 150%;
+      height: 150%;
+      background: linear-gradient(45deg, transparent, #1abc9c, transparent);
+      animation: ledEffect 3s linear infinite;
+      top: -50%;
+      left: -50%;
+      opacity: 0.6;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    .game-btn span {
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 0 10px #1abc9c;
+    }
+    @keyframes ledEffect {
+      0% { transform: rotate(0deg) translateX(-100%); }
+      100% { transform: rotate(360deg) translateX(100%); }
+    }
+    #logoutBtn {
+      margin-top: 15px;
+      display: none;
+      background-color: #e74c3c;
+      border-color: #c0392b;
+      color: white;
+      box-shadow: none;
+      text-shadow: none;
+    }
+    #logoutBtn:hover {
+      background-color: #c0392b;
+    }
+    #adminMenuBtn {
+      position: fixed;
+      top: 15px;
+      left: 15px;
+      background: #1abc9c;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: bold;
+      color: white;
+      box-shadow: 0 0 10px #16a085;
+      z-index: 1000;
+    }
+    #adminContacts {
+      position: fixed;
+      top: 50px;
+      left: 15px;
+      background: rgba(26, 188, 156, 0.9);
+      border-radius: 10px;
+      padding: 10px;
+      display: none;
+      z-index: 999;
+      width: 200px;
+      text-align: left;
+      box-shadow: 0 0 15px #16a085;
+    }
+    #adminContacts a {
+      display: block;
+      color: white;
+      margin: 5px 0;
+      font-weight: bold;
+      text-decoration: none;
+      text-shadow: 0 0 3px black;
+    }
+    #note {
+      margin-top: 40px;
+      font-size: 14px;
+      background: rgba(0,0,0,0.5);
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      color: #f1c40f;
+      text-shadow: 0 0 5px black;
+    }
+    .countdown {
+      font-weight: bold;
+      font-size: 20px;
+      margin-top: 15px;
+      color: #1abc9c;
+      text-shadow: 0 0 10px #16a085;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 10px #16a085; }
+      50% { text-shadow: 0 0 20px #1abc9c; }
+    }
+  </style>
+</head>
+<body>
+
+<button id="adminMenuBtn" onclick="toggleAdminContacts()">Menu Admin</button>
+<div id="adminContacts">
+  <a href="https://facebook.com/admin1" target="_blank">Admin 1</a>
+  <a href="https://facebook.com/admin2" target="_blank">Admin 2</a>
+  <a href="https://facebook.com/admin3" target="_blank">Admin 3</a>
+</div>
+
+<h2>🎮 Vào game bằng key</h2>
+<p>Nhập key để kích hoạt, hoặc bạn đã đăng nhập rồi.</p>
+<input type="text" id="userKey" placeholder="Nhập key bạn có..."><br>
+<button onclick="checkKey()">✅ Kiểm tra key</button>
+<p id="status"></p>
+
+<div id="gameMenu">
+  <h3>Chọn tool bạn muốn dùng:</h3>
+  <div id="gamesButtons"></div>
+  <p id="countdown" class="countdown"></p>
+  <button id="logoutBtn" onclick="logout()">🚪 Đăng xuất</button>
+</div>
+
+<!-- Tool hiển thị tại đây -->
+<div id="toolContainer" style="margin-top: 30px;">
+  <div id="tool1Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 1</h3><p>Đây là nội dung tool 1.</p>
+    <script>console.log("Tool 1 đang hoạt động...");</script>
+  </div>
+  <div id="tool2Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 2</h3><p>Đây là nội dung tool 2.</p>
+    <script>console.log("Tool 2 đang hoạt động...");</script>
+  </div>
+  <div id="tool3Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 3</h3><p>Đây là nội dung tool 3.</p>
+    <script>console.log("Tool 3 đang hoạt động...");</script>
+  </div>
+  <div id="tool4Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 4</h3><p>Đây là nội dung tool 4.</p>
+    <script>console.log("Tool 4 đang hoạt động...");</script>
+  </div>
+  <div id="tool5Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 5</h3><p>Đây là nội dung tool 5.</p>
+    <script>console.log("Tool 5 đang hoạt động...");</script>
+  </div>
+  <div id="tool6Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 6</h3><p>Đây là nội dung tool 6.</p>
+    <script>console.log("Tool 6 đang hoạt động...");</script>
+  </div>
+  <div id="tool7Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 7</h3><p>Đây là nội dung tool 7.</p>
+    <script>console.log("Tool 7 đang hoạt động...");</script>
+  </div>
+  <div id="tool8Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 8</h3><p>Đây là nội dung tool 8.</p>
+    <script>console.log("Tool 8 đang hoạt động...");</script>
+  </div>
+  <div id="tool9Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 9</h3><p>Đây là nội dung tool 9.</p>
+    <script>console.log("Tool 9 đang hoạt động...");</script>
+  </div>
+  <div id="tool10Div" class="tool-content" style="display:none;">
+    <h3>🔧 Tool 10</h3><p>Đây là nội dung tool 10.</p>
+    <script>console.log("Tool 10 đang hoạt động...");</script>
+  </div>
+</div>
+
+<div id="note">
+  ĐÂY LÀ TOOL ANH EM NHÀ KV, KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN THÌ ĐỪNG CÓ SỦA ẲNGGG !!!!!!!!
+</div>
+
+<script>
+  const keysURL = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/refs/heads/main/keys.json";
+  const status = document.getElementById("status");
+  const gameMenu = document.getElementById("gameMenu");
+  const gamesButtons = document.getElementById("gamesButtons");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const countdownElem = document.getElementById("countdown");
+  const userKeyInput = document.getElementById("userKey");
+
+  const toolDivs = [
+    "tool1Div", "tool2Div", "tool3Div", "tool4Div", "tool5Div",
+    "tool6Div", "tool7Div", "tool8Div", "tool9Div", "tool10Div"
+  ];
+
+  function toggleAdminContacts() {
+    const cont = document.getElementById("adminContacts");
+    cont.style.display = cont.style.display === "block" ? "none" : "block";
+  }
+
+  function showTool(index) {
+    for (let i = 0; i < toolDivs.length; i++) {
+      document.getElementById(toolDivs[i]).style.display = i === index ? "block" : "none";
+    }
+    document.getElementById("toolContainer").scrollIntoView({ behavior: "smooth" });
+  }
+
+  function showGameMenu(expireDate) {
+    gameMenu.style.display = "flex";
+    userKeyInput.style.display = "none";
+    document.querySelector("button[onclick='checkKey()']").style.display = "none";
+    logoutBtn.style.display = "inline-block";
+
+    gamesButtons.innerHTML = "";
+    for (let i = 0; i < 10; i++) {
+      const btn = document.createElement("button");
+      btn.className = "game-btn";
+      btn.innerHTML = `<span>Tool ${i + 1}</span>`;
+      btn.onclick = () => showTool(i);
+      gamesButtons.appendChild(btn);
+    }
+
+    if (expireDate) {
+      startCountdown(new Date(expireDate));
+    }
+  }
+
+  let countdownInterval;
+  function startCountdown(expireDate) {
+    clearInterval(countdownInterval);
+    function updateCountdown() {
+      const now = new Date();
+      const diff = expireDate - now;
+      if (diff <= 0) {
+        clearInterval(countdownInterval);
+        alert("⏰ Key của bạn đã hết hạn và bị ban!");
+        logout();
+        return;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      countdownElem.textContent = `Key hết hạn sau: ${d} ngày ${h} giờ ${m} phút ${s} giây`;
+    }
+    updateCountdown();
+    countdownInterval = setInterval(updateCountdown, 1000);
+  }
+
+  async function checkKey() {
+    const inputKey = userKeyInput.value.trim();
+    if (!inputKey) {
+      status.style.color = "red";
+      status.textContent = "❌ Vui lòng nhập key!";
+      return;
+    }
+    status.textContent = "🔄 Đang kiểm tra key...";
+    status.style.color = "white";
+
+    try {
+      const res = await fetch(keysURL);
+      const data = await res.json();
+      const keyObj = data.keys.find(k => k.key === inputKey);
+      if (!keyObj) {
+        status.style.color = "red";
+        status.textContent = "❌ Key không hợp lệ.";
+        return;
+      }
+      const expireDate = keyObj.expiresAt ? new Date(keyObj.expiresAt) : null;
+      const now = new Date();
+      if (expireDate && expireDate < now) {
+        status.style.color = "red";
+        status.textContent = "❌ Key của bạn đã hết hạn và bị ban!";
+        return;
+      }
+      localStorage.setItem("userKey", inputKey);
+      keyObj.expiresAt
+        ? localStorage.setItem("keyExpire", keyObj.expiresAt)
+        : localStorage.removeItem("keyExpire");
+
+      status.style.color = "green";
+      status.textContent = "✅ Key hợp lệ! Đang chuyển hướng...";
+      setTimeout(() => showGameMenu(keyObj.expiresAt), 1000);
+
+    } catch (e) {
+      status.style.color = "red";
+      status.textContent = "❌ Lỗi khi kiểm tra key.";
+      console.error(e);
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("userKey");
+    localStorage.removeItem("keyExpire");
+    location.reload();
+  }
+
+  window.onload = () => {
+    const savedKey = localStorage.getItem("userKey");
+    const savedExpire = localStorage.getItem("keyExpire");
+    if (savedKey) {
+      const expireDate = savedExpire ? new Date(savedExpire) : null;
+      if (expireDate && expireDate < new Date()) {
+        alert("⏰ Key của bạn đã hết hạn và bị ban!");
+        logout();
+      } else {
+        showGameMenu(savedExpire);
+      }
+    }
+  };
+</script>
+
+</body>
+</html>
