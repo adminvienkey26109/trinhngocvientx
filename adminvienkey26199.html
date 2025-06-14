@@ -178,6 +178,7 @@
       expires = now.toISOString();
     } else if (date) {
       const d = new Date(date);
+      d.setHours(23, 59, 59, 999);  // ✅ Sửa lỗi hết hạn sớm
       expires = d.toISOString();
     }
 
