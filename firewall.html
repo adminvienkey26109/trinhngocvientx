@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tool lqh1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #1abc9c;
+      text-align: center;
+      padding: 30px;
+    }
+    a {
+      color: #1abc9c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Tool lqh1</h2>
+<p>Chỉ cho phép truy cập từ trang index.html sau khi đăng nhập key hợp lệ.</p>
+<p><a href="userprogametnv.html">Quay lại trang nhập key</a></p>
+
+<script>
+  // Danh sách 10 tool hợp lệ (phải giống index.html)
+  const allowedTools = [
+    "lqh1.html",
+    "tool2.html",
+    "tool3.html",
+    "tool4.html",
+    "tool5.html",
+    "tool6.html",
+    "tool7.html",
+    "tool8.html",
+    "tool9.html",
+    "tool10.html"
+  ];
+
+  // Kiểm tra trang hiện tại có nằm trong allowedTools không
+  const currentPage = location.pathname.split("/").pop();
+
+  // Kiểm tra key tồn tại và chưa hết hạn
+  const savedKey = localStorage.getItem("userKey");
+  const savedExpire = localStorage.getItem("keyExpire");
+  const now = new Date();
+
+  if (!allowedTools.includes(currentPage)) {
+    alert("⛔ Trang này không được phép truy cập!");
+    location.href = "userprogametnv.html";
+  } else if (!savedKey) {
+    alert("⛔ Bạn chưa đăng nhập key hợp lệ!");
+    location.href = "userprogametnv.html";
+  } else if (savedExpire && new Date(savedExpire) < now) {
+    alert("⏰ Key của bạn đã hết hạn!");
+    location.href = "userprogametnv.html";
+  }
+</script>
+
+</body>
+</html>
