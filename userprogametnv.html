@@ -2,308 +2,322 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Tool Dự Đoán Tài Xỉu - Viễn Tê Nờ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tool Dự Đoán - Nhập Key</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
-
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
     * {
       box-sizing: border-box;
     }
     body {
-      font-family: 'Poppins', Arial, sans-serif;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
       background: #121212;
       color: #eee;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      user-select: none;
+      overflow-x: hidden;
     }
-    h1 {
-      margin-bottom: 15px;
-      font-weight: 700;
-      color: #00e676;
-      text-align: center;
+    a {
+      color: #4fc3f7;
+      text-decoration: none;
     }
+    /* Popup thông báo */
     #popupOverlay {
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.85);
+      inset: 0;
+      background: rgba(0,0,0,0.8);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
-      color: #00e676;
-      font-size: 18px;
-      padding: 20px;
-      text-align: center;
     }
-    #popupOverlay.hidden {
-      display: none;
-    }
-    #popupOverlay button {
-      margin-top: 20px;
-      background: #00e676;
-      border: none;
-      padding: 10px 25px;
-      font-weight: 700;
-      cursor: pointer;
-      border-radius: 6px;
-      color: #121212;
-      transition: background 0.3s ease;
-    }
-    #popupOverlay button:hover {
-      background: #00c853;
-    }
-
-    .input-container {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      align-items: center;
-    }
-    input[type="text"] {
-      flex: 1;
-      padding: 10px 15px;
-      font-size: 16px;
-      border-radius: 6px;
-      border: 2px solid #00e676;
+    #popupBox {
       background: #222;
-      color: #eee;
-      outline: none;
-      transition: border-color 0.3s ease;
+      padding: 20px 30px;
+      border-radius: 8px;
+      max-width: 360px;
+      text-align: center;
+      box-shadow: 0 0 15px #00e676;
     }
-    input[type="text"]:focus {
-      border-color: #00c853;
+    #popupBox p {
+      font-size: 18px;
+      margin-bottom: 20px;
+      font-weight: 600;
     }
-    button#checkKeyBtn {
+    #popupBox button {
       background: #00e676;
       border: none;
       padding: 10px 20px;
-      font-weight: 700;
-      cursor: pointer;
       border-radius: 6px;
       color: #121212;
-      transition: background 0.3s ease;
-      white-space: nowrap;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
     }
-    button#checkKeyBtn:hover {
+    #popupBox button:hover {
       background: #00c853;
     }
-    #contactAdmin, #notifyBtn {
-      background: #333;
+
+    /* Container nhập key */
+    #keySection {
+      max-width: 480px;
+      margin: 80px auto 40px;
+      background: #1e1e1e;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px #00e676;
+      text-align: center;
+    }
+    #keySection h1 {
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 28px;
       color: #00e676;
-      border: 2px solid #00e676;
-      padding: 6px 12px;
+    }
+    #keyInput {
+      width: calc(100% - 140px);
+      padding: 12px 15px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      margin-right: 10px;
+    }
+    #checkKeyBtn {
+      padding: 12px 20px;
+      background: #00e676;
+      border: none;
+      border-radius: 6px;
+      color: #121212;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 110px;
+    }
+    #checkKeyBtn:hover {
+      background: #00c853;
+    }
+    #message {
+      margin-top: 15px;
+      min-height: 22px;
+      font-weight: 600;
+    }
+    #contactAdmin {
+      margin-top: 20px;
+    }
+    #contactAdmin a, #notifyBtn {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 6px;
       font-weight: 600;
       cursor: pointer;
-      border-radius: 5px;
-      margin-left: 10px;
-      white-space: nowrap;
-      transition: background 0.3s ease, color 0.3s ease;
+      user-select: none;
+      margin: 0 6px;
+      transition: background-color 0.3s ease;
     }
-    #contactAdmin:hover, #notifyBtn:hover {
-      background: #00e676;
+    #contactAdmin a {
+      background: #3b5998;
+      color: #fff;
+      text-decoration: none;
+    }
+    #contactAdmin a:hover {
+      background: #2d4373;
+    }
+    #notifyBtn {
+      background: #ffb300;
       color: #121212;
+      border: none;
+    }
+    #notifyBtn:hover {
+      background: #ffa000;
     }
 
-    #keySection {
-      margin-bottom: 30px;
-      width: 100%;
-      max-width: 480px;
-      text-align: center;
-    }
-
-    #message {
-      margin-top: 10px;
-      color: #ff5252;
-      font-weight: 700;
-      min-height: 20px;
-    }
-
-    /* Tool selection */
+    /* Container chọn tool */
     #toolSelection {
-      max-width: 600px;
-      width: 100%;
+      display: none;
+      max-width: 960px;
+      margin: 30px auto 80px;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 30px;
+      gap: 20px;
     }
-    .tool-btn {
-      background: #222;
-      border: 2px solid #00e676;
-      padding: 12px 20px;
-      font-weight: 700;
-      color: #00e676;
-      border-radius: 8px;
-      cursor: pointer;
-      min-width: 110px;
-      text-align: center;
-      transition: background 0.3s ease, color 0.3s ease;
+    #sidebarTools {
+      flex: 0 0 180px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      padding: 15px 0;
+      box-shadow: 0 0 15px #00e676;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
       user-select: none;
     }
-    .tool-btn:hover {
+    .toolBtn {
+      background: #333;
+      border: none;
+      color: #eee;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 12px 0;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+    .toolBtn:hover, .toolBtn.active {
       background: #00e676;
       color: #121212;
+      font-weight: 700;
     }
 
-    /* iframe container */
-    #iframeContainer {
-      width: 100%;
-      max-width: 900px;
-      height: 500px;
-      background: #111;
-      border-radius: 12px;
+    #mainContent {
+      flex: 1;
+      background: #222;
+      border-radius: 10px;
       box-shadow: 0 0 15px #00e676;
-      display: none;
-      flex-direction: column;
       position: relative;
+      display: flex;
+      flex-direction: column;
     }
-    #iframeContainer iframe {
+    #iframeContainer {
+      flex-grow: 1;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    iframe {
       width: 100%;
-      height: 100%;
-      border-radius: 12px;
+      height: 600px;
       border: none;
+      border-radius: 10px;
+      background: #111;
     }
     #backToToolsBtn {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #00e676;
+      background: #ff5252;
       border: none;
-      padding: 8px 16px;
+      color: white;
       font-weight: 700;
-      color: #121212;
-      border-radius: 6px;
+      padding: 12px 20px;
       cursor: pointer;
-      z-index: 10;
-      transition: background 0.3s ease;
+      border-radius: 6px;
+      margin: 10px;
+      align-self: flex-start;
+      transition: background-color 0.3s ease;
       user-select: none;
     }
     #backToToolsBtn:hover {
-      background: #00c853;
+      background: #e04848;
     }
 
-    /* YouTube iframe fixed corner */
-    #youtubeCorner {
+    /* Iframe YouTube góc dưới phải */
+    #youtubeFrame {
       position: fixed;
-      bottom: 10px;
-      right: 10px;
-      width: 240px;
-      height: 135px;
+      bottom: 15px;
+      right: 15px;
+      width: 300px;
+      height: 170px;
       border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 0 10px #00e676;
-      z-index: 999;
-      border: 2px solid #00e676;
+      box-shadow: 0 0 15px rgba(0, 230, 118, 0.8);
+      border: none;
+      z-index: 9999;
     }
 
-    /* Disable right click & F12 */
-    body {
-      -webkit-user-select:none;
-      -moz-user-select:none;
-      -ms-user-select:none;
-      user-select:none;
-    }
+    /* Cấm chuột phải & F12 */
   </style>
 </head>
 <body>
-  <h1>Tool Dự Đoán Tài Xỉu - Viễn Tê Nờ</h1>
-
   <!-- Popup thông báo -->
   <div id="popupOverlay">
-    <div>
+    <div id="popupBox">
       <p><strong>Tool dự đoán</strong></p>
-      <p>Vui lòng nhập key để truy cập các tool dự đoán.</p>
-      <button id="popupOkBtn">Đã hiểu</button>
+      <button id="popupCloseBtn">Đã hiểu</button>
     </div>
   </div>
 
   <!-- Phần nhập key -->
   <section id="keySection">
-    <div class="input-container">
-      <input type="text" id="keyInput" placeholder="Nhập key của bạn..." autocomplete="off" />
-      <button id="checkKeyBtn">Kiểm tra key</button>
-    </div>
-    <div>
-      <button id="contactAdmin" title="Liên hệ admin qua Facebook">Liên hệ admin</button>
-      <button id="notifyBtn" title="Thông báo">Thông báo</button>
-    </div>
+    <h1>Nhập key để vào Tool</h1>
+    <input type="text" id="keyInput" placeholder="Nhập key của bạn" autocomplete="off" />
+    <button id="checkKeyBtn">Kiểm tra key</button>
     <div id="message"></div>
+    <div id="contactAdmin">
+      <a href="https://facebook.com/youradminfb" target="_blank" rel="noopener noreferrer">Liên hệ Admin</a>
+      <button id="notifyBtn" title="Thông báo">!</button>
+    </div>
   </section>
 
-  <!-- Phần chọn tool -->
+  <!-- Phần chọn tool và hiển thị iframe -->
   <section id="toolSelection">
-    <button class="tool-btn" data-tool="tool1">Tool 1</button>
-    <button class="tool-btn" data-tool="tool2">Tool 2</button>
-    <button class="tool-btn" data-tool="tool3">Tool 3</button>
-    <button class="tool-btn" data-tool="tool4">Tool 4</button>
-    <button class="tool-btn" data-tool="tool5">Tool 5</button>
-    <button class="tool-btn" data-tool="tool6">Tool 6</button>
-    <button class="tool-btn" data-tool="tool7">Tool 7</button>
-    <button class="tool-btn" data-tool="tool8">Tool 8</button>
-    <button class="tool-btn" data-tool="tool9">Tool 9</button>
-    <button class="tool-btn" data-tool="tool10">Tool 10</button>
+    <div id="sidebarTools">
+      <button class="toolBtn" data-tool="1">Tool 1</button>
+      <button class="toolBtn" data-tool="2">Tool 2</button>
+      <button class="toolBtn" data-tool="3">Tool 3</button>
+      <button class="toolBtn" data-tool="4">Tool 4</button>
+      <button class="toolBtn" data-tool="5">Tool 5</button>
+      <button class="toolBtn" data-tool="6">Tool 6</button>
+      <button class="toolBtn" data-tool="7">Tool 7</button>
+      <button class="toolBtn" data-tool="8">Tool 8</button>
+      <button class="toolBtn" data-tool="9">Tool 9</button>
+      <button class="toolBtn" data-tool="10">Tool 10</button>
+    </div>
+    <div id="mainContent">
+      <button id="backToToolsBtn" style="display:none;">← Quay lại chọn tool</button>
+      <div id="iframeContainer" style="display:none;">
+        <iframe id="toolIframe" src="" allowfullscreen></iframe>
+      </div>
+    </div>
   </section>
 
-  <!-- Iframe hiện tool -->
-  <section id="iframeContainer">
-    <button id="backToToolsBtn">← Quay lại</button>
-    <iframe id="toolIframe" src="" allowfullscreen></iframe>
-  </section>
-
-  <!-- Iframe YouTube góc phải -->
-  <div id="youtubeCorner">
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
-  </div>
+  <!-- Iframe YouTube góc dưới phải -->
+  <iframe
+    id="youtubeFrame"
+    src="https://www.youtube.com/embed/live_stream?channel=UCxxxxxxxxxxxxxxx"
+    title="YouTube Live"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen
+  ></iframe>
 
   <script>
-    // --- Popup "Tool dự đoán" ---
+    // Popup thông báo
     const popupOverlay = document.getElementById('popupOverlay');
-    const popupOkBtn = document.getElementById('popupOkBtn');
+    const popupCloseBtn = document.getElementById('popupCloseBtn');
+
+    popupCloseBtn.onclick = () => {
+      popupOverlay.style.display = 'none';
+      document.getElementById('keySection').style.display = 'block';
+    };
+
+    // Nếu đã hiểu rồi thì ẩn popup, show key section
+    window.onload = () => {
+      if(localStorage.getItem('popupSeen')) {
+        popupOverlay.style.display = 'none';
+        document.getElementById('keySection').style.display = 'block';
+      } else {
+        popupOverlay.style.display = 'flex';
+        document.getElementById('keySection').style.display = 'none';
+      }
+    };
+    popupCloseBtn.addEventListener('click', () => {
+      localStorage.setItem('popupSeen', 'true');
+    });
+
+    // Các phần tử chính
     const keySection = document.getElementById('keySection');
+    const keyInput = document.getElementById('keyInput');
+    const checkKeyBtn = document.getElementById('checkKeyBtn');
+    const message = document.getElementById('message');
     const toolSelection = document.getElementById('toolSelection');
+    const sidebarTools = document.getElementById('sidebarTools');
     const iframeContainer = document.getElementById('iframeContainer');
     const toolIframe = document.getElementById('toolIframe');
     const backToToolsBtn = document.getElementById('backToToolsBtn');
-    const message = document.getElementById('message');
-    const keyInput = document.getElementById('keyInput');
-    const checkKeyBtn = document.getElementById('checkKeyBtn');
-    const contactAdminBtn = document.getElementById('contactAdmin');
+
+    // Nút thông báo
     const notifyBtn = document.getElementById('notifyBtn');
-
-    // Mảng giả lập keys hợp lệ, bạn có thể thay thành fetch từ GitHub Pages keys.json nếu muốn
-    const validKeys = ['ABC123', 'DEF456', 'GHI789'];
-
-    // Hiển thị popup lúc đầu, ẩn phần nhập key và tool
-    popupOverlay.classList.remove('hidden');
-    keySection.style.display = 'none';
-    toolSelection.style.display = 'none';
-    iframeContainer.style.display = 'none';
-
-    popupOkBtn.onclick = () => {
-      popupOverlay.classList.add('hidden');
-      keySection.style.display = 'block';
-
-      // Nếu key đã lưu trong localStorage thì tự động đi tới toolSelection
-      const savedKey = localStorage.getItem('userKey');
-      if (savedKey && validKeys.includes(savedKey)) {
-        message.style.color = '#00e676';
-        message.textContent = `Chào mừng! Key của bạn hợp lệ.`;
-        keySection.style.display = 'none';
-        toolSelection.style.display = 'flex';
-      }
+    notifyBtn.onclick = () => {
+      alert("Thông báo: Tool dự đoán đang được cập nhật liên tục. Vui lòng theo dõi các thông báo mới nhất.");
     };
 
-    // Kiểm tra key khi nhấn nút
+    // Đường dẫn file key JSON GitHub Pages - đổi thành của bạn
+    const keysUrl = 'https://yourusername.github.io/keys.json';
+
+    // Kiểm tra key online
     checkKeyBtn.onclick = () => {
       const key = keyInput.value.trim();
       if (!key) {
@@ -311,93 +325,97 @@
         message.textContent = 'Vui lòng nhập key!';
         return;
       }
-      if (validKeys.includes(key)) {
-        message.style.color = '#00e676';
-        message.textContent = 'Key hợp lệ! Bạn có thể chọn tool.';
-        // Lưu key localStorage
-        localStorage.setItem('userKey', key);
-        // Ẩn nhập key, hiện chọn tool
-        keySection.style.display = 'none';
-        toolSelection.style.display = 'flex';
-      } else {
-        message.style.color = '#ff5252';
-        message.textContent = 'Key không hợp lệ!';
-      }
+
+      message.style.color = '#00e676';
+      message.textContent = 'Đang kiểm tra key...';
+
+      fetch(keysUrl)
+        .then(response => {
+          if (!response.ok) throw new Error('Không tải được file key!');
+          return response.json();
+        })
+        .then(data => {
+          if (data.keys && Array.isArray(data.keys)) {
+            if (data.keys.includes(key)) {
+              message.style.color = '#00e676';
+              message.textContent = 'Key hợp lệ! Bạn có thể chọn tool.';
+              localStorage.setItem('userKey', key);
+              keySection.style.display = 'none';
+              toolSelection.style.display = 'flex';
+              loadLastTool();
+            } else {
+              message.style.color = '#ff5252';
+              message.textContent = 'Key không hợp lệ!';
+            }
+          } else {
+            message.style.color = '#ff5252';
+            message.textContent = 'Dữ liệu key không đúng định dạng!';
+          }
+        })
+        .catch(err => {
+          message.style.color = '#ff5252';
+          message.textContent = 'Lỗi khi kiểm tra key: ' + err.message;
+        });
     };
 
-    // Bật lại khi nhập key mới hoặc xóa key
-    keyInput.oninput = () => {
-      message.textContent = '';
-    };
-
-    // Nút liên hệ admin
-    contactAdminBtn.onclick = () => {
-      window.open('https://www.facebook.com/lequanghung', '_blank');
-    };
-
-    // Nút thông báo (bạn có thể sửa nội dung thông báo này)
-    notifyBtn.onclick = () => {
-      alert('Thông báo:\nTool dự đoán đang trong giai đoạn phát triển. Vui lòng sử dụng đúng mục đích!');
-    };
-
-    // Chọn tool: ẩn toolSelection, hiện iframe với src tương ứng
-    toolSelection.querySelectorAll('.tool-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tool = btn.getAttribute('data-tool');
-        // Ví dụ: bạn cần đổi URL dưới đây thành URL thật tool 1 - 10 của bạn
-        const toolURLs = {
-          tool1: 'https://example.com/tool1.html',
-          tool2: 'https://example.com/tool2.html',
-          tool3: 'https://example.com/tool3.html',
-          tool4: 'https://example.com/tool4.html',
-          tool5: 'https://example.com/tool5.html',
-          tool6: 'https://example.com/tool6.html',
-          tool7: 'https://example.com/tool7.html',
-          tool8: 'https://example.com/tool8.html',
-          tool9: 'https://example.com/tool9.html',
-          tool10: 'https://example.com/tool10.html',
-        };
-        if (toolURLs[tool]) {
-          toolIframe.src = toolURLs[tool];
-          toolSelection.style.display = 'none';
-          iframeContainer.style.display = 'flex';
-        } else {
-          alert('Tool chưa được cấu hình!');
-        }
-      });
-    });
-
-    // Nút quay lại chọn tool
-    backToToolsBtn.onclick = () => {
-      toolIframe.src = '';
-      iframeContainer.style.display = 'none';
-      toolSelection.style.display = 'flex';
-    };
-
-    // Cấm chuột phải
-    window.addEventListener('contextmenu', e => e.preventDefault());
-
-    // Cấm F12, Ctrl+Shift+I/J/U...
-    window.addEventListener('keydown', e => {
-      if (
-        e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && ['I', 'J'].includes(e.key.toUpperCase())) ||
-        (e.ctrlKey && e.key.toUpperCase() === 'U')
-      ) {
-        e.preventDefault();
-      }
-    });
-
-    // Khi load trang, nếu có key lưu hợp lệ thì tự động vào chọn tool
-    window.onload = () => {
+    // Lấy key local nếu có
+    window.addEventListener('load', () => {
       const savedKey = localStorage.getItem('userKey');
-      if (savedKey && validKeys.includes(savedKey)) {
-        message.style.color = '#00e676';
-        message.textContent = `Chào mừng! Key của bạn hợp lệ.`;
-        keySection.style.display = 'none';
-        toolSelection.style.display = 'flex';
+      if(savedKey) {
+        keyInput.value = savedKey;
+        checkKeyBtn.click();
       }
+    });
+
+    // Xử lý chọn tool
+    sidebarTools.addEventListener('click', e => {
+      if(e.target.classList.contains('toolBtn')) {
+        const toolNum = e.target.dataset.tool;
+        openTool(toolNum);
+        setActiveToolBtn(toolNum);
+      }
+    });
+
+    function openTool(toolNum) {
+      // Ẩn sidebar, hiện iframe tool
+      sidebarTools.style.display = 'none';
+      iframeContainer.style.display = 'block';
+      backToToolsBtn.style.display = 'inline-block';
+      // Link tool - bạn đổi thành link thật của các tool bạn host
+      toolIframe.src = `tools/tool${toolNum}.html`;
+      localStorage.setItem('lastTool', toolNum);
+    }
+
+    function setActiveToolBtn(toolNum) {
+      [...sidebarTools.children].forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tool === toolNum);
+      });
+    }
+
+    backToToolsBtn.onclick = () => {
+      iframeContainer.style.display = 'none';
+      backToToolsBtn.style.display = 'none';
+      sidebarTools.style.display = 'flex';
+      toolIframe.src = '';
+      setActiveToolBtn(null);
     };
+
+    function loadLastTool() {
+      const lastTool = localStorage.getItem('lastTool');
+      if(lastTool) {
+        setActiveToolBtn(lastTool);
+        openTool(lastTool);
+      }
+    }
+
+    // Cấm F12 và chuột phải
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i')) {
+        e.preventDefault();
+        alert('Chức năng này đã bị vô hiệu hóa!');
+      }
+    });
   </script>
 </body>
 </html>
