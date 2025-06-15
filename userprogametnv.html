@@ -31,6 +31,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       text-shadow: 0 0 5px #1abc9c;
+      margin: 5px;
     }
     button:hover {
       background-color: #1abc9c;
@@ -62,10 +63,19 @@
     }
     iframe {
       width: 100%;
-      height: 700px; /* Đã tăng chiều cao từ 500px lên 700px */
+      height: 700px;
       border: 2px solid #1abc9c;
       border-radius: 10px;
       margin-top: 15px;
+    }
+    #keyCountdown {
+      font-size: 16px;
+      color: #f1c40f;
+      margin-bottom: 15px;
+      text-shadow: 0 0 5px black;
+    }
+    #menuActions {
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -79,9 +89,15 @@
 
 <!-- Game Menu -->
 <div id="gameMenu">
+  <div id="keyCountdown">⏳ Thời gian còn lại: đang tính...</div>
   <h3>Danh sách Tool Game:</h3>
   <div id="gamesButtons"></div>
-  <button onclick="logout()" style="background:#e74c3c;color:white;">🚪 Đăng xuất</button>
+
+  <div id="menuActions">
+    <button onclick="notify()">🔔 Thông báo</button>
+    <button onclick="contactAdmin()">📞 Liên hệ Admin</button>
+    <button onclick="logout()" style="background:#e74c3c;color:white;">🚪 Đăng xuất</button>
+  </div>
 </div>
 
 <!-- Iframe game -->
@@ -99,6 +115,9 @@
   const gamesButtons = document.getElementById("gamesButtons");
   const gameContainer = document.getElementById("gameContainer");
   const gameFrame = document.getElementById("gameFrame");
+  const keyCountdown = document.getElementById("keyCountdown");
+
+  let countdownInterval = null;
 
   function showGameMenu() {
     gameMenu.style.display = "block";
@@ -116,6 +135,8 @@
       };
       gamesButtons.appendChild(btn);
     }
+
+    startKeyCountdown();
   }
 
   async function checkKey() {
@@ -159,10 +180,47 @@
     }
   }
 
+  function startKeyCountdown() {
+    clearInterval(countdownInterval);
+    const expire = localStorage.getItem("keyExpire");
+    if (!expire) {
+      keyCountdown.textContent = "⏳ Không rõ thời gian hết hạn.";
+      return;
+    }
+
+    countdownInterval = setInterval(() => {
+      const now = new Date();
+      const expTime = new Date(expire);
+      const diff = expTime - now;
+
+      if (diff <= 0) {
+        keyCountdown.textContent = "⛔ Key đã hết hạn!";
+        alert("⏰ Key đã hết hạn!");
+        logout();
+        return;
+      }
+
+      const h = Math.floor(diff / (1000 * 60 * 60));
+      const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+      keyCountdown.textContent = `⏳ Thời gian còn lại: ${h} giờ ${m} phút ${s} giây`;
+    }, 1000);
+  }
+
   function logout() {
+    clearInterval(countdownInterval);
     localStorage.removeItem("userKey");
     localStorage.removeItem("keyExpire");
     location.reload();
+  }
+
+  function notify() {
+    alert("🔔 Không có thông báo mới.");
+  }
+
+  function contactAdmin() {
+    window.open("https://facebook.com/adminvienkey26109", "_blank");
   }
 
   window.onload = () => {
