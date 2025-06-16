@@ -4,7 +4,7 @@ const gameLinks = [
 ];
 
 const toolNames = [
-  "TOOL MD5 XOCDIA88", "TOOL MÃ PHIÊN 💎", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌",
+  "TOOL MD5 💎", "TOOL MÃ PHIÊN 💎", "TOOL XÍ NGẦU 💎", "CHƯA UPDATE ❌",
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌",
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌"
 ];
