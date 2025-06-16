@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💫</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://i.imgur.com/foCzZJa.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #ffcc00;
+      margin-bottom: 30px;
+      animation: fadeIn 1.2s ease-in;
+    }
+
+    .container {
+      background-color: rgba(44, 44, 62, 0.9);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 500px;
+      animation: slideUp 1s ease-out;
+    }
+
+    label {
+      margin-top: 15px;
+      display: block;
+      font-weight: bold;
+      color: #cccccc;
+    }
+
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      margin-top: 5px;
+      border-radius: 8px;
+      background-color: #444;
+      color: #fff;
+      font-size: 16px;
+    }
+
+    input[type="checkbox"] {
+      margin-right: 10px;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
+      background-size: 400% 400%;
+      color: white;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      animation: rainbowFlash 3s linear infinite, pulse 2s ease-in-out infinite;
+      text-shadow: 0 0 5px #000;
+      font-weight: bold;
+    }
+
+    .log {
+      white-space: pre-line;
+      background-color: #1b1b2d;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 25px;
+      color: #ffffff;
+      font-size: 16px;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out;
+    }
+
+    .result {
+      font-size: 24px;
+      font-weight: bold;
+      margin-top: 15px;
+      color: #00ffcc;
+    }
+
+    .rainbow-footer {
+      position: fixed;
+      bottom: 10px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+      background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 5s linear infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes rainbowFlash {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 5px #fff3; }
+      50% { transform: scale(1.03); box-shadow: 0 0 12px #fff6; }
+      100% { transform: scale(1); box-shadow: 0 0 5px #fff3; }
+    }
+
+    @keyframes rainbow {
+      0% { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <h1>💻 𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶</h1>
+  <div class="container">
+    <label for="ma_phien">Mã phiên:</label>
+    <input type="text" id="ma_phien">
+
+    <label for="tong_3_hot">Tổng 3 hột:</label>
+    <input type="number" id="tong_3_hot">
+
+    <label for="diem_xi_truoc">Điểm xỉ của phiên trước:</label>
+    <input type="number" id="diem_xi_truoc">
+
+    <label>
+      <input type="checkbox" id="sai_phien_truoc">
+      Sai phiên trước?
+    </label>
+
+    <button onclick="duDoan()">💫 Dự đoán</button>
+    <div class="log" id="log_output"></div>
+  </div>
+
+  <div class="rainbow-footer">© 𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💠</div>
+
+  <script src="script.js"></script>
+</body>
+</html>
