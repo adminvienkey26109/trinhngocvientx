@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Công cụ Tài/Xỉu từ MD5</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h2 {
+      color: #333;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    .tai {
+      color: green;
+      font-weight: bold;
+    }
+    .xiu {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Công cụ dự đoán Tài/Xỉu từ MD5</h2>
+
+  <div id="main-functions" style="display: block;">
+    <label for="md5">MD5:</label>
+    <input type="text" id="md5" placeholder="Nhập chuỗi MD5...">
+
+    <label for="secret-key">Key:</label>
+    <input type="text" id="secret-key" placeholder="Nhập key...">
+
+    <button onclick="predictResult()">Dự đoán</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+  <script>
+    function predictResult() {
+      const md5 = document.getElementById('md5').value.trim();
+      const key = document.getElementById('secret-key').value.trim();
+
+      if (md5.length !== 32) {
+        document.getElementById('result').innerHTML = '<span class="xiu">Chuỗi MD5 không hợp lệ.</span>';
+        return;
+      }
+
+      const fullHash = md5 + key;
+      const hash = CryptoJS.MD5(fullHash).toString();
+
+      const sliced = hash.slice(0, 8);
+      const intValue = parseInt(sliced, 16);
+      const diceSum = (intValue % 6 + 1) + (Math.floor(intValue / 6) % 6 + 1) + (Math.floor(intValue / 36) % 6 + 1);
+      const resultText = diceSum >= 11 ? `<span class="tai">Tài (${diceSum})</span>` : `<span class="xiu">Xỉu (${diceSum})</span>`;
+
+      document.getElementById('result').innerHTML = 'Kết quả: ' + resultText;
+    }
+
+    window.onload = () => {
+      document.getElementById('main-functions').style.display = 'block';
+    };
+  </script>
+</body>
+</html>
