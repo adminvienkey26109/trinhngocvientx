@@ -9,7 +9,7 @@ const toolNames = [
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌"
 ];
 
-const keysURL = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json";
+const keysURL = "https://github.com/adminvienkey26109/trinhngocvientx/raw/refs/heads/main/keys.jsonp";
 const status = document.getElementById("status");
 const userKeyInput = document.getElementById("userKey");
 const gameMenu = document.getElementById("gameMenu");
