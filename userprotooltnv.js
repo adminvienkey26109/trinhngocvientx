@@ -1,3 +1,4 @@
+
     const gameLinks = [
       "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
       "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
@@ -56,8 +57,8 @@
         return;
       }
 
-      status.textContent = "💎 KEY ĐÚNG, ĐANG VÀO TOOL !!.";
-      status.style.color = "#fff";
+      status.textContent = "💎 Đang kiểm tra key...";
+      status.style.color = "yellow";
 
       try {
         const res = await fetch(keysURL);
@@ -80,7 +81,6 @@
         localStorage.setItem("userKey", inputKey);
         localStorage.setItem("keyExpire", keyObj.expiresAt || "");
         status.textContent = "";
-        status.style.color = "#00ffbf";
         setTimeout(showGameMenu, 800);
       } catch (err) {
         status.textContent = "❌ Lỗi khi kiểm tra key.";
@@ -152,6 +152,7 @@
       setInterval(updateVNTime, 1000);
     };
 
+    // Chống devtools và chuột phải
     document.addEventListener("keydown", e => {
       if (
         e.key === "F12" ||
