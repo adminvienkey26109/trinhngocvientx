@@ -1,4 +1,4 @@
-const gameLinks = [
+pconst gameLinks = [
   "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
 ];
@@ -61,7 +61,7 @@ async function checkKey() {
   status.style.color = "#fff";
 
   try {
-    const res = await fetch(keysURL);
+    const res = await fetch(`${keysURL}?t=${Date.now()}`); // chống cache
     const data = await res.json();
     const keyObj = data.keys.find(k => k.key === inputKey);
 
