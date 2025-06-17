@@ -102,12 +102,10 @@ function logout() {
 function showNotify() {
   notifyPopup.style.display = "block";
 }
-
 function closeNotify() {
   notifyPopup.style.display = "none";
 }
 
-// ✅ THÊM MỚI: Tắt popup khi bấm ra ngoài (ngoại trừ nút mở)
 window.addEventListener("click", function (e) {
   const notifyBtn = document.querySelector("button[onclick='showNotify()']");
   if (
