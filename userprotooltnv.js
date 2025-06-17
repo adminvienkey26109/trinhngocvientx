@@ -31,6 +31,7 @@ function showGameMenu() {
     btn.onclick = () => openTool(i);
     gamesButtons.appendChild(btn);
   }
+  updateExpiryInfo();
   startExpiryCountdown();
 }
 
@@ -53,7 +54,7 @@ async function checkKey() {
     status.style.color = "red";
     return;
   }
-  status.textContent = "💎 ĐANG KIỂM TRA KEY!!.";
+  status.textContent = "💎 ĐANG KIỂM TRA KEY...";
   status.style.color = "#fff";
   try {
     const res = await fetch(keysURL);
@@ -72,7 +73,7 @@ async function checkKey() {
     }
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
-    status.textContent = "";
+    status.textContent = "✅ Đăng nhập thành công!";
     status.style.color = "#00ffbf";
     setTimeout(showGameMenu, 800);
   } catch (err) {
@@ -86,19 +87,6 @@ function logout() {
   localStorage.removeItem("userKey");
   localStorage.removeItem("keyExpire");
   location.reload();
-}
-
-function showNotify() {
-  notifyPopup.style.display = "block";
-  setTimeout(() => notifyPopup.style.display = "none", 4000);
-}
-
-function contactAdmin() {
-  window.open("https://www.facebook.com/Vientn26", "_blank");
-}
-
-function hideIntro() {
-  document.getElementById("introPopup").style.display = "none";
 }
 
 function updateExpiryInfo() {
@@ -124,15 +112,9 @@ function updateExpiryInfo() {
 function startExpiryCountdown() {
   if (countdownInterval) clearInterval(countdownInterval);
   const expireDateStr = localStorage.getItem("keyExpire");
-  if (!expireDateStr) {
-    expiryInfo.textContent = "";
-    return;
-  }
+  if (!expireDateStr) return;
   const expireDate = new Date(expireDateStr);
-  if (isNaN(expireDate.getTime())) {
-    expiryInfo.textContent = "";
-    return;
-  }
+  if (isNaN(expireDate.getTime())) return;
   countdownInterval = setInterval(() => {
     const now = new Date();
     let diff = expireDate.getTime() - now.getTime();
@@ -149,7 +131,7 @@ function startExpiryCountdown() {
     const minutes = Math.floor(diff / (1000 * 60));
     diff -= minutes * (1000 * 60);
     const seconds = Math.floor(diff / 1000);
-    expiryInfo.textContent = `⏳ Thời gian còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+    expiryInfo.textContent = `⏳ Còn lại: ${days} ngày ${hours}h ${minutes}m ${seconds}s`;
   }, 1000);
 }
 
@@ -184,7 +166,6 @@ document.addEventListener("keydown", e => {
     alert("🚫 Không được phép!");
   }
 });
-
 document.addEventListener("contextmenu", e => {
   e.preventDefault();
   alert("🚫 Chuột phải bị khóa!");
