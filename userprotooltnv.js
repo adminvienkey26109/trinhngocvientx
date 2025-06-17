@@ -106,7 +106,7 @@ function showNotify() {
   notifyTimeout = setTimeout(() => {
     popup.style.display = "none";
     notifyTimeout = null;
-  }, 4000);
+  }
 }
 
 function contactAdmin() {
