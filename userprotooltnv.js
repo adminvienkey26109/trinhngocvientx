@@ -1,3 +1,4 @@
+
 const gameLinks = [
   "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
@@ -17,6 +18,7 @@ const gameFrame = document.getElementById("gameFrame");
 const notifyPopup = document.getElementById("notifyPopup");
 const expiryInfo = document.getElementById("expiryInfo");
 let countdownInterval = null;
+let notifyTimeout = null;
 
 function showGameMenu() {
   gameMenu.style.display = "block";
@@ -89,8 +91,18 @@ function logout() {
 }
 
 function showNotify() {
-  notifyPopup.style.display = "block";
-  setTimeout(() => notifyPopup.style.display = "none", 4000);
+  const popup = notifyPopup;
+  if (popup.style.display === "block") {
+    popup.style.display = "none";
+    clearTimeout(notifyTimeout);
+    notifyTimeout = null;
+    return;
+  }
+  popup.style.display = "block";
+  notifyTimeout = setTimeout(() => {
+    popup.style.display = "none";
+    notifyTimeout = null;
+  }, 4000);
 }
 
 function contactAdmin() {
