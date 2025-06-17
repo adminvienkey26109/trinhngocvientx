@@ -78,11 +78,15 @@ async function checkKey() {
       return;
     }
 
+    localStorage.removeItem("userKey");
+    localStorage.removeItem("keyExpire");
+
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
 
     status.textContent = "✅ Key hợp lệ. Đang chuyển hướng...";
     status.style.color = "lime";
+
     showGameMenu();
   } catch (err) {
     status.textContent = "❌ Lỗi khi kiểm tra key.";
@@ -186,10 +190,8 @@ window.onload = () => {
     const now = new Date();
     const expireDate = new Date(savedExpire);
     if (expireDate > now) {
-      // ✅ Vô tool NGAY không chờ
       showGameMenu();
 
-      // 🕵️‍♂️ Kiểm tra lại key trên GitHub sau vài giây
       fetch(`${keysURL}?v=${Date.now()}`)
         .then(res => res.json())
         .then(data => {
@@ -210,7 +212,7 @@ window.onload = () => {
   setInterval(updateVNTime, 1000);
 };
 
-// 🔒 Chống F12, Ctrl+U...
+// Chống Ctrl+U, F12, Ctrl+Shift+I...
 document.addEventListener("keydown", e => {
   if (
     e.key === "F12" ||
