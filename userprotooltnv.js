@@ -78,7 +78,6 @@ async function checkKey() {
       return;
     }
 
-    // Xoá key cũ rồi lưu key mới
     localStorage.removeItem("userKey");
     localStorage.removeItem("keyExpire");
     localStorage.setItem("userKey", inputKey);
@@ -108,10 +107,15 @@ function closeNotify() {
   notifyPopup.style.display = "none";
 }
 
-// Bấm ra ngoài để ẩn popup nếu đang mở
+// ✅ THÊM MỚI: Tắt popup khi bấm ra ngoài (ngoại trừ nút mở)
 window.addEventListener("click", function (e) {
-  if (notifyPopup.style.display === "block" && !notifyPopup.contains(e.target)) {
-    notifyPopup.style.display = "none";
+  const notifyBtn = document.querySelector("button[onclick='showNotify()']");
+  if (
+    notifyPopup.style.display === "block" &&
+    !notifyPopup.contains(e.target) &&
+    e.target !== notifyBtn
+  ) {
+    closeNotify();
   }
 });
 
