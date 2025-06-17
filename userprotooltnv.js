@@ -78,16 +78,12 @@ async function checkKey() {
       return;
     }
 
-    localStorage.removeItem("userKey");
-    localStorage.removeItem("keyExpire");
-
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
 
     status.textContent = "✅ Key hợp lệ. Đang chuyển hướng...";
     status.style.color = "lime";
-
-    showGameMenu();
+    setTimeout(showGameMenu, 800);
   } catch (err) {
     status.textContent = "❌ Lỗi khi kiểm tra key.";
     status.style.color = "red";
@@ -106,7 +102,7 @@ function showNotify() {
 }
 
 function closeNotify() {
-  notifyPopup.style.display = "none";
+  if (notifyPopup) notifyPopup.style.display = "none";
 }
 
 function contactAdmin() {
@@ -114,7 +110,8 @@ function contactAdmin() {
 }
 
 function hideIntro() {
-  document.getElementById("introPopup").style.display = "none";
+  const introPopup = document.getElementById("introPopup");
+  if (introPopup) introPopup.style.display = "none";
 }
 
 function updateExpiryInfo() {
@@ -180,7 +177,7 @@ function updateVNTime() {
   document.getElementById("vnTime").textContent = `🕒 Giờ Việt Nam: ${vnTimeStr}`;
 }
 
-window.onload = () => {
+window.onload = async () => {
   const savedKey = localStorage.getItem("userKey");
   const savedExpire = localStorage.getItem("keyExpire");
 
@@ -190,19 +187,19 @@ window.onload = () => {
     const now = new Date();
     const expireDate = new Date(savedExpire);
     if (expireDate > now) {
-      showGameMenu();
-
-      fetch(`${keysURL}?v=${Date.now()}`)
-        .then(res => res.json())
-        .then(data => {
-          const stillValid = data.keys.some(k => k.key === savedKey);
-          if (!stillValid) logout();
-        })
-        .catch(err => {
-          console.warn("Lỗi khi kiểm tra key lại:", err);
-        });
-
-      return;
+      try {
+        const res = await fetch(`${keysURL}?v=${Date.now()}`);
+        const data = await res.json();
+        const keyExists = data.keys.some(k => k.key === savedKey);
+        if (keyExists) {
+          showGameMenu();
+        } else {
+          logout();
+        }
+      } catch (err) {
+        console.error("Lỗi khi kiểm tra lại key:", err);
+        logout();
+      }
     } else {
       logout();
     }
