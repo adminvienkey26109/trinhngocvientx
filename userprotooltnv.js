@@ -1,5 +1,5 @@
 const gameLinks = [
-  "tool1.html", "tool2.html", "tool3.html", "", "tool5.html",
+  "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
 ];
 const toolNames = [
@@ -53,7 +53,7 @@ async function checkKey() {
     status.style.color = "red";
     return;
   }
-  status.textContent = "💎 KEY ĐÚNG, ĐANG VÀO TOOL !!.";
+  status.textContent = "💎 ĐANG KIỂM TRA KEY!!.";
   status.style.color = "#fff";
   try {
     const res = await fetch(keysURL);
