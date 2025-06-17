@@ -176,7 +176,7 @@ function updateVNTime() {
   document.getElementById("vnTime").textContent = `🕒 Giờ Việt Nam: ${vnTimeStr}`;
 }
 
-window.onload = async () => {
+window.onload = () => {
   const savedKey = localStorage.getItem("userKey");
   const savedExpire = localStorage.getItem("keyExpire");
 
@@ -186,19 +186,21 @@ window.onload = async () => {
     const now = new Date();
     const expireDate = new Date(savedExpire);
     if (expireDate > now) {
-      try {
-        const res = await fetch(`${keysURL}?v=${Date.now()}`);
-        const data = await res.json();
-        const keyExists = data.keys.some(k => k.key === savedKey);
-        if (keyExists) {
-          showGameMenu();
-        } else {
-          logout();
-        }
-      } catch (err) {
-        console.error("Lỗi khi kiểm tra lại key:", err);
-        logout();
-      }
+      // ✅ Vô tool NGAY không chờ
+      showGameMenu();
+
+      // 🕵️‍♂️ Kiểm tra lại key trên GitHub sau vài giây
+      fetch(`${keysURL}?v=${Date.now()}`)
+        .then(res => res.json())
+        .then(data => {
+          const stillValid = data.keys.some(k => k.key === savedKey);
+          if (!stillValid) logout();
+        })
+        .catch(err => {
+          console.warn("Lỗi khi kiểm tra key lại:", err);
+        });
+
+      return;
     } else {
       logout();
     }
@@ -208,7 +210,7 @@ window.onload = async () => {
   setInterval(updateVNTime, 1000);
 };
 
-// Chống Ctrl+U, F12, Ctrl+Shift+I...
+// 🔒 Chống F12, Ctrl+U...
 document.addEventListener("keydown", e => {
   if (
     e.key === "F12" ||
