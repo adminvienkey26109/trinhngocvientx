@@ -78,6 +78,9 @@ async function checkKey() {
       return;
     }
 
+    // Xoá key cũ rồi lưu key mới
+    localStorage.removeItem("userKey");
+    localStorage.removeItem("keyExpire");
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
 
@@ -102,16 +105,22 @@ function showNotify() {
 }
 
 function closeNotify() {
-  if (notifyPopup) notifyPopup.style.display = "none";
+  notifyPopup.style.display = "none";
 }
+
+// Bấm ra ngoài để ẩn popup nếu đang mở
+window.addEventListener("click", function (e) {
+  if (notifyPopup.style.display === "block" && !notifyPopup.contains(e.target)) {
+    notifyPopup.style.display = "none";
+  }
+});
 
 function contactAdmin() {
   window.open("https://www.facebook.com/Vientn26", "_blank");
 }
 
 function hideIntro() {
-  const introPopup = document.getElementById("introPopup");
-  if (introPopup) introPopup.style.display = "none";
+  document.getElementById("introPopup").style.display = "none";
 }
 
 function updateExpiryInfo() {
