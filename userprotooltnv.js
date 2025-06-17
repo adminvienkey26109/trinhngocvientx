@@ -20,6 +20,7 @@ const gameFrame = document.getElementById("gameFrame");
 const notifyPopup = document.getElementById("notifyPopup");
 const expiryInfo = document.getElementById("expiryInfo");
 let countdownInterval = null;
+let notifyTimeout = null;
 
 function showGameMenu() {
   gameMenu.style.display = "block";
@@ -34,6 +35,7 @@ function showGameMenu() {
     btn.onclick = () => openTool(i);
     gamesButtons.appendChild(btn);
   }
+  updateExpiryInfo();
   startExpiryCountdown();
 }
 
@@ -56,27 +58,26 @@ async function checkKey() {
     status.style.color = "red";
     return;
   }
-
   status.textContent = "💎 ĐANG KIỂM TRA KEY...";
   status.style.color = "#fff";
-
   try {
-    const res = await fetch(`${keysURL}?v=${Date.now()}`);
+    const res = await fetch(keysURL);
     const data = await res.json();
-    const now = new Date();
-
-    const keyObj = data.keys.find(k => k.key === inputKey && (!k.expiresAt || new Date(k.expiresAt) > now));
-
+    const keyObj = data.keys.find(k => k.key === inputKey);
     if (!keyObj) {
-      status.textContent = "❌ Key không hợp lệ hoặc đã hết hạn!";
+      status.textContent = "❌ Key không hợp lệ!";
       status.style.color = "red";
       return;
     }
-
-    // ✅ Lưu key và ngày hết hạn
+    const now = new Date();
+    if (keyObj.expiresAt && new Date(keyObj.expiresAt) < now) {
+      status.textContent = "⏰ Key đã hết hạn!";
+      status.style.color = "red";
+      return;
+    }
+    // Lưu lại key mới (ghi đè key cũ nếu có)
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
-
     status.textContent = "";
     status.style.color = "#00ffbf";
     setTimeout(showGameMenu, 800);
@@ -94,8 +95,18 @@ function logout() {
 }
 
 function showNotify() {
-  notifyPopup.style.display = "block";
-  setTimeout(() => notifyPopup.style.display = "none", 4000);
+  const popup = notifyPopup;
+  if (popup.style.display === "block") {
+    popup.style.display = "none";
+    clearTimeout(notifyTimeout);
+    notifyTimeout = null;
+    return;
+  }
+  popup.style.display = "block";
+  notifyTimeout = setTimeout(() => {
+    popup.style.display = "none";
+    notifyTimeout = null;
+  }, 4000);
 }
 
 function contactAdmin() {
@@ -154,7 +165,7 @@ function startExpiryCountdown() {
     const minutes = Math.floor(diff / (1000 * 60));
     diff -= minutes * (1000 * 60);
     const seconds = Math.floor(diff / 1000);
-    expiryInfo.textContent = `⏳ Thời gian còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+    expiryInfo.textContent = `⏳ Còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
   }, 1000);
 }
 
@@ -172,27 +183,20 @@ function updateVNTime() {
 window.onload = async () => {
   const savedKey = localStorage.getItem("userKey");
   const savedExpire = localStorage.getItem("keyExpire");
+  const now = new Date();
 
-  if (savedKey && savedExpire) {
-    const now = new Date();
-    const expireDate = new Date(savedExpire);
-    if (expireDate > now) {
-      // Kiểm tra key có còn tồn tại trên GitHub không
-      try {
-        const res = await fetch(`${keysURL}?v=${Date.now()}`);
-        const data = await res.json();
-        const keyExists = data.keys.some(k => k.key === savedKey);
-        if (keyExists) {
-          showGameMenu();
-        } else {
-          logout();
-        }
-      } catch (err) {
-        console.error("Lỗi khi kiểm tra lại key:", err);
-        logout();
+  if (savedKey && savedExpire && new Date(savedExpire) > now) {
+    try {
+      const res = await fetch(keysURL);
+      const data = await res.json();
+      const keyObj = data.keys.find(k => k.key === savedKey);
+      if (keyObj && new Date(keyObj.expiresAt) > now) {
+        showGameMenu();
+      } else {
+        logout(); // Nếu key không còn trong file JSON hoặc hết hạn, thì đăng xuất
       }
-    } else {
-      logout();
+    } catch (e) {
+      console.error("Lỗi khi kiểm tra lại key:", e);
     }
   }
 
@@ -200,7 +204,6 @@ window.onload = async () => {
   setInterval(updateVNTime, 1000);
 };
 
-// Chống Ctrl+U, F12, Ctrl+Shift+I...
 document.addEventListener("keydown", e => {
   if (
     e.key === "F12" ||
@@ -211,6 +214,7 @@ document.addEventListener("keydown", e => {
     alert("🚫 Không được phép!");
   }
 });
+
 document.addEventListener("contextmenu", e => {
   e.preventDefault();
   alert("🚫 Chuột phải bị khóa!");
