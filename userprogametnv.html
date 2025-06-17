@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💫</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      color: white;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00ffc8;
+      animation: glow 2.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 8px #00ffc8, 0 0 20px #00ffc8, 0 0 30px #00ffc8; }
+      to { text-shadow: 0 0 20px #00fff1, 0 0 35px #00fff1, 0 0 50px #00fff1; }
+    }
+    input, button {
+      padding: 12px 15px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    input {
+      width: 80%;
+      max-width: 480px;
+      margin-bottom: 15px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1.5px solid rgba(0,255,200,0.6);
+      text-align: center;
+      font-weight: 600;
+    }
+    button {
+      cursor: pointer;
+      background: transparent;
+      color: #00ffc8;
+      border: 2px solid #00ffc8;
+      font-weight: 700;
+      text-shadow: 0 0 4px #00ffc8;
+      filter: drop-shadow(0 0 2px #00ffc8);
+      margin: 6px 8px 6px 8px;
+    }
+    button:hover {
+      background-color: #00ffc8;
+      color: #003322;
+      box-shadow: 0 0 14px #00ffc8, 0 0 24px #00ffc8;
+      transform: scale(1.05);
+    }
+    #status {
+      margin-top: 10px;
+      font-weight: 700;
+      text-shadow: 0 0 6px #00ffc8;
+    }
+    #gameMenu, #gameContainer {
+      margin-top: 28px;
+      display: none;
+    }
+    iframe {
+      width: 100%;
+      height: 520px;
+      border-radius: 18px;
+      margin-top: 18px;
+      border: 3px solid #00ffc8;
+      box-shadow: 0 0 30px #00ffc8;
+    }
+    #backToMenuBtn {
+      margin-bottom: 12px;
+    }
+    .game-btn {
+      padding: 12px 22px;
+      margin: 6px;
+      border-radius: 12px;
+      background: linear-gradient(45deg, #ff416c, #ff4b2b, #ff6f61, #ffcc00, #00ffc8, #4facfe, #00f2fe);
+      background-size: 400% 400%;
+      color: white;
+      font-weight: 700;
+      animation: rainbow 3s ease infinite;
+      border: none;
+      box-shadow: 0 0 15px #fff;
+    }
+    @keyframes rainbow {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+    #notifyPopup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: black;
+      color: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 18px #fff;
+      z-index: 9999;
+      display: none;
+      max-width: 90vw;
+      font-size: 1.2rem;
+      text-align: center;
+      user-select: none;
+    }
+    #footerText {
+      position: fixed;
+      bottom: 5px;
+      width: 100%;
+      text-align: center;
+      background: black;
+      color: white;
+      padding: 5px 0;
+      font-weight: 700;
+      font-size: 1.1rem;
+      animation: rainbowText 8s linear infinite;
+      z-index: 10;
+    }
+    @keyframes rainbowText {
+      0% {color: red;} 16% {color: orange;} 32% {color: yellow;}
+      48% {color: green;} 64% {color: cyan;} 80% {color: blue;} 100% {color: violet;}
+    }
+    #ytFrame {
+      position: fixed;
+      bottom: 55px;
+      right: 10px;
+      width: 300px;
+      height: 170px;
+      border: 2px solid #00ffc8;
+      border-radius: 12px;
+      z-index: 999;
+      box-shadow: 0 0 18px #00ffc8;
+    }
+    #vnTime {
+      position: fixed;
+      bottom: 230px;
+      right: 10px;
+      color: #00ffc8;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-shadow: 0 0 10px #00ffc8;
+      user-select: none;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 6px 12px;
+      border-radius: 12px;
+    }
+    .popup-intro {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+    .popup-intro div {
+      background: white;
+      color: black;
+      padding: 30px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 90vw;
+    }
+    .popup-intro button {
+      margin-top: 12px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-weight: 700;
+      border-radius: 8px;
+      border: none;
+      background-color: #00ffc8;
+      color: #003322;
+      box-shadow: 0 0 14px #00ffc8, 0 0 24px #00ffc8;
+      transition: background-color 0.3s ease;
+    }
+    .popup-intro button:hover {
+      background-color: #00bb8a;
+    }
+    #expiryInfo {
+      margin-top: 8px;
+      font-size: 1rem;
+      color: #00ffc8;
+      font-weight: 700;
+      text-shadow: 0 0 8px #00ffc8;
+      user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup-intro" id="introPopup">
+    <div>
+      <h2>🎰 𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶</h2>
+      <p>📢 Thông Báo Quan Trọng
+1. TOOL FREE BÁN LÀM 🐶 🐶 
+2. NGHIÊM CẤM ĐI SHARE & CRACK ĐEM BÁN
+3. TOOL DỰ ĐOÁN TÀI XỈU KHÔNG PHẢI HACK
+4. TOOL KHÁ LỎ, HÃY TEST 3,4 PHIÊN RỒI SỬ DỤNG THEO Ý BẠN.
+5. MẤT TIỀN OAN AE CHÚNG TÔI KHÔNG CHỊU TRÁCH NHIỆM BIẾT CHƠI THÌ NGƯNG ĐÚNG LÚC
+6. TOOL TAI XIU MANG TÍNH CHẤT DỰ ĐOÁN 
+7. TOOL CÓ LỖI GÌ HÃY LIÊN HỆ ADMIN ĐỂ ĐƯỢC HỖ TRỢ 💠
+8. TOOL CÓ THỂ LỎ VÀ SAI THÌ CHÚNG TÔI XIN LỖI VÀ FIX LẠI CHO BẠN
+9. CẤM SHARE KEY CHO NGƯỜI KHÁC!!!!
+10. KEY FREE SẼ CẬP NHẬT 00H MỖI NGÀY (KEY Ở TRONG PHẦN THÔNG BÁO)</p>
+      <button onclick="hideIntro()">Đã hiểu</button>
+    </div>
+  </div>
+
+  <h2>𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💠</h2>
+  <input type="text" id="userKey" placeholder="Nhập key bạn có..."><br>
+  <button onclick="checkKey()">XAC NHAN KEY</button>
+  <div style="margin-top:10px;">
+    <button onclick="contactAdmin()">💫 Liên hệ Admin</button>
+    <button onclick="showNotify()">🔔 Thông báo</button>
+  </div>
+  <div id="expiryInfo"></div>
+  <p id="status"></p>
+
+  <div id="gameMenu">
+    <h3>🔧 Chọn Tool TX</h3>
+    <div id="gamesButtons"></div>
+    <div style="margin-top:20px;">
+      <button onclick="logout()">🚪 Đăng xuất</button>
+    </div>
+  </div>
+
+  <div id="gameContainer">
+    <button id="backToMenuBtn" onclick="backToMenu()">⬅️ Quay Lại</button>
+    <iframe id="gameFrame"></iframe>
+  </div>
+
+  <div id="notifyPopup">🔔  TOOL KHÁ LỎ KHUYẾN CÁO ANH EM ĐẶT CƯỢC ÍT BỞI VÌ TOOL KHÁ LỎ NÊN ANH EM MẤT TIỀN OAN AE CHÚNG TÔI KHÔNG CHỊU TRÁCH NHIỆM, BIẾT NGỪNG ĐÚNG LÚC LÀ BẠN THIÊN TÀI !!
+V1 VẪN CÒN LỎ "ANH EM THÔNG CẢM TÔI SẼ UPDATE TÍNH NĂNG DỰ ĐOÁN CAO HƠN.."</div>
+  <div id="footerText">© 𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💫</div>
+  <iframe id="ytFrame" src="https://www.youtube.com/embed/ZZ5LpwO-An4?autoplay=1&mute=1" allow="autoplay" frameborder="0"></iframe>
+  <div id="vnTime"></div>
+
+  <script>
+    const gameLinks = [
+      "tool1.html","tool2.html","tool3.html","tool4.html","tool5.html",
+      "tool6.html","tool7.html","tool8.html","tool9.html","tool10.html"
+    ];
+    const keysURL = "https://raw.githubusercontent.com/adminvienkey26109/trinhngocvientx/main/keys.json";
+    const status = document.getElementById("status");
+    const userKeyInput = document.getElementById("userKey");
+    const gameMenu = document.getElementById("gameMenu");
+    const gamesButtons = document.getElementById("gamesButtons");
+    const gameContainer = document.getElementById("gameContainer");
+    const gameFrame = document.getElementById("gameFrame");
+    const notifyPopup = document.getElementById("notifyPopup");
+    const expiryInfo = document.getElementById("expiryInfo");
+
+    let countdownInterval = null;
+
+    function showGameMenu() {
+      gameMenu.style.display = "block";
+      userKeyInput.style.display = "none";
+      document.querySelector("button[onclick='checkKey()']").style.display = "none";
+      gameContainer.style.display = "none";
+      gamesButtons.innerHTML = "";
+      for (let i = 0; i < gameLinks.length; i++) {
+        const btn = document.createElement("button");
+        btn.className = "game-btn";
+        btn.textContent = `Tool ${i + 1}`;
+        btn.onclick = () => openTool(i);
+        gamesButtons.appendChild(btn);
+      }
+      startExpiryCountdown();
+    }
+
+    function openTool(index) {
+      gameFrame.src = gameLinks[index];
+      gameMenu.style.display = "none";
+      gameContainer.style.display = "block";
+    }
+
+    function backToMenu() {
+      gameFrame.src = "";
+      gameContainer.style.display = "none";
+      gameMenu.style.display = "block";
+    }
+
+    async function checkKey() {
+      const inputKey = userKeyInput.value.trim();
+      if (!inputKey) {
+        status.textContent = "❌ Vui lòng nhập key!";
+        status.style.color = "red";
+        return;
+      }
+
+      status.textContent = "🔄 Đang kiểm tra...";
+      status.style.color = "#fff";
+
+      try {
+        const res = await fetch(keysURL);
+        const data = await res.json();
+        const keyObj = data.keys.find(k => k.key === inputKey);
+
+        if (!keyObj) {
+          status.textContent = "❌ Key không hợp lệ!";
+          status.style.color = "red";
+          return;
+        }
+
+        const now = new Date();
+        if (keyObj.expiresAt && new Date(keyObj.expiresAt) < now) {
+          status.textContent = "⏰ Key đã hết hạn!";
+          status.style.color = "red";
+          return;
+        }
+
+        localStorage.setItem("userKey", inputKey);
+        localStorage.setItem("keyExpire", keyObj.expiresAt || "");
+        status.textContent = ""; // Ẩn thông báo thành công
+        status.style.color = "#00ffbf";
+        setTimeout(showGameMenu, 800);
+      } catch (err) {
+        status.textContent = "❌ Lỗi khi kiểm tra key.";
+        status.style.color = "red";
+        console.error(err);
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("userKey");
+      localStorage.removeItem("keyExpire");
+      location.reload();
+    }
+
+    function showNotify() {
+      notifyPopup.style.display = "block";
+      setTimeout(() => notifyPopup.style.display = "none", 4000);
+    }
+
+    function contactAdmin() {
+      window.open("https://t.me/LQHng_W", "_blank");
+    }
+
+    function hideIntro() {
+      document.getElementById("introPopup").style.display = "none";
+    }
+
+    // Hiển thị ngày hết hạn tĩnh
+    function updateExpiryInfo() {
+      const expireDateStr = localStorage.getItem("keyExpire");
+      if (!expireDateStr) {
+        expiryInfo.textContent = "";
+        return;
+      }
+      const expireDate = new Date(expireDateStr);
+      if (isNaN(expireDate.getTime())) {
+        expiryInfo.textContent = "";
+        return;
+      }
+      const options = { 
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Ho_Chi_Minh'
+      };
+      const expireVN = expireDate.toLocaleString('vi-VN', options);
+      expiryInfo.textContent = `⏳ Key hết hạn: ${expireVN}`;
+    }
+
+    // Đếm ngược thời gian hết hạn và hiển thị theo format d - h - m - s
+    function startExpiryCountdown() {
+      if (countdownInterval) clearInterval(countdownInterval);
+
+      const expireDateStr = localStorage.getItem("keyExpire");
+      if (!expireDateStr) {
+        expiryInfo.textContent = "";
+        return;
+      }
+      const expireDate = new Date(expireDateStr);
+      if (isNaN(expireDate.getTime())) {
+        expiryInfo.textContent = "";
+        return;
+      }
+
+      countdownInterval = setInterval(() => {
+        const now = new Date();
+        let diff = expireDate.getTime() - now.getTime();
+
+        if (diff <= 0) {
+          expiryInfo.textContent = "⏰ Key đã hết hạn!";
+          clearInterval(countdownInterval);
+          logout();
+          return;
+        }
+
+        // Tính ngày, giờ, phút, giây
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        diff -= days * (1000 * 60 * 60 * 24);
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        diff -= hours * (1000 * 60 * 60);
+        const minutes = Math.floor(diff / (1000 * 60));
+        diff -= minutes * (1000 * 60);
+        const seconds = Math.floor(diff / 1000);
+
+        expiryInfo.textContent = `⏳ Thời gian còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+      }, 1000);
+    }
+
+    // Đồng hồ Việt Nam (giờ Hà Nội)
+    function updateVNTime() {
+      const now = new Date();
+      // Chuyển giờ sang múi giờ VN
+      const vnTimeStr = now.toLocaleString('vi-VN', {
+        timeZone: 'Asia/Ho_Chi_Minh',
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      });
+      document.getElementById("vnTime").textContent = `🕒 Giờ Việt Nam: ${vnTimeStr}`;
+    }
+
+    window.onload = () => {
+      const savedKey = localStorage.getItem("userKey");
+      const savedExpire = localStorage.getItem("keyExpire");
+      if (savedKey && (!savedExpire || new Date(savedExpire) > new Date())) {
+        showGameMenu();
+      }
+      updateVNTime();
+      setInterval(updateVNTime, 1000);
+    };
+
+    // Chống F12, Ctrl+U, Ctrl+Shift+I...
+    document.addEventListener("keydown", e => {
+      if (
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && ["I", "C", "J"].includes(e.key.toUpperCase())) ||
+        (e.ctrlKey && ["U", "S"].includes(e.key.toUpperCase()))
+      ) {
+        e.preventDefault();
+        alert("🚫 Không được phép!");
+      }
+    });
+
+    document.addEventListener("contextmenu", e => {
+      e.preventDefault();
+      alert("🚫 Chuột phải bị khóa!");
+    });
+  </script>
+</body>
+</html>
