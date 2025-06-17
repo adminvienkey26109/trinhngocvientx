@@ -64,19 +64,25 @@ async function checkKey() {
     const data = await res.json();
     const now = new Date();
 
-    const keyObj = data.keys.find(k => k.key === inputKey && (!k.expiresAt || new Date(k.expiresAt) > now));
+    const keyObj = data.keys.find(k => k.key === inputKey);
 
     if (!keyObj) {
-      status.textContent = "❌ Key không hợp lệ hoặc đã hết hạn!";
+      status.textContent = "❌ Key không tồn tại!";
       status.style.color = "red";
+      return;
+    }
+
+    if (keyObj.expiresAt && new Date(keyObj.expiresAt) <= now) {
+      status.textContent = "❌ Key đã hết hạn!";
+      status.style.color = "orange";
       return;
     }
 
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
 
-    status.textContent = "";
-    status.style.color = "#00ffbf";
+    status.textContent = "✅ Key hợp lệ. Đang chuyển hướng...";
+    status.style.color = "lime";
     setTimeout(showGameMenu, 800);
   } catch (err) {
     status.textContent = "❌ Lỗi khi kiểm tra key.";
