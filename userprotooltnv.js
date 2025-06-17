@@ -1,14 +1,12 @@
 const gameLinks = [
-  "lqh1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
+  "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
 ];
-
 const toolNames = [
-  "TOOL MD5 💎", "TOOL MA PHIEN 💎", "TOOL XÍ NGẦU 💎 ", "CHƯA UPDATE ❌",
+  "TOOL MD5 💎", "TOOL MA PHIEN 💎", "TOOL XÍ NGẦU 💎", "CHƯA UPDATE ❌",
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌",
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌"
 ];
-
 const keysURL = "https://adminvienkey26109.github.io/trinhngocvientx/keys.json";
 const status = document.getElementById("status");
 const userKeyInput = document.getElementById("userKey");
@@ -18,7 +16,6 @@ const gameContainer = document.getElementById("gameContainer");
 const gameFrame = document.getElementById("gameFrame");
 const notifyPopup = document.getElementById("notifyPopup");
 const expiryInfo = document.getElementById("expiryInfo");
-
 let countdownInterval = null;
 
 function showGameMenu() {
@@ -56,28 +53,23 @@ async function checkKey() {
     status.style.color = "red";
     return;
   }
-
   status.textContent = "💎 KEY ĐÚNG, ĐANG VÀO TOOL !!.";
   status.style.color = "#fff";
-
   try {
     const res = await fetch(keysURL);
     const data = await res.json();
     const keyObj = data.keys.find(k => k.key === inputKey);
-
     if (!keyObj) {
       status.textContent = "❌ Key không hợp lệ!";
       status.style.color = "red";
       return;
     }
-
     const now = new Date();
     if (keyObj.expiresAt && new Date(keyObj.expiresAt) < now) {
       status.textContent = "⏰ Key đã hết hạn!";
       status.style.color = "red";
       return;
     }
-
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
     status.textContent = "";
@@ -131,7 +123,6 @@ function updateExpiryInfo() {
 
 function startExpiryCountdown() {
   if (countdownInterval) clearInterval(countdownInterval);
-
   const expireDateStr = localStorage.getItem("keyExpire");
   if (!expireDateStr) {
     expiryInfo.textContent = "";
@@ -142,7 +133,6 @@ function startExpiryCountdown() {
     expiryInfo.textContent = "";
     return;
   }
-
   countdownInterval = setInterval(() => {
     const now = new Date();
     let diff = expireDate.getTime() - now.getTime();
@@ -152,7 +142,6 @@ function startExpiryCountdown() {
       logout();
       return;
     }
-
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     diff -= days * (1000 * 60 * 60 * 24);
     const hours = Math.floor(diff / (1000 * 60 * 60));
@@ -160,7 +149,6 @@ function startExpiryCountdown() {
     const minutes = Math.floor(diff / (1000 * 60));
     diff -= minutes * (1000 * 60);
     const seconds = Math.floor(diff / 1000);
-
     expiryInfo.textContent = `⏳ Thời gian còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
   }, 1000);
 }
