@@ -1,4 +1,5 @@
 const keysURL = "https://adminvienkey26109.github.io/trinhngocvientx/keys.json";
+
 const gameLinks = [
   "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
