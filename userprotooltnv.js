@@ -83,7 +83,7 @@ async function checkKey() {
 
     status.textContent = "✅ Key hợp lệ. Đang chuyển hướng...";
     status.style.color = "lime";
-    setTimeout(showGameMenu, 800);
+    showGameMenu();
   } catch (err) {
     status.textContent = "❌ Lỗi khi kiểm tra key.";
     status.style.color = "red";
