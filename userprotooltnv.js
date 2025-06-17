@@ -1,4 +1,3 @@
-
 const gameLinks = [
   "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
@@ -34,6 +33,7 @@ function showGameMenu() {
     gamesButtons.appendChild(btn);
   }
   startExpiryCountdown();
+  updateExpiryInfo();
 }
 
 function openTool(index) {
@@ -55,23 +55,27 @@ async function checkKey() {
     status.style.color = "red";
     return;
   }
-  status.textContent = "💎 ĐANG KIỂM TRA KEY!!.";
+  status.textContent = "💎 ĐANG KIỂM TRA KEY...";
   status.style.color = "#fff";
   try {
     const res = await fetch(keysURL);
     const data = await res.json();
-    const keyObj = data.keys.find(k => k.key === inputKey);
+    const keyObj = data.keys.find(k => k.key.trim() === inputKey);
     if (!keyObj) {
       status.textContent = "❌ Key không hợp lệ!";
       status.style.color = "red";
       return;
     }
+
     const now = new Date();
-    if (keyObj.expiresAt && new Date(keyObj.expiresAt) < now) {
+    const expire = keyObj.expiresAt ? new Date(keyObj.expiresAt) : null;
+
+    if (expire && expire.getTime() < now.getTime()) {
       status.textContent = "⏰ Key đã hết hạn!";
       status.style.color = "red";
       return;
     }
+
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
     status.textContent = "";
@@ -161,7 +165,7 @@ function startExpiryCountdown() {
     const minutes = Math.floor(diff / (1000 * 60));
     diff -= minutes * (1000 * 60);
     const seconds = Math.floor(diff / 1000);
-    expiryInfo.textContent = `⏳ Thời gian còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
+    expiryInfo.textContent = `⏳ Còn lại: ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây`;
   }, 1000);
 }
 
