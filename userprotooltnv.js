@@ -1,3 +1,4 @@
+const keysURL = "https://adminvienkey26109.github.io/trinhngocvientx/keys.json";
 const gameLinks = [
   "tool1.html", "tool2.html", "tool3.html", "tool4.html", "tool5.html",
   "tool6.html", "tool7.html", "tool8.html", "tool9.html", "tool10.html"
@@ -7,7 +8,7 @@ const toolNames = [
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌", "CHƯA UPDATE ❌",
   "CHƯA UPDATE ❌", "CHƯA UPDATE ❌"
 ];
-const keysURL = "https://adminvienkey26109.github.io/trinhngocvientx/keys.json";
+
 const status = document.getElementById("status");
 const userKeyInput = document.getElementById("userKey");
 const gameMenu = document.getElementById("gameMenu");
@@ -26,11 +27,10 @@ function showGameMenu() {
   for (let i = 0; i < gameLinks.length; i++) {
     const btn = document.createElement("button");
     btn.className = "game-btn";
-    btn.textContent = toolNames[i] || `Tool ${i + 1}`;
+    btn.textContent = toolNames[i];
     btn.onclick = () => openTool(i);
     gamesButtons.appendChild(btn);
   }
-  updateExpiryInfo();
   startExpiryCountdown();
 }
 
@@ -53,8 +53,8 @@ async function checkKey() {
     status.style.color = "red";
     return;
   }
-  status.textContent = "💎 ĐANG KIỂM TRA KEY...";
-  status.style.color = "#fff";
+  status.textContent = "🔄 Đang kiểm tra key...";
+  status.style.color = "white";
   try {
     const res = await fetch(keysURL);
     const data = await res.json();
@@ -64,20 +64,23 @@ async function checkKey() {
       status.style.color = "red";
       return;
     }
+
     const now = new Date();
-    if (keyObj.expiresAt && new Date(keyObj.expiresAt) < now) {
+    const expiresAt = new Date(keyObj.expiresAt);
+    if (keyObj.expiresAt && expiresAt < now) {
       status.textContent = "⏰ Key đã hết hạn!";
       status.style.color = "red";
       return;
     }
+
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
-    status.textContent = "✅ Thành công!";
-    status.style.color = "#00ffbf";
-    setTimeout(showGameMenu, 800);
-  } catch (err) {
-    status.textContent = "❌ Lỗi khi kiểm tra key.";
+    status.textContent = "";
+    showGameMenu();
+  } catch (e) {
+    status.textContent = "❌ Lỗi khi kiểm tra key!";
     status.style.color = "red";
+    console.error(e);
   }
 }
 
@@ -87,23 +90,6 @@ function logout() {
   location.reload();
 }
 
-function updateExpiryInfo() {
-  const expireDateStr = localStorage.getItem("keyExpire");
-  if (!expireDateStr) {
-    expiryInfo.textContent = "";
-    return;
-  }
-  const expireDate = new Date(expireDateStr);
-  if (isNaN(expireDate.getTime())) return;
-  const options = {
-    year: 'numeric', month: '2-digit', day: '2-digit',
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
-    hour12: false, timeZone: 'Asia/Ho_Chi_Minh'
-  };
-  const expireVN = expireDate.toLocaleString('vi-VN', options);
-  expiryInfo.textContent = `⏳ Key hết hạn: ${expireVN}`;
-}
-
 function startExpiryCountdown() {
   if (countdownInterval) clearInterval(countdownInterval);
   const expireDateStr = localStorage.getItem("keyExpire");
@@ -111,7 +97,7 @@ function startExpiryCountdown() {
   const expireDate = new Date(expireDateStr);
   countdownInterval = setInterval(() => {
     const now = new Date();
-    let diff = expireDate.getTime() - now.getTime();
+    let diff = expireDate - now;
     if (diff <= 0) {
       expiryInfo.textContent = "⏰ Key đã hết hạn!";
       clearInterval(countdownInterval);
@@ -119,25 +105,19 @@ function startExpiryCountdown() {
       return;
     }
     const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-    diff %= (1000 * 60 * 60 * 24);
-    const h = Math.floor(diff / (1000 * 60 * 60));
-    diff %= (1000 * 60 * 60);
-    const m = Math.floor(diff / (1000 * 60));
-    diff %= (1000 * 60);
-    const s = Math.floor(diff / 1000);
-    expiryInfo.textContent = `⏳ Còn: ${d} ngày ${h}h ${m}m ${s}s`;
+    const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const m = Math.floor((diff / (1000 * 60)) % 60);
+    const s = Math.floor((diff / 1000) % 60);
+    expiryInfo.textContent = `⏳ Còn lại: ${d} ngày ${h} giờ ${m} phút ${s} giây`;
   }, 1000);
 }
 
 function updateVNTime() {
-  const now = new Date();
-  const vnTimeStr = now.toLocaleString('vi-VN', {
-    timeZone: 'Asia/Ho_Chi_Minh',
-    hour12: false,
-    hour: '2-digit', minute: '2-digit', second: '2-digit',
-    day: '2-digit', month: '2-digit', year: 'numeric'
+  const now = new Date().toLocaleString("vi-VN", {
+    timeZone: "Asia/Ho_Chi_Minh",
+    hour12: false
   });
-  document.getElementById("vnTime").textContent = `🕒 Giờ VN: ${vnTimeStr}`;
+  document.getElementById("vnTime").textContent = `🕒 Giờ Việt Nam: ${now}`;
 }
 
 window.onload = () => {
