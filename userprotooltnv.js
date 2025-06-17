@@ -14,7 +14,6 @@ const gameMenu = document.getElementById("gameMenu");
 const gamesButtons = document.getElementById("gamesButtons");
 const gameContainer = document.getElementById("gameContainer");
 const gameFrame = document.getElementById("gameFrame");
-const notifyPopup = document.getElementById("notifyPopup");
 const expiryInfo = document.getElementById("expiryInfo");
 let countdownInterval = null;
 
@@ -73,13 +72,12 @@ async function checkKey() {
     }
     localStorage.setItem("userKey", inputKey);
     localStorage.setItem("keyExpire", keyObj.expiresAt || "");
-    status.textContent = "✅ Đăng nhập thành công!";
+    status.textContent = "✅ Thành công!";
     status.style.color = "#00ffbf";
     setTimeout(showGameMenu, 800);
   } catch (err) {
     status.textContent = "❌ Lỗi khi kiểm tra key.";
     status.style.color = "red";
-    console.error(err);
   }
 }
 
@@ -96,10 +94,7 @@ function updateExpiryInfo() {
     return;
   }
   const expireDate = new Date(expireDateStr);
-  if (isNaN(expireDate.getTime())) {
-    expiryInfo.textContent = "";
-    return;
-  }
+  if (isNaN(expireDate.getTime())) return;
   const options = {
     year: 'numeric', month: '2-digit', day: '2-digit',
     hour: '2-digit', minute: '2-digit', second: '2-digit',
@@ -114,7 +109,6 @@ function startExpiryCountdown() {
   const expireDateStr = localStorage.getItem("keyExpire");
   if (!expireDateStr) return;
   const expireDate = new Date(expireDateStr);
-  if (isNaN(expireDate.getTime())) return;
   countdownInterval = setInterval(() => {
     const now = new Date();
     let diff = expireDate.getTime() - now.getTime();
@@ -124,14 +118,14 @@ function startExpiryCountdown() {
       logout();
       return;
     }
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    diff -= days * (1000 * 60 * 60 * 24);
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    diff -= hours * (1000 * 60 * 60);
-    const minutes = Math.floor(diff / (1000 * 60));
-    diff -= minutes * (1000 * 60);
-    const seconds = Math.floor(diff / 1000);
-    expiryInfo.textContent = `⏳ Còn lại: ${days} ngày ${hours}h ${minutes}m ${seconds}s`;
+    const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff %= (1000 * 60 * 60 * 24);
+    const h = Math.floor(diff / (1000 * 60 * 60));
+    diff %= (1000 * 60 * 60);
+    const m = Math.floor(diff / (1000 * 60));
+    diff %= (1000 * 60);
+    const s = Math.floor(diff / 1000);
+    expiryInfo.textContent = `⏳ Còn: ${d} ngày ${h}h ${m}m ${s}s`;
   }, 1000);
 }
 
@@ -143,7 +137,7 @@ function updateVNTime() {
     hour: '2-digit', minute: '2-digit', second: '2-digit',
     day: '2-digit', month: '2-digit', year: 'numeric'
   });
-  document.getElementById("vnTime").textContent = `🕒 Giờ Việt Nam: ${vnTimeStr}`;
+  document.getElementById("vnTime").textContent = `🕒 Giờ VN: ${vnTimeStr}`;
 }
 
 window.onload = () => {
@@ -166,6 +160,7 @@ document.addEventListener("keydown", e => {
     alert("🚫 Không được phép!");
   }
 });
+
 document.addEventListener("contextmenu", e => {
   e.preventDefault();
   alert("🚫 Chuột phải bị khóa!");
