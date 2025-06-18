@@ -157,7 +157,29 @@
 </head>
 <body>
 
-<iframe id="gameFrame" src="https://i.imgur.com/1M7ly1v.png"></iframe>
+<iframe id="gameFrame" 
+  srcdoc='
+    <html>
+      <head>
+        <style>
+          body {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+          }
+          img {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+          }
+        </style>
+      </head>
+      <body>
+        <img src="https://i.imgur.com/1M7ly1v.png" />
+      </body>
+    </html>
+  '>
+</iframe>
   
 <div id="toolPopup">
   <div id="toolHeader">
