@@ -134,31 +134,37 @@
       0% {color: red;} 16% {color: orange;} 32% {color: yellow;}
       48% {color: green;} 64% {color: cyan;} 80% {color: blue;} 100% {color: violet;}
     }
-    #ytFrame {
+    #ytWrapper {
   position: fixed;
-  bottom: 20px;
-  left: 20px;
-  width: 320px;
-  height: 180px;
+  bottom: 55px;
+  right: 10px;
+  width: 300px;
+  height: 170px;
+  z-index: 999;
+}
+
+#ytFrame {
+  width: 100%;
+  height: 100%;
   border: 2px solid #00ffc8;
   border-radius: 12px;
-  box-shadow: 0 0 15px #00ffc8;
-  z-index: 9999;
-    }
-    #vnTime {
-      position: fixed;
-      bottom: 230px;
-      right: 10px;
-      color: #00ffc8;
-      font-weight: 700;
-      font-size: 1.1rem;
-      text-shadow: 0 0 10px #00ffc8;
-      user-select: none;
-      z-index: 1000;
-      background: rgba(0, 0, 0, 0.4);
-      padding: 6px 12px;
-      border-radius: 12px;
-    }
+  box-shadow: 0 0 18px #00ffc8;
+}
+
+#vnTime {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  color: #00ffc8;
+  font-weight: bold;
+  font-size: 0.9rem;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 4px 8px;
+  border-radius: 8px;
+  text-shadow: 0 0 6px #00ffc8;
+  pointer-events: none;
+  user-select: none;
+}
     .popup-intro {
       position: fixed;
       top: 0; left: 0;
@@ -247,10 +253,35 @@ V1 VẪN CÒN LỎ "ANH EM THÔNG CẢM TÔI SẼ UPDATE TÍNH NĂNG DỰ ĐOÁN
      <p> 8. TOOL CÓ THỂ LỎ VÀ SAI THÌ CHÚNG TÔI XIN LỖI VÀ FIX LẠI CHO BẠN</p>
      <p> 9. NHẬN KEY FREE NHẮN ADMIN 💠  !!!!</p></div>
   <div id="footerText">© 𝑻𝑶𝑶𝑳 𝑫𝑼 𝑫𝑶𝑨𝑵 𝑩𝒀 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💫</div>
-  <iframe id="ytFrame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
-  <div id="vnTime"></div>
+  <div id="ytWrapper">
+  <iframe id="ytFrame" src="https://www.youtube.com/embed/ZZ5LpwO-An4?autoplay=1&mute=1&enablejsapi=1"
+    allow="autoplay"
+    frameborder="0"
+    allowfullscreen></iframe>
+  <div id="vnTime">🕒 --:--:-- | --/--/----</div>
+  </div>
 
   <script src="randomyt.js"></script>
   <script src="userprotooltnv-ob.js"></script>
+  <script>
+function updateVNTime() {
+  const now = new Date();
+  const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
+  const vn = new Date(utc + 7 * 3600000);
+
+  const h = vn.getHours().toString().padStart(2, '0');
+  const m = vn.getMinutes().toString().padStart(2, '0');
+  const s = vn.getSeconds().toString().padStart(2, '0');
+
+  const day = vn.getDate().toString().padStart(2, '0');
+  const month = (vn.getMonth() + 1).toString().padStart(2, '0');
+  const year = vn.getFullYear();
+
+  document.getElementById("vnTime").textContent = `🕒 ${h}:${m}:${s} | ${day}/${month}/${year}`;
+}
+
+setInterval(updateVNTime, 1000);
+updateVNTime();
+</script>
 </body>
 </html>
