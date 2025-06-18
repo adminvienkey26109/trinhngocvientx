@@ -13,26 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   const ytFrame = document.getElementById("ytFrame");
-  const toggleBtn = document.getElementById("toggleMuteBtn");
-  let isMuted = true;
-
-  if (ytFrame && toggleBtn) {
+  if (ytFrame) {
     const randomIndex = Math.floor(Math.random() * videoLinks.length);
-    const videoUrl = `${videoLinks[randomIndex]}?autoplay=1&mute=1&enablejsapi=1`;
+    // Chỉ có autoplay=1, không có mute => nỗ lực phát âm thanh
+    const videoUrl = `${videoLinks[randomIndex]}?autoplay=1`;
     ytFrame.src = videoUrl;
-
-    toggleBtn.addEventListener("click", () => {
-      const command = isMuted ? "unMute" : "mute";
-      ytFrame.contentWindow.postMessage(
-        JSON.stringify({
-          event: "command",
-          func: command,
-          args: ""
-        }),
-        "*"
-      );
-      toggleBtn.textContent = isMuted ? "🔊 Tắt Tiếng" : "🔇 Bật Tiếng";
-      isMuted = !isMuted;
-    });
   }
 });
