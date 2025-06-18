@@ -1,15 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
   const videoLinks = [
-    "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/tgbNymZ7vqY?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/kJQP7kiw5Fk?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/3JZ_D3ELwOQ?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/2Vv-BfVoq4g?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/LsoLEjrDogU?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/eVTXPUF4Oz4?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/uelHwf8o7_U?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/YykjpeuMNEk?autoplay=1&mute=1",
-    "https://www.youtube.com/embed/HgzGwKwLmgM?autoplay=1&mute=1"
+    "https://youtu.be/pCbaNYGsqOs?si=DKGsHV2bDlQxtkOh",
+    "https://youtu.be/ZGhTjouWqoQ?si=ibg07HrnYHHTYtmE",
+    "https://youtu.be/jDu2103LJIo?si=g0Ua5xeTIik6h3Xl",
+    "https://youtu.be/UUVfum1EpYY?si=yTXf3Je2OmjWqxfc",
+    "https://youtu.be/vVHHrX91Qjw?si=UNkoTK8-HJ9kfJm-",
+    "https://youtu.be/MpIAp0n_giM?si=HeXDNn6LQaSNJeYI",
+    "https://youtu.be/5RNNtw-DyQs?si=mfDavIMAhy7hJrKx",
+    "https://youtu.be/ZxPxDjmTpyU?si=4aj-Wng3ouPqNYXp",
+    "https://youtu.be/AXzEeFkmev8?si=gy93GJUkZCCNSVm6",
+    "https://youtu.be/AGF-QP0rTnc?si=tR_mAFEYlSJIhOP-"
   ];
 
   const ytFrame = document.getElementById("ytFrame");
