@@ -1,15 +1,11 @@
 {
   "keys": [
     {
-      "key": "MBYIrHHEwLix4hQSDlbDjLoEfOZlWkvHzFl",
-      "expiresAt": "2026-06-18T00:00:00.000Z"
-    },
-    {
-      "key": "Cf7rXFa9W3yVwLAFqRRec3NhinadVS21sIl",
-      "expiresAt": "2025-06-18T08:05:00.000Z"
-    },
-    {
       "key": "JFnWJNPFU9Oc0LKLDHCe3h6uwtJy0h9nLAB",
+      "expiresAt": "6065-01-01T00:00:00.000Z"
+    },
+    {
+      "key": "TOeqJ8EvECfu8MUKGNNLt4casegrqP6yp8V",
       "expiresAt": "6065-01-01T00:00:00.000Z"
     }
   ]
