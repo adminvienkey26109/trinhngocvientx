@@ -13,12 +13,12 @@
       background: #000;
       font-family: 'Poppins', sans-serif;
     }
-    iframe#gameFrame {
+    #bgImage {
       position: fixed;
       top: 0; left: 0;
       width: 100vw;
       height: 100vh;
-      border: none;
+      object-fit: cover;
       z-index: 1;
     }
     #toolPopup {
@@ -157,7 +157,8 @@
 </head>
 <body>
 
-<iframe id="gameFrame" src="https://play.ok789.help/"></iframe>
+<img id="bgImage" src="https://i.imgur.com/AYGkih6.jpeg" alt="Nền" />
+
 <div id="toolPopup">
   <div id="toolHeader">
     <span>𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💠</span>
@@ -181,8 +182,8 @@
 
 <button id="openBtn">Mở Tool</button>
 
-<div id="ledTicker">🔥 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💠 - Đảm Bảo Lấy Lại Vốn Mua Tool Sau 20p 💸</div>
+<div id="ledTicker">🔥 𝑽𝑰𝑬𝑵 𝑻𝑬 𝑵𝑶 💸</div>
 
-  <script src="tool3-ob.js"></script>
+<script src="tool3-ob.js"></script>
 </body>
 </html>
